@@ -8,7 +8,7 @@
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
-#define FALL_STEP 4
+#define FALL_STEP 6
 
 
 enum PlayerAnims
@@ -19,7 +19,8 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	bJumping = false;
+	bJumping = bGravity = gravity = false;
+
 	spritesheet.loadFromFile("images/bub.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
@@ -71,17 +72,6 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-	{
-		if (sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);
-		posPlayer.y -= 5;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
-		{
-			posPlayer.y += 5;
-			sprite->changeAnimation(STAND_RIGHT);
-		}
-	}
 	else
 	{
 		if(sprite->animation() == MOVE_LEFT)
@@ -90,7 +80,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
 	
-	if(bJumping)
+	/*if(bJumping)
 	{
 		jumpAngle += JUMP_ANGLE_STEP;
 		if(jumpAngle == 180)
@@ -115,6 +105,43 @@ void Player::update(int deltaTime)
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
+			}
+		}
+	}*/
+
+	if (bGravity) {
+		if (gravity) { // roof
+			posPlayer.y += FALL_STEP;
+			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+				bGravity = false;
+				gravity = false;
+			}
+		}
+		else { // floor
+			posPlayer.y -= FALL_STEP;
+			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+				bGravity = false;
+				gravity = true;
+			}
+		}
+	}
+	else {
+		if (gravity) { // roof
+			posPlayer.y -= FALL_STEP;
+			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+				cout << "hola1" << endl;
+				if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+					cout << "hola2" << endl;
+					bGravity = true;
+				}
+			}
+		}
+		else { // floor
+			posPlayer.y += FALL_STEP;
+			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+				if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+					bGravity = true;
+				}
 			}
 		}
 	}
