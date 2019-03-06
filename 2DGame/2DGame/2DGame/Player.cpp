@@ -19,7 +19,7 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	bJumping = bGravity = gravity = false;
+	bJumping = bGravity = techo = false;
 
 	spritesheet.loadFromFile("images/bub.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -110,23 +110,23 @@ void Player::update(int deltaTime)
 	}*/
 
 	if (bGravity) {
-		if (gravity) { // roof
+		if (techo) { // roof
 			posPlayer.y += FALL_STEP;
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
 				bGravity = false;
-				gravity = false;
+				techo = false;
 			}
 		}
 		else { // floor
 			posPlayer.y -= FALL_STEP;
 			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
 				bGravity = false;
-				gravity = true;
+				techo = true;
 			}
 		}
 	}
 	else {
-		if (gravity) { // roof
+		if (techo) { // roof
 			posPlayer.y -= FALL_STEP;
 			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
 				cout << "hola1" << endl;
