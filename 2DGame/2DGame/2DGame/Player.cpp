@@ -19,7 +19,8 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	bJumping = bGravity = techo = false;
+	bJumping = bGravity = false;
+	isOnFloor = true;
 
 	spritesheet.loadFromFile("images/bub.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -79,59 +80,28 @@ void Player::update(int deltaTime)
 		else if(sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
-	
-	/*if(bJumping)
-	{
-		jumpAngle += JUMP_ANGLE_STEP;
-		if(jumpAngle == 180)
-		{
-			bJumping = false;
-			posPlayer.y = startY;
-		}
-		else
-		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if(jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
-		}
-	}
-	else
-	{
-		posPlayer.y += FALL_STEP;
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
-		{
-			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
-			{
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
-			}
-		}
-	}*/
 
 	if (bGravity) {
-		if (techo) { // roof
+		if (!isOnFloor) { // roof
 			posPlayer.y += FALL_STEP;
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
 				bGravity = false;
-				techo = false;
+				isOnFloor = true;
 			}
 		}
 		else { // floor
 			posPlayer.y -= FALL_STEP;
 			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
 				bGravity = false;
-				techo = true;
+				isOnFloor = false;
 			}
 		}
 	}
 	else {
-		if (techo) { // roof
+		if (!isOnFloor) { // roof
 			posPlayer.y -= FALL_STEP;
 			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
-				cout << "hola1" << endl;
 				if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-					cout << "hola2" << endl;
 					bGravity = true;
 				}
 			}

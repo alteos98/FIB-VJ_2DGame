@@ -24,7 +24,7 @@ public:
 private:
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity
-	bool techo;
+	bool isOnFloor;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
