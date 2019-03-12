@@ -3,6 +3,7 @@
 #include "Game.h"
 
 
+
 void Game::init()
 {
 	bPlay = true;
@@ -49,8 +50,9 @@ void Game::mouseMove(int x, int y)
 {
 }
 
-void Game::mousePress(int button)
+void Game::mousePress(int button, int x, int y)
 {
+	if (scene.ButtonPress(x,y)){}
 }
 
 void Game::mouseRelease(int button)
