@@ -4,7 +4,6 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "TileMap.h"
 #include "Player.h"
 
 
@@ -16,22 +15,13 @@ class Scene
 {
 
 public:
-	Scene();
-	~Scene();
+	virtual void init() = 0;
+	virtual void update(int deltaTime) = 0;
+	virtual void render() = 0;
 
-	void init();
-	void update(int deltaTime);
-	void render();
-
-private:
+protected:
 	void initShaders();
-
-private:
-	TileMap *map;
-	Player *player;
 	ShaderProgram texProgram;
-	float currentTime;
-	glm::mat4 projection;
 
 };
 
