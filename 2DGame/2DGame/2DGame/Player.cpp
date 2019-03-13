@@ -66,20 +66,20 @@ void Player::update(int deltaTime) {
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_LEFT_DOWN)
 				sprite->changeAnimation(MOVE_LEFT_DOWN);
-			posPlayer.x -= 2;
+			posPlayer.x -= 5;
 			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 			{
-				posPlayer.x += 2;
+				posPlayer.x += 5;
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			}
 		}
 		else {
 			if (sprite->animation() != MOVE_LEFT_UP)
 				sprite->changeAnimation(MOVE_LEFT_UP);
-			posPlayer.x -= 2;
+			posPlayer.x -= 5;
 			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 			{
-				posPlayer.x += 2;
+				posPlayer.x += 5;
 				sprite->changeAnimation(STAND_LEFT_UP);
 			}
 		}
@@ -88,20 +88,20 @@ void Player::update(int deltaTime) {
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_RIGHT_DOWN)
 				sprite->changeAnimation(MOVE_RIGHT_DOWN);
-			posPlayer.x += 2;
+			posPlayer.x += 5;
 			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 			{
-				posPlayer.x -= 2;
+				posPlayer.x -= 5;
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			}
 		}
 		else {
 			if (sprite->animation() != MOVE_RIGHT_UP)
 				sprite->changeAnimation(MOVE_RIGHT_UP);
-			posPlayer.x += 2;
+			posPlayer.x += 5;
 			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 			{
-				posPlayer.x -= 2;
+				posPlayer.x -= 5;
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			}
 		}

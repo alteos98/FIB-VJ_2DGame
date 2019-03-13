@@ -27,8 +27,11 @@ Level::~Level()
 
 void Level::init(int difficulty)
 {
-	if (difficulty == 1)
+	if (difficulty == 1) {
 		addressActualMap = "levels/level11.txt";
+		posPlayer = glm::vec2(10*16, 20*16);
+	}
+		
 	else if (difficulty == 2)
 		addressActualMap = "levels/level21.txt";
 
@@ -40,7 +43,7 @@ void Level::loadMap() {
 	initShaders();
 	map = TileMap::createTileMap(addressActualMap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(posPlayer);
 	posPlayer = player->getPosition();
 	player->setTileMap(map);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -54,12 +57,27 @@ void Level::update(int deltaTime)
 
 	// Afegir condicions de que si el player se surt de la pantalla canvii de nivell
 	posPlayer = player->getPosition();
-	if (posPlayer.x >= (SCREEN_WIDTH - 32)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+	printf("%i , %i \n", posPlayer.x, posPlayer.y);
+	if (posPlayer.x >= (SCREEN_WIDTH - 35)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+		posPlayer.x = 5;
 		nextMap();
 		newPositionPlayer();
 		loadMap();
 	}
-	if (posPlayer.x == (0)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+	if (posPlayer.x <= (0)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+		posPlayer.x = 600;
+		previousMap();
+		newPositionPlayer();
+		loadMap();
+	}
+	if (posPlayer.y >= (SCREEN_HEIGHT - 35)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+		posPlayer.y = 5;
+		nextMap();
+		newPositionPlayer();
+		loadMap();
+	}
+	if (posPlayer.y <= (0)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+		posPlayer.y = 440;
 		previousMap();
 		newPositionPlayer();
 		loadMap();
