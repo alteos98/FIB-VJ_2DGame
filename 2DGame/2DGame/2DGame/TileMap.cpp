@@ -87,7 +87,7 @@ bool TileMap::loadLevel(const string &levelFile)
 				fin.get(tile);
 			}
 			int aux = 0;
-			while (tile != ',' && tile != '.') {
+			while (tile != ',') {
 				aux = tile - int('0') + aux * 10;
 				fin.get(tile);
 			}

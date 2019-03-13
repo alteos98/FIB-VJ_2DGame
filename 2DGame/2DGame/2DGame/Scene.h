@@ -4,7 +4,6 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "TileMap.h"
 #include "Player.h"
 #include "Button.h"
 
@@ -16,24 +15,13 @@ class Scene
 {
 
 public:
-	Scene();
-	~Scene();
+	virtual void init() = 0;
+	virtual void update(int deltaTime) = 0;
+	virtual void render() = 0;
 
-	void init();
-	void update(int deltaTime);
-	void render();
-	bool Scene::ButtonPress(int x, int y);
-
-private:
+protected:
 	void initShaders();
-
-private:
-	TileMap *map;
-	Player *player;
-	Button *button;
 	ShaderProgram texProgram;
-	float currentTime;
-	glm::mat4 projection;
 
 };
 
