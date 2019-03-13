@@ -21,6 +21,7 @@ private:
 	int actualMap; // 1 ~ 5 easy, 6 ~ 10 hard
 	TileMap *map;
 	Player *player;
+	glm::ivec2 posPlayer;
 	float currentTime;
 	glm::mat4 projection;
 

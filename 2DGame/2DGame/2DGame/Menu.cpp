@@ -15,7 +15,7 @@ Menu::~Menu()
 
 void Menu::init() {}
 
-void Menu::init(string sprites[], glm::vec2 positions[], int nButtons)
+void Menu::loadMenu(string sprites[], glm::vec2 positions[], int nButtons)
 {
 	/*initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);

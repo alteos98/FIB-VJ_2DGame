@@ -19,6 +19,11 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
+	/*if (isPlaying)
+		level.update(deltaTime);
+	else
+		menu.update(deltaTime);*/
+
 	switch (actualMenu) {
 	case MAINMENU:
 	{
@@ -200,7 +205,7 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 10),
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 25)
 		};
-		menu.init(sprites, positions, 3);
+		menu.loadMenu(sprites, positions, 3);
 		break;
 	}
 	case SELECTDIFFICULTY:
@@ -213,7 +218,7 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 45),
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 10)
 		};
-		menu.init(sprites, positions, 2);
+		menu.loadMenu(sprites, positions, 2);
 		break;
 	}
 	case PLAYING:

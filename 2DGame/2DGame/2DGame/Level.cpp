@@ -41,6 +41,7 @@ void Level::loadMap() {
 	map = TileMap::createTileMap(addressActualMap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	posPlayer = player->getPosition();
 	player->setTileMap(map);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -52,14 +53,49 @@ void Level::update(int deltaTime)
 	player->update(deltaTime);
 
 	// Afegir condicions de que si el player se surt de la pantalla canvii de nivell
-	// Esquerra el nivell anterior i dreta el següent nivell (per exemple)
-	glm::ivec2 playerPos = player->getPosition();
-	if (playerPos.x >= (SCREEN_WIDTH - 32)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+	posPlayer = player->getPosition();
+	if (posPlayer.x >= (SCREEN_WIDTH - 32)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
 		nextMap();
 		newPositionPlayer();
 		loadMap();
 	}
-	//cout << playerPos.x << " " << SCREEN_WIDTH << endl;
+	/*switch (actualMap) {
+	case 1: {
+		if (posPlayer.x >= (SCREEN_WIDTH - 32)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+			nextMap();
+			newPositionPlayer();
+			loadMap();
+		}
+		break;
+	}
+	case 2: {
+		break;
+	}
+	case 3: {
+		break;
+	}
+	case 4: {
+		break;
+	}
+	case 5: {
+		break;
+	}
+	case 6: {
+		break;
+	}
+	case 7: {
+		break;
+	}
+	case 8: {
+		break;
+	}
+	case 9: {
+		break;
+	}
+	case 10: {
+		break;
+	}
+	}*/
 }
 
 void Level::render()

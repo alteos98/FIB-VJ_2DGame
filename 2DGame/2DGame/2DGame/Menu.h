@@ -10,7 +10,7 @@ public:
 	~Menu();
 
 	void init();
-	void init(string sprites[], glm::vec2 positions[], int nButtons);
+	void loadMenu(string sprites[], glm::vec2 positions[], int nButtons);
 	void update(int deltaTime);
 	void render();
 	int isButtonPressed();
