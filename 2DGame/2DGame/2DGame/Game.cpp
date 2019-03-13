@@ -161,48 +161,54 @@ void Game::updateMenu(MenuTypes menuType) {
 	switch (menuType) {
 	case MAINMENU:
 	{
-		string sprites[3]{
-			"images/buttonPlay.png",
-			"images/GO.png",
-			"images/buttonCredits.png"
+		const int nButtons = 3;
+		string sprites[nButtons]{
+			"images/buttons/PlayButton.png",
+			"images/buttons/InstructionsButton.png",
+			"images/buttons/CreditsButton.png"
 		};
-		glm::vec2 positions[3]{
-			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 45),
-			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 10),
-			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 25)
+		glm::vec2 positions[nButtons]{
+			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 80),
+			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 0),
+			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 + 80)
 		};
-		glm::ivec2 sizeButtons[3]{
-			glm::ivec2(100, 30),
-			glm::ivec2(100, 30),
-			glm::ivec2(100, 30)
+		glm::ivec2 sizeButtons[nButtons]{
+			glm::ivec2(256, 64),
+			glm::ivec2(256, 64),
+			glm::ivec2(256, 64)
 		};
-		glm::vec2 relation[3]{
-			glm::vec2(1.f, 1.f/4.f),
-			glm::vec2(1.f, 1.f),
+		glm::vec2 relation[nButtons]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
-		menu.loadMenu(sprites, positions, sizeButtons, relation, 3);
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
 		break;
 	}
 	case SELECTDIFFICULTY:
 	{
-		string sprites[2]{
-			"images/buttonHelp.png",
-			"images/buttonPlay.png"
+		const int nButtons = 3;
+		string sprites[nButtons]{
+			"images/buttons/EasyModeButton.png",
+			"images/buttons/HardModeButton.png",
+			"images/buttons/BackButton.png"
 		};
-		glm::vec2 positions[2]{
-			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 45),
-			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 10)
+		glm::vec2 positions[nButtons]{
+			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 70),
+			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 + 10),
+			glm::vec2(15, SCREEN_HEIGHT - 47)
 		};
-		glm::ivec2 sizeButtons[2]{
-			glm::ivec2(100, 30),
-			glm::ivec2(100, 30)
+		glm::ivec2 sizeButtons[nButtons]{
+			glm::ivec2(256, 64),
+			glm::ivec2(256, 64),
+			glm::ivec2(64, 32)
 		};
-		glm::vec2 relation[2]{
+		glm::vec2 relation[nButtons]{
+			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
-		menu.loadMenu(sprites, positions, sizeButtons, relation, 2);
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
 		break;
 	}
 	case PLAYING:
@@ -211,10 +217,38 @@ void Game::updateMenu(MenuTypes menuType) {
 	}
 	case INSTRUCTIONS:
 	{
+		const int nButtons = 1;
+		string sprites[nButtons]{
+			"images/buttons/BackButton.png"
+		};
+		glm::vec2 positions[nButtons]{
+			glm::vec2(15, SCREEN_HEIGHT - 47)
+		};
+		glm::ivec2 sizeButtons[nButtons]{
+			glm::ivec2(64, 32)
+		};
+		glm::vec2 relation[nButtons]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
 		break;
 	}
 	case CREDITS:
 	{
+		const int nButtons = 1;
+		string sprites[nButtons]{
+			"images/buttons/BackButton.png"
+		};
+		glm::vec2 positions[nButtons]{
+			glm::vec2(15, SCREEN_HEIGHT - 47)
+		};
+		glm::ivec2 sizeButtons[nButtons]{
+			glm::ivec2(64, 32)
+		};
+		glm::vec2 relation[nButtons]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
 		break;
 	}
 	case PAUSE:

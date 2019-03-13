@@ -14,11 +14,13 @@ public:
 	void update(int deltaTime);
 	void render();
 	void nextMap();
-	void newPositionPlayer();
 	void previousMap();
+
 private:
 	string addressActualMap;
 	int actualMap; // 1 ~ 5 easy, 6 ~ 10 hard
+	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
+
 	TileMap *map;
 	Player *player;
 	glm::ivec2 posPlayer;

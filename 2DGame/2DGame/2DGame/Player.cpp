@@ -17,10 +17,10 @@ enum PlayerAnims
 	STAND_LEFT_UP, STAND_RIGHT_UP, MOVE_LEFT_UP, MOVE_RIGHT_UP
 };
 
-void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bool isOnFloor)
 {
 	bJumping = bGravity = false;
-	isOnFloor = true;
+	this->isOnFloor = isOnFloor;
 
 	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
@@ -186,4 +186,8 @@ void Player::setPosition(const glm::vec2 &pos)
 
 glm::ivec2 Player::getPosition() {
 	return posPlayer;
+}
+
+bool Player::getIsOnFloor() {
+	return isOnFloor;
 }

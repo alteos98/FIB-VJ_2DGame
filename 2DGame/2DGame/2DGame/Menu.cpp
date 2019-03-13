@@ -30,6 +30,7 @@ void Menu::loadMenu(string sprites[], glm::vec2 positions[], glm::ivec2 sizeButt
 	currentTime = 0.0f;*/
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	buttons.clear();
 	initShaders();
 
 	/*backgroundQuad = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, simpleTexProgram);
@@ -103,7 +104,7 @@ int Menu::ButtonPress(int x, int y) {
 			printf(" GO!"); printf("%i, %i \n", x, y);
 			return i + 1;
 		}
-		printf("%i, %i \n", x, y);
-		return -1;
 	}
+	printf("%i, %i \n", x, y);
+	return -1;
 }

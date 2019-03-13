@@ -36,13 +36,15 @@ void Level::init(int difficulty)
 		addressActualMap = "levels/level21.txt";
 
 	player = new Player();
+	isOnFloor = true;
 	loadMap();
 }
 
 void Level::loadMap() {
 	initShaders();
 	map = TileMap::createTileMap(addressActualMap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, isOnFloor);
 	player->setPosition(posPlayer);
 	posPlayer = player->getPosition();
 	player->setTileMap(map);
@@ -55,31 +57,29 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 
+	isOnFloor = player->getIsOnFloor();
+	cout << isOnFloor << endl;
+
 	// Afegir condicions de que si el player se surt de la pantalla canvii de nivell
 	posPlayer = player->getPosition();
-	printf("%i , %i \n", posPlayer.x, posPlayer.y);
-	if (posPlayer.x >= (SCREEN_WIDTH - 35)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
-		posPlayer.x = 5;
+	if (posPlayer.x >= SCREEN_WIDTH) {
+		posPlayer.x = 0;
 		nextMap();
-		newPositionPlayer();
 		loadMap();
 	}
-	if (posPlayer.x <= (0)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
-		posPlayer.x = 600;
+	if (posPlayer.x < -25) {
+		posPlayer.x = 620;
 		previousMap();
-		newPositionPlayer();
 		loadMap();
 	}
-	if (posPlayer.y >= (SCREEN_HEIGHT - 35)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+	if (posPlayer.y >= SCREEN_HEIGHT) {
 		posPlayer.y = 5;
 		nextMap();
-		newPositionPlayer();
 		loadMap();
 	}
-	if (posPlayer.y <= (0)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+	if (posPlayer.y < -25) {
 		posPlayer.y = 440;
 		previousMap();
-		newPositionPlayer();
 		loadMap();
 	}
 }
@@ -98,18 +98,16 @@ void Level::render()
 	player->render();
 }
 
-// Funció per establir la nova posició del player en funció del nou mapa
-void Level::newPositionPlayer () {}
-
 // Els hi posem a tots els mapes "levelXY.txt"
 // On X fa referencia a la dificultat i Y al nivell en si
 void Level::nextMap () {
-	if (actualMap + 1 != 5 && actualMap + 1 != 10) {
+	if (actualMap + 1 != 6 && actualMap + 1 != 11) {
 		int numberOfTheNewMap = int(addressActualMap[13]) + 1;
 		addressActualMap[13] = char(numberOfTheNewMap);
 		actualMap++;
 	}
 }
+
 void Level::previousMap() {
 	if (actualMap - 1 != 0 && actualMap - 1 != 5) {
 		int numberOfTheNewMap = int(addressActualMap[13]) - 1;
@@ -117,7 +115,6 @@ void Level::previousMap() {
 		actualMap--;
 	}
 }
-
 
 void Level::initShaders()
 {
