@@ -180,9 +180,10 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
 	int x, y0, y1;
+	cout << pos.x << endl;
 
 	// Fa que el Player pugui sortir del mapa per avançar de pantalla
-	if (pos.x >= 640 - 30)
+	if (pos.x >= 1080 - 50)
 		return false;
 	
 	x = (pos.x + size.x - 1) / tileSize;

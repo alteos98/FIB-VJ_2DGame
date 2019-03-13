@@ -168,14 +168,14 @@ void Game::updateMenu(MenuTypes menuType) {
 			"images/buttons/CreditsButton.png"
 		};
 		glm::vec2 positions[nButtons]{
-			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 80),
-			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 0),
-			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 + 80)
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 - 100),
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 + 50),
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 + 200)
 		};
 		glm::ivec2 sizeButtons[nButtons]{
-			glm::ivec2(256, 64),
-			glm::ivec2(256, 64),
-			glm::ivec2(256, 64)
+			glm::ivec2(512, 128),
+			glm::ivec2(512, 128),
+			glm::ivec2(512, 128)
 		};
 		glm::vec2 relation[nButtons]{
 			glm::vec2(1.f, 1.f / 4.f),
@@ -194,14 +194,14 @@ void Game::updateMenu(MenuTypes menuType) {
 			"images/buttons/BackButton.png"
 		};
 		glm::vec2 positions[nButtons]{
-			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 70),
-			glm::vec2(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 + 10),
-			glm::vec2(15, SCREEN_HEIGHT - 47)
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 - 150),
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 + 100),
+			glm::vec2(15, SCREEN_HEIGHT - 80)
 		};
 		glm::ivec2 sizeButtons[nButtons]{
-			glm::ivec2(256, 64),
-			glm::ivec2(256, 64),
-			glm::ivec2(64, 32)
+			glm::ivec2(512, 128),
+			glm::ivec2(512, 128),
+			glm::ivec2(128, 64)
 		};
 		glm::vec2 relation[nButtons]{
 			glm::vec2(1.f, 1.f / 4.f),
@@ -222,10 +222,10 @@ void Game::updateMenu(MenuTypes menuType) {
 			"images/buttons/BackButton.png"
 		};
 		glm::vec2 positions[nButtons]{
-			glm::vec2(15, SCREEN_HEIGHT - 47)
+			glm::vec2(15, SCREEN_HEIGHT - 80)
 		};
 		glm::ivec2 sizeButtons[nButtons]{
-			glm::ivec2(64, 32)
+			glm::ivec2(128, 64)
 		};
 		glm::vec2 relation[nButtons]{
 			glm::vec2(1.f, 1.f / 4.f)
@@ -240,10 +240,10 @@ void Game::updateMenu(MenuTypes menuType) {
 			"images/buttons/BackButton.png"
 		};
 		glm::vec2 positions[nButtons]{
-			glm::vec2(15, SCREEN_HEIGHT - 47)
+			glm::vec2(15, SCREEN_HEIGHT - 80)
 		};
 		glm::ivec2 sizeButtons[nButtons]{
-			glm::ivec2(64, 32)
+			glm::ivec2(128, 64)
 		};
 		glm::vec2 relation[nButtons]{
 			glm::vec2(1.f, 1.f / 4.f)

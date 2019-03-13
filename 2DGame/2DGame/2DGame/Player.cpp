@@ -8,7 +8,8 @@
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
-#define FALL_STEP 6
+#define FALL_STEP 14
+#define VELOCITY 10
 
 
 enum PlayerAnims
@@ -19,11 +20,12 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bool isOnFloor)
 {
+	quadSize = glm::ivec2(64, 64);
 	bJumping = bGravity = false;
 	this->isOnFloor = isOnFloor;
 
 	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(quadSize, glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(8);
 
 	sprite->setAnimationSpeed(STAND_LEFT_DOWN, 8);
@@ -66,20 +68,20 @@ void Player::update(int deltaTime) {
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_LEFT_DOWN)
 				sprite->changeAnimation(MOVE_LEFT_DOWN);
-			posPlayer.x -= 5;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+			posPlayer.x -= VELOCITY;
+			if (map->collisionMoveLeft(posPlayer, quadSize))
 			{
-				posPlayer.x += 5;
+				posPlayer.x += VELOCITY;
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			}
 		}
 		else {
 			if (sprite->animation() != MOVE_LEFT_UP)
 				sprite->changeAnimation(MOVE_LEFT_UP);
-			posPlayer.x -= 5;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+			posPlayer.x -= VELOCITY;
+			if (map->collisionMoveLeft(posPlayer, quadSize))
 			{
-				posPlayer.x += 5;
+				posPlayer.x += VELOCITY;
 				sprite->changeAnimation(STAND_LEFT_UP);
 			}
 		}
@@ -88,20 +90,20 @@ void Player::update(int deltaTime) {
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_RIGHT_DOWN)
 				sprite->changeAnimation(MOVE_RIGHT_DOWN);
-			posPlayer.x += 5;
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+			posPlayer.x += VELOCITY;
+			if (map->collisionMoveRight(posPlayer, quadSize))
 			{
-				posPlayer.x -= 5;
+				posPlayer.x -= VELOCITY;
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			}
 		}
 		else {
 			if (sprite->animation() != MOVE_RIGHT_UP)
 				sprite->changeAnimation(MOVE_RIGHT_UP);
-			posPlayer.x += 5;
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+			posPlayer.x += VELOCITY;
+			if (map->collisionMoveRight(posPlayer, quadSize))
 			{
-				posPlayer.x -= 5;
+				posPlayer.x -= VELOCITY;
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			}
 		}
@@ -125,14 +127,14 @@ void Player::update(int deltaTime) {
 	if (bGravity) {
 		if (!isOnFloor) {
 			posPlayer.y += FALL_STEP;
-			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+			if (map->collisionMoveDown(posPlayer, quadSize, &posPlayer.y, FALL_STEP)) {
 				bGravity = false;
 				isOnFloor = true;
 			}
 		}
 		else {
 			posPlayer.y -= FALL_STEP;
-			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+			if (map->collisionMoveUp(posPlayer, quadSize, &posPlayer.y, FALL_STEP)) {
 				bGravity = false;
 				isOnFloor = false;
 			}
@@ -145,7 +147,7 @@ void Player::update(int deltaTime) {
 				sprite->changeAnimation(STAND_LEFT_UP);
 			else if (sprite->animation() == STAND_RIGHT_DOWN)
 				sprite->changeAnimation(STAND_RIGHT_UP);
-			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+			if (map->collisionMoveUp(posPlayer, quadSize, &posPlayer.y, FALL_STEP)) {
 				if (Game::instance().getKey(' ')) {
 					bGravity = true;
 				}
@@ -157,7 +159,7 @@ void Player::update(int deltaTime) {
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			else if (sprite->animation() == STAND_RIGHT_UP)
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
-			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
+			if (map->collisionMoveDown(posPlayer, quadSize, &posPlayer.y, FALL_STEP)) {
 				if (Game::instance().getKey(' ')) {
 					bGravity = true;
 				}
@@ -190,4 +192,12 @@ glm::ivec2 Player::getPosition() {
 
 bool Player::getIsOnFloor() {
 	return isOnFloor;
+}
+
+Sprite* Player::getSprite() {
+	return sprite;
+}
+
+void Player::setAnimation(int i) {
+	sprite->changeAnimation(i);
 }

@@ -22,16 +22,20 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getPosition();
 	bool getIsOnFloor();
+	Sprite* getSprite();
+	void setAnimation(int i);
 	
 private:
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity
 	bool isOnFloor;
+
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
+	glm::ivec2 quadSize;
 
 };
 

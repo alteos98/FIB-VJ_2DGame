@@ -58,19 +58,26 @@ void Level::update(int deltaTime)
 	player->update(deltaTime);
 
 	isOnFloor = player->getIsOnFloor();
-	cout << isOnFloor << endl;
 
 	// Afegir condicions de que si el player se surt de la pantalla canvii de nivell
 	posPlayer = player->getPosition();
-	if (posPlayer.x >= SCREEN_WIDTH) {
-		posPlayer.x = 0;
+	if (posPlayer.x > SCREEN_WIDTH) {
+		posPlayer.x = -10;
 		nextMap();
 		loadMap();
+		if (isOnFloor)
+			player->setAnimation(1);
+		else
+			player->setAnimation(5);
 	}
-	if (posPlayer.x < -25) {
-		posPlayer.x = 620;
+	if (posPlayer.x < -30) {
+		posPlayer.x = SCREEN_WIDTH - 20;
 		previousMap();
 		loadMap();
+		if (isOnFloor)
+			player->setAnimation(0);
+		else
+			player->setAnimation(4);
 	}
 	if (posPlayer.y >= SCREEN_HEIGHT) {
 		posPlayer.y = 5;
@@ -78,7 +85,7 @@ void Level::update(int deltaTime)
 		loadMap();
 	}
 	if (posPlayer.y < -25) {
-		posPlayer.y = 440;
+		posPlayer.y = SCREEN_HEIGHT;
 		previousMap();
 		loadMap();
 	}
