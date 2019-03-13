@@ -20,96 +20,10 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-	/*if (isPlaying)
+	if (isPlaying)
 		level.update(deltaTime);
 	else
-		menu.update(deltaTime);*/
-
-	switch (actualMenu) {
-	case MAINMENU:
-	{
-		if (keys['1']) {
-			updateMenu(SELECTDIFFICULTY);
-		}
-		else if (keys['2']) {
-			updateMenu(INSTRUCTIONS);
-		}
-		else if (keys['3']) {
-			updateMenu(CREDITS);
-		}
-		break;
-	}
-	case SELECTDIFFICULTY:
-	{
-		if (keys['1']) {
-			updateMenu(PLAYING);
-			isPlaying = true;
-			easyDifficulty = true;
-			level.init(easyDifficulty);
-		}
-		else if (keys['2']) {
-			updateMenu(PLAYING);
-			isPlaying = true;
-			easyDifficulty = false;
-			level.init(easyDifficulty);
-		}
-		else if (keys[27]) {
-			updateMenu(MAINMENU);
-		}
-		break;
-	}
-	case PLAYING:
-	{
-		if (keys[27]) {
-			updateMenu(PAUSE);
-			isPlaying = false;
-		}
-		else {
-			level.update(deltaTime);
-		}
-		break;
-	}
-	case INSTRUCTIONS:
-	{
-		if (keys[27]) {
-			updateMenu(MAINMENU);
-		}
-		break;
-	}
-	case CREDITS:
-	{
-		if (keys[27]) {
-			updateMenu(MAINMENU);
-		}
-		break;
-	}
-	case PAUSE:
-	{
-		if (keys[27]) {
-			updateMenu(MAINMENU);
-		}
-		else if (keys[' ']) {
-			updateMenu(PLAYING);
-			isPlaying = true;
-		}
-		break;
-	}
-	case ENDSCREEN:
-	{
-		if (keys[27]) {
-			updateMenu(MAINMENU);
-		}
-		else {
-			for (int i = 0; i < 256 && !isPlaying; ++i) {
-				if (keys[i] && !keys[27])
-					updateMenu(PLAYING);
-					isPlaying = true;
-					level.init(easyDifficulty);
-			}
-		}
-		break;
-	}
-	}
+		menu.update(deltaTime);
 	
 	return bPlay;
 }
