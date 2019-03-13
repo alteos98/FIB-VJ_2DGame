@@ -9,7 +9,7 @@ class Level
 public:
 	Level();
 	~Level();
-	void init(bool difficulty);
+	void init(int difficulty);
 	void loadMap();
 	void update(int deltaTime);
 	void render();

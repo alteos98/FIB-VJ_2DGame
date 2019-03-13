@@ -25,11 +25,11 @@ Level::~Level()
 		delete player;
 }
 
-void Level::init(bool easyDifficulty)
+void Level::init(int difficulty)
 {
-	if (easyDifficulty)
+	if (difficulty == 1)
 		addressActualMap = "levels/level11.txt";
-	else
+	else if (difficulty == 2)
 		addressActualMap = "levels/level21.txt";
 
 	player = new Player();

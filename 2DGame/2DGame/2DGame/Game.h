@@ -56,7 +56,7 @@ private:
 	bool isPlaying;	// True -> the user is in a level, False -> the user is in a menu
 	bool bLeft;	// True -> left button of the mouse is pressed
 	int mouseX, mouseY;
-	bool easyDifficulty;
+	int difficulty;
 
 public:
 	void updateMenu(MenuTypes menuType);
