@@ -150,28 +150,34 @@ void Game::specialKeyReleased(int key)
 
 void Game::mouseMove(int x, int y)
 {
-	mouseX = x;
-	mouseY = y;
-
-	if (isPlaying) {}
-	else
-		menu.mouseMove(x, y, bLeft);
 }
 
 void Game::mousePress(int button, int x, int y)
 {
-	if (scene.ButtonPress(x,y)){}
+	switch (actualMenu) {
+	case MAINMENU:
+	{
+		switch (menu.ButtonPress(x, y)) {
+		case 1: {
+			updateMenu(SELECTDIFFICULTY);
+			break;
+		}
+		case 2: {
+			updateMenu(INSTRUCTIONS);
+			break;
+		}
+		case 3: {
+			updateMenu(CREDITS);
+			break;
+		}
+		}
+		break;
+	}
+	}
 }
 
 void Game::mouseRelease(int button)
 {
-	if (button == GLUT_LEFT_BUTTON)
-		bLeft = false;
-
-	if (isPlaying)
-		level.render();
-	else
-		menu.mouseReleased(mouseX, mouseY);
 }
 
 bool Game::getKey(int key) const
@@ -190,30 +196,48 @@ void Game::updateMenu(MenuTypes menuType) {
 	switch (menuType) {
 	case MAINMENU:
 	{
-		string sprites[4]{
+		string sprites[3]{
 			"images/buttonPlay.png",
-			"images/buttonHelp.png",
+			"images/GO.png",
 			"images/buttonCredits.png"
 		};
-		glm::vec2 positions[4]{
+		glm::vec2 positions[3]{
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 45),
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 10),
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 25)
 		};
-		menu.loadMenu(sprites, positions, 3);
+		glm::ivec2 sizeButtons[3]{
+			glm::ivec2(100, 30),
+			glm::ivec2(100, 30),
+			glm::ivec2(100, 30)
+		};
+		glm::vec2 relation[3]{
+			glm::vec2(1.f, 1.f/4.f),
+			glm::vec2(1.f, 1.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		menu.loadMenu(sprites, positions, sizeButtons, relation, 3);
 		break;
 	}
 	case SELECTDIFFICULTY:
 	{
-		string sprites[4]{
+		string sprites[2]{
 			"images/buttonHelp.png",
 			"images/buttonPlay.png"
 		};
-		glm::vec2 positions[4]{
+		glm::vec2 positions[2]{
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 45),
 			glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 10)
 		};
-		menu.loadMenu(sprites, positions, 2);
+		glm::ivec2 sizeButtons[2]{
+			glm::ivec2(100, 30),
+			glm::ivec2(100, 30)
+		};
+		glm::vec2 relation[2]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		menu.loadMenu(sprites, positions, sizeButtons, relation, 2);
 		break;
 	}
 	case PLAYING:

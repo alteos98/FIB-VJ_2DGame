@@ -9,7 +9,7 @@ class Button
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 buttonSize, glm::vec2 relation, string nameImage);
 	void update(int deltaTime);
 	void render();
 
@@ -18,11 +18,13 @@ public:
 	glm::vec2 getposB();
 	int getWidth();
 	int getHeight();
+
 private:
 	glm::ivec2 tileMapDispl, posButton;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
+	glm::ivec2 buttonSize;
 
 };
 

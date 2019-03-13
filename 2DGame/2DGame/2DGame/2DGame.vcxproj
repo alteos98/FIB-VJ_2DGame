@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
-    <ClInclude Include="Button.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Level.h" />

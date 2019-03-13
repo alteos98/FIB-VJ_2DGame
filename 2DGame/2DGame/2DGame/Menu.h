@@ -10,17 +10,14 @@ public:
 	~Menu();
 
 	void init();
-	void loadMenu(string sprites[], glm::vec2 positions[], int nButtons);
+	void loadMenu(string sprites[], glm::vec2 positions[], glm::ivec2 sizeButtons[], glm::vec2 relation[], int nButtons);
 	void update(int deltaTime);
 	void render();
-	int isButtonPressed();
-	void mouseMove(int x, int y, bool bLeft);
-	void mouseReleased(int mouseX, int mouseY);
+	int ButtonPress(int x, int y);
 
 private:
 	vector<Button*> buttons;
 	Texture colorTexture;
-	//ShaderProgram simpleTexProgram;
 	float currentTime;
 	glm::mat4 projection;
 

@@ -14,10 +14,12 @@ enum ButtonAnims
 	GO
 };
 
-void Button::init(const glm::ivec2 & tileMapPos, ShaderProgram & shaderProgram)
+void Button::init(const glm::ivec2 & tileMapPos, ShaderProgram & shaderProgram, glm::ivec2 buttonSize, glm::vec2 relation, string nameImage)
 {
-	spritesheet.loadFromFile("images/GO.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(WIDTH, HEIGHT), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+	this->buttonSize = buttonSize;
+
+	spritesheet.loadFromFile(nameImage, TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(glm::ivec2(buttonSize.x, buttonSize.y), relation, &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 	
 	sprite->setAnimationSpeed(GO, 1);
@@ -55,12 +57,12 @@ glm::vec2 Button::getposB()
 
 int Button::getWidth()
 {
-	return WIDTH;
+	return buttonSize.x;
 }
 
 int Button::getHeight()
 {
-	return HEIGHT;
+	return buttonSize.y;
 }
 
 

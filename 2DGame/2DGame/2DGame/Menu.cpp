@@ -4,6 +4,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Game.h"
 
+#define SCREEN_X 0
+#define SCREEN_Y 0
+
 Menu::Menu()
 {
 }
@@ -15,7 +18,7 @@ Menu::~Menu()
 
 void Menu::init() {}
 
-void Menu::loadMenu(string sprites[], glm::vec2 positions[], int nButtons)
+void Menu::loadMenu(string sprites[], glm::vec2 positions[], glm::ivec2 sizeButtons[], glm::vec2 relation[], int nButtons)
 {
 	/*initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -35,8 +38,9 @@ void Menu::loadMenu(string sprites[], glm::vec2 positions[], int nButtons)
 	colorTexture.setMagFilter(GL_NEAREST);*/
 
 	for (int i = 0; i < nButtons; i++) {
-		Button *b = new Button;
-		b->init(positions[i], sprites[i], texProgram);
+		Button* b = new Button;
+		b->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, sizeButtons[i], relation[i], sprites[i]);
+		b->setPosition(positions[i]);
 		buttons.push_back(b);
 	}
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -92,29 +96,14 @@ void Menu::initShaders()
 	fShader.free();
 }
 
-int Menu::isButtonPressed()
-{
-	for (int i = 0; i < buttons.size(); i++) {
-		if (buttons[i]->isSelected())
-			return i;
-	}
-	return -1;
-}
-
-void Menu::mouseMove(int x, int y, bool bLeft) {
+int Menu::ButtonPress(int x, int y) {
 	for (int i = 0; i < buttons.size(); ++i) {
-		buttons[i]->mouseMoved(x, y, bLeft);
-	}
-}
-
-void Menu::mouseReleased(int mouseX, int mouseY) {
-	int buttonSelected = isButtonPressed();
-	for (int i = 0; i < buttons.size(); i++) {
-		if (!(buttons[i]->mouseReleased(mouseX, mouseY))) {
-			buttons[i]->mouseMoved(mouseX, mouseY, false);
-			if (buttons[i]->isSelected())
-				if (buttonSelected != -1 && buttonSelected != i)
-					buttons[buttonSelected]->deselect();
+		if ((x > buttons[i]->getposB().x + SCREEN_X && x < (buttons[i]->getposB().x + buttons[i]->getWidth() + SCREEN_X))
+			&& (y > buttons[i]->getposB().y + SCREEN_Y && y < (buttons[i]->getposB().y + buttons[i]->getHeight() + SCREEN_Y))) {
+			printf(" GO!"); printf("%i, %i \n", x, y);
+			return i + 1;
 		}
+		printf("%i, %i \n", x, y);
+		return -1;
 	}
 }
