@@ -15,7 +15,7 @@ public:
 	void render();
 	void nextMap();
 	void newPositionPlayer();
-
+	void previousMap();
 private:
 	string addressActualMap;
 	int actualMap; // 1 ~ 5 easy, 6 ~ 10 hard

@@ -59,43 +59,11 @@ void Level::update(int deltaTime)
 		newPositionPlayer();
 		loadMap();
 	}
-	/*switch (actualMap) {
-	case 1: {
-		if (posPlayer.x >= (SCREEN_WIDTH - 32)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
-			nextMap();
-			newPositionPlayer();
-			loadMap();
-		}
-		break;
+	if (posPlayer.x == (0)) { // posPlayer.x arriba com a molt a 608; 640 - 608 = 32
+		previousMap();
+		newPositionPlayer();
+		loadMap();
 	}
-	case 2: {
-		break;
-	}
-	case 3: {
-		break;
-	}
-	case 4: {
-		break;
-	}
-	case 5: {
-		break;
-	}
-	case 6: {
-		break;
-	}
-	case 7: {
-		break;
-	}
-	case 8: {
-		break;
-	}
-	case 9: {
-		break;
-	}
-	case 10: {
-		break;
-	}
-	}*/
 }
 
 void Level::render()
@@ -124,6 +92,14 @@ void Level::nextMap () {
 		actualMap++;
 	}
 }
+void Level::previousMap() {
+	if (actualMap - 1 != 0 && actualMap - 1 != 5) {
+		int numberOfTheNewMap = int(addressActualMap[13]) - 1;
+		addressActualMap[13] = char(numberOfTheNewMap);
+		actualMap--;
+	}
+}
+
 
 void Level::initShaders()
 {
