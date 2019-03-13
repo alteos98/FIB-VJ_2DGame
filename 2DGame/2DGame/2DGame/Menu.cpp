@@ -63,7 +63,7 @@ void Menu::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	for (int i = 0; i < buttons.size(); i++)
+	for (unsigned int i = 0; i < buttons.size(); i++)
 		buttons[i]->render();
 }
 
@@ -98,7 +98,7 @@ void Menu::initShaders()
 }
 
 int Menu::ButtonPress(int x, int y) {
-	for (int i = 0; i < buttons.size(); ++i) {
+	for (unsigned int i = 0; i < buttons.size(); ++i) {
 		if ((x > buttons[i]->getposB().x + SCREEN_X && x < (buttons[i]->getposB().x + buttons[i]->getWidth() + SCREEN_X))
 			&& (y > buttons[i]->getposB().y + SCREEN_Y && y < (buttons[i]->getposB().y + buttons[i]->getHeight() + SCREEN_Y))) {
 			printf(" GO!"); printf("%i, %i \n", x, y);

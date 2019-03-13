@@ -146,7 +146,7 @@ void Player::update(int deltaTime) {
 			else if (sprite->animation() == STAND_RIGHT_DOWN)
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
-				if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+				if (Game::instance().getKey(' ')) {
 					bGravity = true;
 				}
 			}
@@ -158,7 +158,7 @@ void Player::update(int deltaTime) {
 			else if (sprite->animation() == STAND_RIGHT_UP)
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y, FALL_STEP)) {
-				if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+				if (Game::instance().getKey(' ')) {
 					bGravity = true;
 				}
 			}
