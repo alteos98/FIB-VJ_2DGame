@@ -69,8 +69,7 @@ void Game::mouseMove(int x, int y)
 void Game::mousePress(int button, int x, int y)
 {
 	switch (actualMenu) {
-	case MAINMENU:
-	{
+	case MAINMENU: {
 		switch (menu.ButtonPress(x, y)) {
 		case 1: {
 			updateMenu(SELECTDIFFICULTY);
@@ -87,22 +86,54 @@ void Game::mousePress(int button, int x, int y)
 		}
 		break;
 	}
-	case SELECTDIFFICULTY:
-	{
+	case SELECTDIFFICULTY: {
 		switch (menu.ButtonPress(x, y)) {
 		case 1: {
 			updateMenu(PLAYING);
 			isPlaying = true;
-			easyDifficulty = true;
-			level.init(easyDifficulty);
+			int difficulty = 1;
+			level.init(difficulty);
 			break;
 		}
-		case 2:
-		{
+		case 2: {
 			updateMenu(PLAYING);
 			isPlaying = true;
-			easyDifficulty = false;
-			level.init(easyDifficulty);
+			difficulty = 2;
+			level.init(difficulty);
+			break;
+		}
+		case 3: {
+			updateMenu(MAINMENU);
+			break;
+		}
+		}
+		break;
+	}
+	case INSTRUCTIONS: {
+		if (menu.ButtonPress(x, y) == 1) {
+			updateMenu(MAINMENU);
+		}
+	}
+	case CREDITS: {
+		if (menu.ButtonPress(x, y) == 1) {
+			updateMenu(MAINMENU);
+		}
+	}
+	case PAUSE: {
+		/*switch (menu.ButtonPress(x, y)) {
+		}*/
+	}
+	case ENDSCREEN: {
+		switch (menu.ButtonPress(x, y)) {
+		case 1: {
+			updateMenu(PLAYING);
+			isPlaying = true;
+			level.init(difficulty);
+			break;
+		}
+		case 2: {
+			updateMenu(SELECTDIFFICULTY);
+			isPlaying = false;
 			break;
 		}
 		}
