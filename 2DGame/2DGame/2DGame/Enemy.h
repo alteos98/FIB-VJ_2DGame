@@ -14,7 +14,7 @@ class Enemy
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::vec2 relation, string nameImage);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::vec2 relation, string nameImage, glm::ivec2 posInicial, glm::ivec2 posFinal);
 	void update(int deltaTime);
 	void render();
 
@@ -24,12 +24,17 @@ public:
 	void setAnimation(int i);
 
 private:
-	glm::ivec2 tileMapDispl, posEnemy;
-	int jumpAngle, startY;
+	glm::ivec2 tileMapDispl, posEnemy, posInicial, posFinal;
+	float incrementX, incrementY; // increment for each update to the position of the enemy
+	int nMovement, nTotalMovements; // número de moviments que farà
+	bool goingReturning; // True -> going to posFinal, False -> returning to posInicial
+
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
 	glm::ivec2 quadSize;
+
+	void newPosition();
 
 };
 
