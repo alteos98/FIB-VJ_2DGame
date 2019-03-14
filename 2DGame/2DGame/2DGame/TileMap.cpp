@@ -245,3 +245,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
 
 	return false;
 }
+
+bool TileMap::collisionPlayerEnemy() {
+	return false;
+}

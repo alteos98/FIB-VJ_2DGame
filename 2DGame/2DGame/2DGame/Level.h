@@ -3,6 +3,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class Level
 {
@@ -10,7 +11,12 @@ public:
 	Level();
 	~Level();
 	void init(int difficulty);
+
+	void load();
 	void loadMap();
+	void loadPlayer();
+	void loadEnemy(int i);
+
 	void update(int deltaTime);
 	void render();
 	void nextMap();
@@ -23,6 +29,7 @@ private:
 
 	TileMap *map;
 	Player *player;
+	vector<Enemy*> enemy;
 	glm::ivec2 posPlayer;
 	float currentTime;
 	glm::mat4 projection;

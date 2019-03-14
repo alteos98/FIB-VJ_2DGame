@@ -14,6 +14,9 @@ Level::Level()
 {
 	map = NULL;
 	player = NULL;
+	for (unsigned int i = 0; i < enemy.size(); ++i) {
+		enemy[i] = NULL;
+	}
 }
 
 
@@ -23,6 +26,10 @@ Level::~Level()
 		delete map;
 	if (player != NULL)
 		delete player;
+	for (unsigned int i = 0; i < enemy.size(); ++i) {
+		if (enemy[i] != NULL)
+			delete enemy[i];
+	}
 }
 
 void Level::init(int difficulty)
@@ -37,19 +44,37 @@ void Level::init(int difficulty)
 
 	player = new Player();
 	isOnFloor = true;
+	load();
+}
+
+void Level::load() {
+	initShaders();
 	loadMap();
+	loadPlayer();
+	for (unsigned int i = 0; i < enemy.size(); ++i)
+		loadEnemy(i);
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	currentTime = 0.0f;
 }
 
 void Level::loadMap() {
-	initShaders();
 	map = TileMap::createTileMap(addressActualMap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	
+}
+
+void Level::loadPlayer() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, isOnFloor);
 	player->setPosition(posPlayer);
 	posPlayer = player->getPosition();
 	player->setTileMap(map);
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	currentTime = 0.0f;
+}
+
+void Level::loadEnemy(int i) {
+	/*
+	enemy[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemy[i]->setPosition(posEnemy);
+	posEnemy = enemy[i]->getPosition();
+	enemy[i]->setTileMap(map);
+	*/
 }
 
 void Level::update(int deltaTime)
@@ -64,7 +89,7 @@ void Level::update(int deltaTime)
 	if (posPlayer.x > SCREEN_WIDTH) {
 		posPlayer.x = -10;
 		nextMap();
-		loadMap();
+		load();
 		if (isOnFloor)
 			player->setAnimation(1);
 		else
@@ -73,7 +98,7 @@ void Level::update(int deltaTime)
 	if (posPlayer.x < -30) {
 		posPlayer.x = SCREEN_WIDTH - 20;
 		previousMap();
-		loadMap();
+		load();
 		if (isOnFloor)
 			player->setAnimation(0);
 		else
@@ -82,12 +107,12 @@ void Level::update(int deltaTime)
 	if (posPlayer.y >= SCREEN_HEIGHT) {
 		posPlayer.y = 5;
 		nextMap();
-		loadMap();
+		load();
 	}
 	if (posPlayer.y < -25) {
 		posPlayer.y = SCREEN_HEIGHT;
 		previousMap();
-		loadMap();
+		load();
 	}
 }
 

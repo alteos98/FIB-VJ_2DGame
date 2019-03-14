@@ -11,7 +11,7 @@
 
 enum ButtonAnims
 {
-	GO
+	BASE
 };
 
 void Button::init(const glm::ivec2 & tileMapPos, ShaderProgram & shaderProgram, glm::ivec2 buttonSize, glm::vec2 relation, string nameImage)
@@ -22,8 +22,8 @@ void Button::init(const glm::ivec2 & tileMapPos, ShaderProgram & shaderProgram, 
 	sprite = Sprite::createSprite(glm::ivec2(buttonSize.x, buttonSize.y), relation, &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 	
-	sprite->setAnimationSpeed(GO, 1);
-	sprite->addKeyframe(GO, glm::vec2(0.f, 0.f));
+	sprite->setAnimationSpeed(BASE, 1);
+	sprite->addKeyframe(BASE, glm::vec2(0.f, 0.f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -32,7 +32,7 @@ void Button::init(const glm::ivec2 & tileMapPos, ShaderProgram & shaderProgram, 
 }
 
 void Button::update(int deltaTime) {
-	sprite->changeAnimation(GO);
+	sprite->changeAnimation(BASE);
 }
 
 void Button::render() {
