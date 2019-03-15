@@ -10,6 +10,17 @@
 #define INIT_PLAYER_X_TILES 10
 #define INIT_PLAYER_Y_TILES 20
 
+#define N_ENEMIES1 1
+#define N_ENEMIES2 1
+#define N_ENEMIES3 1
+#define N_ENEMIES4 1
+#define N_ENEMIES5 1
+#define N_ENEMIES6 1
+#define N_ENEMIES7 1
+#define N_ENEMIES8 1
+#define N_ENEMIES9 1
+#define N_ENEMIES10 1
+
 Level::Level()
 {
 	map = NULL;
@@ -51,8 +62,8 @@ void Level::load() {
 	initShaders();
 	loadMap();
 	loadPlayer();
-	for (unsigned int i = 0; i < enemy.size(); ++i)
-		loadEnemy(i);
+	enemy.clear();
+	loadEnemies();
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -64,56 +75,242 @@ void Level::loadMap() {
 void Level::loadPlayer() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, isOnFloor);
 	player->setPosition(posPlayer);
-	posPlayer = player->getPosition();
 	player->setTileMap(map);
 }
 
-void Level::loadEnemy(int i) {
-	/*
-	enemy[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	enemy[i]->setPosition(posEnemy);
-	posEnemy = enemy[i]->getPosition();
-	enemy[i]->setTileMap(map);
-	*/
+void Level::loadEnemies() {
+	switch (actualMap) {
+	case 1: {
+		glm::vec2 relation[N_ENEMIES1]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES1]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES1]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES1]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES1; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 2: {
+		glm::vec2 relation[N_ENEMIES2]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES2]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES2]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES2]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES2; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 3: {
+		glm::vec2 relation[N_ENEMIES3]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES3]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES3]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES3]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES3; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 4: {
+		glm::vec2 relation[N_ENEMIES4]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES4]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES4]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES4]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES4; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 5: {
+		glm::vec2 relation[N_ENEMIES5]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES5]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES5]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES5]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES5; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 6: {
+		glm::vec2 relation[N_ENEMIES6]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES6]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES6]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES6]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES6; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 7: {
+		glm::vec2 relation[N_ENEMIES7]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES7]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES7]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES7]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES7; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 8: {
+		glm::vec2 relation[N_ENEMIES8]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES8]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES8]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES8]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES8; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 9: {
+		glm::vec2 relation[N_ENEMIES9]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES9]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES9]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES9]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES9; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 10: {
+		glm::vec2 relation[N_ENEMIES10]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES10]{
+			"images/enemies/Enemy1.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES10]{
+			glm::ivec2(0, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES10]{
+			glm::ivec2(50, 50)
+		};
+		for (int i = 0; i < N_ENEMIES10; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	}
 }
 
 void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	for (unsigned int i = 0; i < enemy.size(); ++i)
+		enemy[i]->update(deltaTime);
 
-	isOnFloor = player->getIsOnFloor();
-
-	// Afegir condicions de que si el player se surt de la pantalla canvii de nivell
-	posPlayer = player->getPosition();
-	if (posPlayer.x > SCREEN_WIDTH) {
-		posPlayer.x = -10;
-		nextMap();
-		load();
-		if (isOnFloor)
-			player->setAnimation(1);
-		else
-			player->setAnimation(5);
-	}
-	if (posPlayer.x < -30) {
-		posPlayer.x = SCREEN_WIDTH - 20;
-		previousMap();
-		load();
-		if (isOnFloor)
-			player->setAnimation(0);
-		else
-			player->setAnimation(4);
-	}
-	if (posPlayer.y >= SCREEN_HEIGHT) {
-		posPlayer.y = 5;
-		nextMap();
-		load();
-	}
-	if (posPlayer.y < -25) {
-		posPlayer.y = SCREEN_HEIGHT;
-		previousMap();
-		load();
-	}
+	changingMapConditions();
 }
 
 void Level::render()
@@ -147,6 +344,42 @@ void Level::previousMap() {
 		actualMap--;
 	}
 }
+
+void Level::changingMapConditions() {
+	isOnFloor = player->getIsOnFloor();
+	posPlayer = player->getPosition();
+
+	if (posPlayer.x > SCREEN_WIDTH) {
+		posPlayer.x = -10;
+		nextMap();
+		load();
+		if (isOnFloor)
+			player->setAnimation(1);
+		else
+			player->setAnimation(5);
+	}
+	if (posPlayer.x < -30) {
+		posPlayer.x = SCREEN_WIDTH - 20;
+		previousMap();
+		load();
+		if (isOnFloor)
+			player->setAnimation(0);
+		else
+			player->setAnimation(4);
+	}
+	if (posPlayer.y >= SCREEN_HEIGHT) {
+		posPlayer.y = 5;
+		nextMap();
+		load();
+	}
+	if (posPlayer.y < -25) {
+		posPlayer.y = SCREEN_HEIGHT;
+		previousMap();
+		load();
+	}
+}
+
+void Level::collisionPlayerEnemy() {}
 
 void Level::initShaders()
 {

@@ -15,12 +15,15 @@ public:
 	void load();
 	void loadMap();
 	void loadPlayer();
-	void loadEnemy(int i);
+	void loadEnemies();
 
 	void update(int deltaTime);
 	void render();
+
 	void nextMap();
 	void previousMap();
+	void changingMapConditions();
+	void collisionPlayerEnemy();
 
 private:
 	string addressActualMap;
@@ -29,8 +32,8 @@ private:
 
 	TileMap *map;
 	Player *player;
-	vector<Enemy*> enemy;
 	glm::ivec2 posPlayer;
+	vector<Enemy*> enemy;
 	float currentTime;
 	glm::mat4 projection;
 
