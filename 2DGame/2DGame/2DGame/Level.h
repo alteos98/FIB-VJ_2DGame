@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Button.h"
 
 class Level
 {
@@ -23,12 +24,14 @@ public:
 	void nextMap();
 	void previousMap();
 	void changingMapConditions();
-	void collisionPlayerEnemy();
+	bool buttonPress(int x, int y);
+	bool collisionPlayerEnemies();
 
 private:
 	string addressActualMap;
-	int actualMap; // 1 ~ 5 easy, 6 ~ 10 hard
+	int actualMap; // 11 ~ 15 easy, 21 ~ 25 hard
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
+	int difficulty;
 
 	TileMap *map;
 	Player *player;
@@ -36,7 +39,18 @@ private:
 	vector<Enemy*> enemy;
 	float currentTime;
 	glm::mat4 projection;
+	Button* b;
+
+	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
 
 	void initShaders();
 	ShaderProgram texProgram;
+
+	int enemiesVelocityEasy[5]{
+		NULL, NULL, 4, 4, 4
+	};
+	int enemiesVelocityHard[5]{
+		2, 2, 2, 2, 2
+	};
+
 };

@@ -9,34 +9,48 @@
 
 Menu::Menu()
 {
+	for (unsigned int i = 0; i < buttons.size(); ++i) {
+		buttons[i] = NULL;
+	}
+	for (unsigned int i = 0; i < images.size(); ++i) {
+		images[i] = NULL;
+	}
+	background = NULL;
 }
 
 
 Menu::~Menu()
 {
+	for (unsigned int i = 0; i < buttons.size(); ++i) {
+		if (buttons[i] != NULL)
+			delete buttons[i];
+	}
+	for (unsigned int i = 0; i < images.size(); ++i) {
+		if (images[i] != NULL)
+			delete images[i];
+	}
+	if (background != NULL)
+		delete background;
 }
 
 void Menu::init() {}
 
-void Menu::loadMenu(string sprites[], glm::vec2 positions[], glm::ivec2 sizeButtons[], glm::vec2 relation[], int nButtons)
+void Menu::loadMenu(
+	string sprites[],
+	glm::vec2 positions[],
+	glm::ivec2 sizeButtons[],
+	glm::vec2 relation[],
+	int nButtons,
+	bool clear
+)
 {
-	/*initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	currentTime = 0.0f;*/
-	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	if (clear)
+		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	buttons.clear();
-	initShaders();
+	images.clear();
 
-	/*backgroundQuad = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, simpleTexProgram);
-	colorTexture.loadFromFile(background, TEXTURE_PIXEL_FORMAT_RGBA);
-	colorTexture.setMinFilter(GL_NEAREST);
-	colorTexture.setMagFilter(GL_NEAREST);*/
+	initShaders();
+	hasBackground = false;
 
 	for (int i = 0; i < nButtons; i++) {
 		Button* b = new Button;
@@ -63,8 +77,35 @@ void Menu::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
+	if (hasBackground)
+		background->render();
+
+	for (unsigned int i = 0; i < images.size(); i++)
+		images[i]->render();
+
 	for (unsigned int i = 0; i < buttons.size(); i++)
 		buttons[i]->render();
+}
+
+void Menu::addBackground(string background) {
+	hasBackground = true;
+	texture.loadFromFile(background, TEXTURE_PIXEL_FORMAT_RGBA);
+	texture.setMinFilter(GL_NEAREST);
+	texture.setMagFilter(GL_NEAREST);
+	glm::vec2 quadSize = glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT);
+	glm::vec2 sizeInSpritesheet = glm::vec2(1.f, 1.f);
+	this->background = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture, &texProgram);
+}
+
+void Menu::addImage(string nameImage, glm::vec2 quadSize, glm::vec2 sizeInSpritesheet, glm::vec2 position) {
+	texture.loadFromFile(nameImage, TEXTURE_PIXEL_FORMAT_RGBA);
+	texture.setMinFilter(GL_NEAREST);
+	texture.setMagFilter(GL_NEAREST);
+	glm::vec2 _quadSize = quadSize;
+	glm::vec2 _sizeInSpritesheet = sizeInSpritesheet;
+	Sprite* image = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture, &texProgram);
+	image->setPosition(position);
+	images.push_back(image);
 }
 
 void Menu::initShaders()
@@ -97,14 +138,12 @@ void Menu::initShaders()
 	fShader.free();
 }
 
-int Menu::ButtonPress(int x, int y) {
+int Menu::buttonPress(int x, int y) {
 	for (unsigned int i = 0; i < buttons.size(); ++i) {
 		if ((x > buttons[i]->getposB().x + SCREEN_X && x < (buttons[i]->getposB().x + buttons[i]->getWidth() + SCREEN_X))
 			&& (y > buttons[i]->getposB().y + SCREEN_Y && y < (buttons[i]->getposB().y + buttons[i]->getHeight() + SCREEN_Y))) {
-			printf(" GO!"); printf("%i, %i \n", x, y);
 			return i + 1;
 		}
 	}
-	printf("%i, %i \n", x, y);
 	return -1;
 }

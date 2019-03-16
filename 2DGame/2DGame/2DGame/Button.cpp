@@ -36,9 +36,7 @@ void Button::update(int deltaTime) {
 }
 
 void Button::render() {
-	{
-		sprite->render();
-	}
+	sprite->render();
 }
 
 void Button::setTileMap(TileMap *tileMap) {

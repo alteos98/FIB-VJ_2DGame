@@ -5,35 +5,34 @@
 #include "Enemy.h"
 #include "Game.h"
 
-#define VELOCITY 2
-
 enum EnemyAnims
 {
 	BASE
 };
 
-void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::vec2 relation, string nameImage, glm::ivec2 posInicial, glm::ivec2 posFinal)
+void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::vec2 relation, string nameImage, glm::ivec2 posInicial, glm::ivec2 posFinal, int velocity)
 {
 	quadSize = glm::ivec2(64, 64);
 	this->posInicial = posInicial;
 	this->posFinal = posFinal;
+	this->velocity = velocity;
 
 	int x = posFinal.x - posInicial.x;
 	int y = posFinal.y - posInicial.y;
-	if (x > y)
-		nTotalMovements = x / VELOCITY;
+	if (abs(x) > abs(y))
+		nTotalMovements = abs(x) / velocity;
 	else
-		nTotalMovements = y / VELOCITY;
-	incrementX = (float)x / nTotalMovements;
-	incrementY = (float)y / nTotalMovements;
-	nMovement = 0;
+		nTotalMovements = abs(y) / velocity;
+	incrementX = (float)x / ((float)nTotalMovements * (float)velocity);
+	incrementY = (float)y / ((float)nTotalMovements * (float)velocity);
+	nMovement = 1;
 	goingReturning = true;
 
 	spritesheet.loadFromFile(nameImage, TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(quadSize, relation, &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
-	sprite->setAnimationSpeed(BASE, 8);
+	sprite->setAnimationSpeed(BASE, 1);
 	sprite->addKeyframe(BASE, glm::vec2(0.f, 0.f));
 
 	sprite->changeAnimation(0);
@@ -44,28 +43,28 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm
 
 void Enemy::newPosition() {
 	if (goingReturning) {
-		if (nMovement >= nTotalMovements) {
+		if (nMovement == nTotalMovements) {
 			posEnemy.x = posFinal.x;
 			posEnemy.y = posFinal.y;
 			nMovement = nTotalMovements - 1;
 			goingReturning = !goingReturning;
 		}
 		else { // nMovement < nTotalMovements
-			posEnemy.x += int(incrementX * VELOCITY);
-			posEnemy.y += int(incrementY * VELOCITY);
+			posEnemy.x = posInicial.x + nMovement * (int)incrementX * velocity;
+			posEnemy.y = posInicial.y + nMovement * (int)incrementY * velocity;
 			nMovement++;
 		}
 	}
 	else {
-		if (nMovement <= 0) {
+		if (nMovement == 0) {
 			posEnemy.x = posInicial.x;
 			posEnemy.y = posInicial.y;
 			nMovement = 1;
 			goingReturning = !goingReturning;
 		}
 		else { // nMovement > 0
-			posEnemy.x += int(incrementX * VELOCITY);
-			posEnemy.y += int(incrementY * VELOCITY);
+			posEnemy.x = posInicial.x + nMovement * (int)incrementX * velocity;
+			posEnemy.y = posInicial.y + nMovement * (int)incrementY * velocity;
 			nMovement--;
 		}
 	}

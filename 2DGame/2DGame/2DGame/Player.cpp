@@ -52,7 +52,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 	sprite->addKeyframe(MOVE_RIGHT_UP, glm::vec2(0.f, 3.f / 6.f));
 	sprite->addKeyframe(MOVE_RIGHT_UP, glm::vec2(1.f / 6.f, 3.f / 6.f));
 
-	sprite->changeAnimation(0);
+	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
@@ -144,8 +144,9 @@ void Player::update(int deltaTime) {
 			else if (sprite->animation() == STAND_RIGHT_DOWN)
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			if (map->collisionMoveUp(posPlayer, quadSize, &posPlayer.y, FALL_STEP)) {
-				if (Game::instance().getKey(' ')) {
+				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 					bGravity = true;
+					Game::instance().setCanInvertGravity(false);
 				}
 			}
 		}
@@ -156,8 +157,9 @@ void Player::update(int deltaTime) {
 			else if (sprite->animation() == STAND_RIGHT_UP)
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			if (map->collisionMoveDown(posPlayer, quadSize, &posPlayer.y, FALL_STEP)) {
-				if (Game::instance().getKey(' ')) {
+				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 					bGravity = true;
+					Game::instance().setCanInvertGravity(false);
 				}
 			}
 		}

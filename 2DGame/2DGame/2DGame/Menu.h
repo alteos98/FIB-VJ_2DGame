@@ -8,14 +8,29 @@ public:
 	~Menu();
 
 	void init();
-	void loadMenu(string sprites[], glm::vec2 positions[], glm::ivec2 sizeButtons[], glm::vec2 relation[], int nButtons);
+	void loadMenu(
+		string sprites[],
+		glm::vec2 positions[],
+		glm::ivec2 sizeButtons[],
+		glm::vec2 relation[],
+		int nButtons,
+		bool clear
+	);
 	void update(int deltaTime);
 	void render();
-	int ButtonPress(int x, int y);
+	int buttonPress(int x, int y);
+	void addBackground(string background);
+	void addImage(string nameImage, glm::vec2 quadSize, glm::vec2 sizeInSpritesheet, glm::vec2 position);
 
 private:
 	vector<Button*> buttons;
-	Texture colorTexture;
+
+	bool hasBackground;
+	Sprite* background;
+	Texture texture;
+
+	vector<Sprite*> images;
+
 	float currentTime;
 	glm::mat4 projection;
 

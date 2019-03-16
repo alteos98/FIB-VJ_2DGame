@@ -45,7 +45,7 @@ public:
 
 private:
 	enum MenuTypes {
-		MAINMENU, PLAYING, SELECTDIFFICULTY, INSTRUCTIONS, CREDITS, PAUSE, ENDSCREEN
+		MAINMENU, SELECTDIFFICULTY, INSTRUCTIONS, CREDITS, PAUSE, ENDSCREEN, PLAYING
 	};
 
 	bool bPlay;                       // Continue to play game?
@@ -54,12 +54,14 @@ private:
 	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
 	MenuTypes actualMenu;
 	bool isPlaying;	// True -> the user is in a level, False -> the user is in a menu
-	bool bLeft;	// True -> left button of the mouse is pressed
 	int mouseX, mouseY;
 	int difficulty;
+	bool canInvertGravity;
 
 public:
 	void updateMenu(MenuTypes menuType);
+	bool getCanInvertGravity();
+	void setCanInvertGravity(bool b);
 };
 
 

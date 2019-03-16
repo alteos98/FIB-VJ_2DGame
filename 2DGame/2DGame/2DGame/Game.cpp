@@ -8,12 +8,14 @@
 void Game::init()
 {
 	bPlay = true;
-	isPlaying = bLeft = false;
+	isPlaying = false;
 	actualMenu = MAINMENU;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	menu = Menu();
 	level = Level();
+
+	canInvertGravity = true;
 
 	updateMenu(MAINMENU);
 }
@@ -40,15 +42,18 @@ void Game::render()
 
 void Game::keyPressed(int key)
 {
-	if(key == 27) // Escape code
+	if (key == 27) { // Escape code
 		if (actualMenu == MAINMENU)
 			bPlay = false;
+	}
 
 	keys[key] = true;
 }
 
 void Game::keyReleased(int key)
 {
+	if (key == ' ')
+		canInvertGravity = true;
 	keys[key] = false;
 }
 
@@ -70,7 +75,7 @@ void Game::mousePress(int button, int x, int y)
 {
 	switch (actualMenu) {
 	case MAINMENU: {
-		switch (menu.ButtonPress(x, y)) {
+		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			updateMenu(SELECTDIFFICULTY);
 			break;
@@ -87,7 +92,7 @@ void Game::mousePress(int button, int x, int y)
 		break;
 	}
 	case SELECTDIFFICULTY: {
-		switch (menu.ButtonPress(x, y)) {
+		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			updateMenu(PLAYING);
 			isPlaying = true;
@@ -110,21 +115,34 @@ void Game::mousePress(int button, int x, int y)
 		break;
 	}
 	case INSTRUCTIONS: {
-		if (menu.ButtonPress(x, y) == 1) {
+		if (menu.buttonPress(x, y) == 1) {
 			updateMenu(MAINMENU);
 		}
+		break;
 	}
 	case CREDITS: {
-		if (menu.ButtonPress(x, y) == 1) {
+		if (menu.buttonPress(x, y) == 1) {
 			updateMenu(MAINMENU);
 		}
+		break;
 	}
 	case PAUSE: {
-		/*switch (menu.ButtonPress(x, y)) {
-		}*/
+		switch (menu.buttonPress(x, y)) {
+		case 1: {
+			updateMenu(PLAYING);
+			isPlaying = true;
+			break;
+		}
+		case 2: {
+			updateMenu(MAINMENU);
+			isPlaying = false;
+			break;
+		}
+		}
+		break;
 	}
 	case ENDSCREEN: {
-		switch (menu.ButtonPress(x, y)) {
+		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			updateMenu(PLAYING);
 			isPlaying = true;
@@ -137,6 +155,14 @@ void Game::mousePress(int button, int x, int y)
 			break;
 		}
 		}
+		break;
+	}
+	case PLAYING: {
+		if (level.buttonPress(x, y)) {
+			isPlaying = false;
+			updateMenu(PAUSE);
+		}
+		break;
 	}
 	}
 }
@@ -182,7 +208,8 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
-		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
+		menu.addImage("images/logo.png", glm::vec2(700, 300), glm::vec2(1.f, 1.f), glm::vec2(SCREEN_WIDTH / 2 - 350, SCREEN_HEIGHT / 2 - 400));
 		break;
 	}
 	case SELECTDIFFICULTY:
@@ -208,7 +235,7 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
-		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
 		break;
 	}
 	case PLAYING:
@@ -230,7 +257,7 @@ void Game::updateMenu(MenuTypes menuType) {
 		glm::vec2 relation[nButtons]{
 			glm::vec2(1.f, 1.f / 4.f)
 		};
-		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
 		break;
 	}
 	case CREDITS:
@@ -248,11 +275,29 @@ void Game::updateMenu(MenuTypes menuType) {
 		glm::vec2 relation[nButtons]{
 			glm::vec2(1.f, 1.f / 4.f)
 		};
-		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons);
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
 		break;
 	}
 	case PAUSE:
 	{
+		const int nButtons = 2;
+		string sprites[nButtons]{
+			"images/buttons/ResumeButton.png",
+			"images/buttons/ExitButton.png"
+		};
+		glm::vec2 positions[nButtons]{
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 - 150),
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 + 100)
+		};
+		glm::ivec2 sizeButtons[nButtons]{
+			glm::ivec2(512, 128),
+			glm::ivec2(512, 128)
+		};
+		glm::vec2 relation[nButtons]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, false);
 		break;
 	}
 	case ENDSCREEN:
@@ -260,4 +305,12 @@ void Game::updateMenu(MenuTypes menuType) {
 		break;
 	}
 	}
+}
+
+bool Game::getCanInvertGravity() {
+	return canInvertGravity;
+}
+
+void Game::setCanInvertGravity(bool b) {
+	canInvertGravity = b;
 }
