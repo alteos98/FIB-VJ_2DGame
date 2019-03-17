@@ -9,11 +9,11 @@ class Guardar
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 buttonSize);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 buttonSize, int id);
 	void update(int deltaTime);
 	void render();
-
-	void Cambiar_llama();
+	int getID();
+	void Cambiar_llama(bool llama);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getposG();
@@ -26,7 +26,7 @@ private:
 	Sprite *sprite, *spriteBase;
 	TileMap *map;
 	glm::ivec2 GuardarSize;
-
+	int id;
 };
 
 

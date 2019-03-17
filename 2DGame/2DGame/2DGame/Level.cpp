@@ -57,8 +57,18 @@ Level::~Level()
 	}
 }
 
+
+void Level::InitPosGuardar() {
+	vector<glm::ivec3> g(3);
+	g[0] = glm::ivec3(780, 482,1); // El tercer elemento es el mapa en el que es la posicion
+	g[1] = glm::ivec3(850, 482, 2);
+	g[2] = glm::ivec3(64, 482, 3);
+	posicionesGuardar = g;
+}
+
 void Level::init(int difficulty)
 {
+	InitPosGuardar();
 	if (difficulty == 1) {
 		addressActualMap = "levels/level11.txt";
 		actualMap = 11;
@@ -93,6 +103,7 @@ void Level::load() {
 	loadMap();
 	loadPlayer();
 	enemy.clear();
+	guardar.clear();
 	loadEnemies();
 	loadGuardar();
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -100,6 +111,7 @@ void Level::load() {
 }
 
 void Level::loadMap() {
+	mapacambiado = true;
 	map = TileMap::createTileMap(addressActualMap, glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
 
@@ -313,24 +325,41 @@ void Level::loadGuardar() {
 		switch (actualMap) {
 		case 11: {
 			glm::ivec2 posIni[GUARDAR11]{
-				glm::ivec2(600, 600)
+				glm::ivec2(posicionesGuardar[0].x, posicionesGuardar[0].y)
+
 			};
+			int id = 1;
 			for (int i = 0; i < GUARDAR11; i++) {
 				Guardar* g = new Guardar;
-				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16,16));
+				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64,64), id);
 				g->setPosition(posIni[i]);
 				g->setTileMap(map);
 				guardar.push_back(g);
 			}
 			break;
 		}
-		case 12: {
+		case 12: {// Deberia hacer un vector diciendo que guardados va en cada nivel para que solo cargue esos o algo asi 
 			glm::ivec2 posIni[GUARDAR12]{
-				glm::ivec2(300, 200)
+				glm::ivec2(posicionesGuardar[1].x, posicionesGuardar[1].y)
 			};
+			int id = 2;
 			for (int i = 0; i < GUARDAR12; i++) {
 				Guardar* g = new Guardar;
-				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16, 16));
+				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+				g->setPosition(posIni[i]);
+				g->setTileMap(map);
+				guardar.push_back(g);
+			}
+			break;
+		}
+		case 13: {// Deberia hacer un vector diciendo que guardados va en cada nivel para que solo cargue esos o algo asi 
+			glm::ivec2 posIni[GUARDAR13]{
+				glm::ivec2(posicionesGuardar[2].x, posicionesGuardar[2].y)
+			};
+			int id = 3;
+			for (int i = 0; i < GUARDAR13; i++) {
+				Guardar* g = new Guardar;
+				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
 				g->setPosition(posIni[i]);
 				g->setTileMap(map);
 				guardar.push_back(g);
@@ -355,16 +384,44 @@ void Level::update(int deltaTime)
 	
 	if (collisionPlayerEnemies()) {
 		cout << "collision" << endl;
-		posPlayer = guardar[numGuardado]->getposG();
+		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado-1].x, posicionesGuardar[numGuardado-1].y);
 		// fer que el player reapareixi a l'ultim punt de guardat
+		player->setPosition(glm::vec2(posPlayer.x, posPlayer.y));
+		player->setIsOnFloor(false);
+		changeMap();
 	}
 	int aux = -1;
 	if (collisionPlayerGuardar(aux)) {
 		cout << "colision llama" << aux << numGuardado << endl;
 		if (aux != -1 && numGuardado != aux) {
-			if (numGuardado != -1) guardar[numGuardado]->Cambiar_llama();
+			//if (numGuardado != -1) guardar[numGuardado-1]->Cambiar_llama();
 			numGuardado = aux;
-			guardar[numGuardado]->Cambiar_llama();
+			//guardar[numGuardado-1]->Cambiar_llama();
+			Actualizarllama();
+		}
+	}
+	if (mapacambiado) { Actualizarllama(); mapacambiado = false; }
+}
+
+void Level::changeMap()
+{
+	//cout << char(posicionesGuardar[numGuardado - 1].z) + '0';
+	addressActualMap[13] = char(posicionesGuardar[numGuardado - 1].z) + '0';
+	actualMap = posicionesGuardar[numGuardado - 1].z;
+	load();
+	if (isOnFloor)
+		player->setAnimation(0);
+	else
+		player->setAnimation(4);
+}
+
+void Level::Actualizarllama() {
+	if (numGuardado != -1) {
+		for (int i = 0; i < guardar.size(); ++i) {
+			if (numGuardado == guardar[i]->getID()) {
+				guardar[i]->Cambiar_llama(true);
+			}
+			else guardar[i]->Cambiar_llama(false);
 		}
 	}
 }
@@ -408,6 +465,7 @@ void Level::previousMap() {
 		actualMap--;
 	}
 }
+
 
 void Level::changingMapConditions() {
 	isOnFloor = player->getIsOnFloor();
@@ -468,9 +526,10 @@ bool Level::collisionPlayerGuardar(int & GuardadoActual) {
 	posPlayer = player->getPosition();
 
 	for (unsigned int i = 0; i < guardar.size() && !b; ++i) {
-		if (collision(posPlayer, glm::ivec2(64, 64), guardar[i]->getposG(), glm::ivec2(64, 64))) {
+		if (collision(posPlayer, glm::ivec2(64, 64), guardar[i]->getposG(), glm::ivec2(64, 128))) {
 			b = true;
-			if (b) GuardadoActual = i;
+			GuardadoActual = guardar[i]->getID();
+			cout << guardar[i]->getID();
 		}
 	}
 	return b;

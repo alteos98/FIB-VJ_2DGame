@@ -24,7 +24,8 @@ public:
 	bool getIsOnFloor();
 	Sprite* getSprite();
 	void setAnimation(int i);
-	
+	void setIsOnFloor(bool floor);
+
 private:
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity

@@ -36,6 +36,9 @@ private:
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
 	int difficulty;
 
+	void changeMap();
+	void Actualizarllama();
+	bool mapacambiado;
 	TileMap *map;
 	Player *player;
 	glm::ivec2 posPlayer;
@@ -45,7 +48,8 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	Button* b;
-
+	vector<glm::ivec3> posicionesGuardar;
+	void InitPosGuardar();
 
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
 

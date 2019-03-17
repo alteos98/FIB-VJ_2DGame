@@ -61,6 +61,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 void Player::update(int deltaTime) {
 	sprite->update(deltaTime);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
+		cout << posPlayer.x << ", " << posPlayer.y << endl;
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_LEFT_DOWN)
 				sprite->changeAnimation(MOVE_LEFT_DOWN);
@@ -198,4 +199,9 @@ Sprite* Player::getSprite() {
 
 void Player::setAnimation(int i) {
 	sprite->changeAnimation(i);
+}
+
+void Player::setIsOnFloor(bool floor)
+{
+	isOnFloor = floor;
 }
