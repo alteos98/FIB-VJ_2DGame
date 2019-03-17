@@ -16,6 +16,12 @@
 #define N_ENEMIES14 2
 #define N_ENEMIES15 1
 
+#define GUARDAR11 1
+#define GUARDAR12 1
+#define GUARDAR13 1
+#define GUARDAR14 1
+#define GUARDAR15 1
+
 #define N_ENEMIES21 1
 #define N_ENEMIES22 1
 #define N_ENEMIES23 1
@@ -29,6 +35,9 @@ Level::Level()
 	for (unsigned int i = 0; i < enemy.size(); ++i) {
 		enemy[i] = NULL;
 	}
+	for (unsigned int i = 0; i < guardar.size(); ++i) {
+		guardar[i] = NULL;
+	}
 }
 
 
@@ -41,6 +50,10 @@ Level::~Level()
 	for (unsigned int i = 0; i < enemy.size(); ++i) {
 		if (enemy[i] != NULL)
 			delete enemy[i];
+	}
+	for (unsigned int i = 0; i < guardar.size(); ++i) {
+		if (guardar[i] != NULL)
+			delete guardar[i];
 	}
 }
 
@@ -62,7 +75,7 @@ void Level::init(int difficulty)
 	player = new Player();
 	isOnFloor = true;
 	this->difficulty = difficulty;
-
+	numGuardado = -1;
 	b = new Button;
 	b->init(
 		glm::ivec2(SCREEN_X, SCREEN_Y),
@@ -81,6 +94,7 @@ void Level::load() {
 	loadPlayer();
 	enemy.clear();
 	loadEnemies();
+	loadGuardar();
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -294,6 +308,39 @@ void Level::loadEnemies() {
 	}
 }
 
+void Level::loadGuardar() {
+	if (difficulty == 1) { // easy
+		switch (actualMap) {
+		case 11: {
+			glm::ivec2 posIni[GUARDAR11]{
+				glm::ivec2(600, 600)
+			};
+			for (int i = 0; i < GUARDAR11; i++) {
+				Guardar* g = new Guardar;
+				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16,16));
+				g->setPosition(posIni[i]);
+				g->setTileMap(map);
+				guardar.push_back(g);
+			}
+			break;
+		}
+		case 12: {
+			glm::ivec2 posIni[GUARDAR12]{
+				glm::ivec2(300, 200)
+			};
+			for (int i = 0; i < GUARDAR12; i++) {
+				Guardar* g = new Guardar;
+				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16, 16));
+				g->setPosition(posIni[i]);
+				g->setTileMap(map);
+				guardar.push_back(g);
+			}
+			break;
+		}
+		}
+	}
+}
+
 void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
@@ -301,12 +348,24 @@ void Level::update(int deltaTime)
 
 	for (unsigned int i = 0; i < enemy.size(); ++i)
 		enemy[i]->update(deltaTime);
+	for (unsigned int i = 0; i < guardar.size(); ++i)
+		guardar[i]->update(deltaTime);
 
 	changingMapConditions();
 	
 	if (collisionPlayerEnemies()) {
 		cout << "collision" << endl;
+		posPlayer = guardar[numGuardado]->getposG();
 		// fer que el player reapareixi a l'ultim punt de guardat
+	}
+	int aux = -1;
+	if (collisionPlayerGuardar(aux)) {
+		cout << "colision llama" << aux << numGuardado << endl;
+		if (aux != -1 && numGuardado != aux) {
+			if (numGuardado != -1) guardar[numGuardado]->Cambiar_llama();
+			numGuardado = aux;
+			guardar[numGuardado]->Cambiar_llama();
+		}
 	}
 }
 
@@ -325,6 +384,9 @@ void Level::render()
 	player->render();
 	for (unsigned int i = 0; i < enemy.size(); ++i) {
 		enemy[i]->render();
+	}
+	for (unsigned int i = 0; i < guardar.size(); ++i) {
+		guardar[i]->render();
 	}
 	b->render();
 }
@@ -396,6 +458,19 @@ bool Level::collisionPlayerEnemies() {
 	for (unsigned int i = 0; i < enemy.size() && !b; ++i) {
 		if (collision(posPlayer, glm::ivec2(64, 64), enemy[i]->getPosition(), glm::ivec2(64, 64))) {
 			b = true;
+		}
+	}
+	return b;
+}
+
+bool Level::collisionPlayerGuardar(int & GuardadoActual) {
+	bool b = false;
+	posPlayer = player->getPosition();
+
+	for (unsigned int i = 0; i < guardar.size() && !b; ++i) {
+		if (collision(posPlayer, glm::ivec2(64, 64), guardar[i]->getposG(), glm::ivec2(64, 64))) {
+			b = true;
+			if (b) GuardadoActual = i;
 		}
 	}
 	return b;
