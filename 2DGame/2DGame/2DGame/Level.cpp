@@ -387,8 +387,9 @@ void Level::update(int deltaTime)
 		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado-1].x, posicionesGuardar[numGuardado-1].y);
 		// fer que el player reapareixi a l'ultim punt de guardat
 		player->setPosition(glm::vec2(posPlayer.x, posPlayer.y));
-		player->setIsOnFloor(false);
 		changeMap();
+		player->setIsOnFloor(true);
+
 	}
 	int aux = -1;
 	if (collisionPlayerGuardar(aux)) {
@@ -407,7 +408,7 @@ void Level::changeMap()
 {
 	//cout << char(posicionesGuardar[numGuardado - 1].z) + '0';
 	addressActualMap[13] = char(posicionesGuardar[numGuardado - 1].z) + '0';
-	actualMap = posicionesGuardar[numGuardado - 1].z;
+	actualMap = (addressActualMap[12] - '0')*10 + posicionesGuardar[numGuardado - 1].z;
 	load();
 	if (isOnFloor)
 		player->setAnimation(0);
