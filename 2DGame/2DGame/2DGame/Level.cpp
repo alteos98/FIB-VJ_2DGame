@@ -76,9 +76,9 @@ void Level::init(int difficulty)
 	}
 		
 	else if (difficulty == 2) {
-		addressActualMap = "levels/level21.txt";
-		actualMap = 21;
-		posPlayer = glm::vec2(200, 200);
+		addressActualMap = "levels/level22.txt";
+		actualMap = 22;
+		posPlayer = glm::vec2(50, 50);
 	}
 
 	initShaders();
@@ -206,7 +206,7 @@ void Level::loadEnemies() {
 	}
 	else { // hard
 		switch (actualMap) {
-		case 21: {
+		/*case 21: {
 			glm::vec2 relation[N_ENEMIES21]{
 				glm::vec2(1.f, 1.f / 4.f)
 			};
@@ -315,8 +315,8 @@ void Level::loadEnemies() {
 				enemy.push_back(e);
 			}
 			break;
+		}*/
 		}
-	}
 	}
 }
 
@@ -418,7 +418,7 @@ void Level::changeMap()
 
 void Level::Actualizarllama() {
 	if (numGuardado != -1) {
-		for (int i = 0; i < guardar.size(); ++i) {
+		for (unsigned int i = 0; i < guardar.size(); ++i) {
 			if (numGuardado == guardar[i]->getID()) {
 				guardar[i]->Cambiar_llama(true);
 			}
@@ -452,7 +452,7 @@ void Level::render()
 // Els hi posem a tots els mapes "levelXY.txt"
 // On X fa referencia a la dificultat i Y al nivell en si
 void Level::nextMap () {
-	if (actualMap + 1 != 16 && actualMap + 1 != 26) {
+	if (actualMap + 1 != 16 && actualMap + 1 != 27) {
 		int numberOfTheNewMap = int(addressActualMap[13]) + 1;
 		addressActualMap[13] = char(numberOfTheNewMap);
 		actualMap++;
@@ -471,34 +471,121 @@ void Level::previousMap() {
 void Level::changingMapConditions() {
 	isOnFloor = player->getIsOnFloor();
 	posPlayer = player->getPosition();
+	cout << posPlayer.x << endl;
 
-	if (posPlayer.x > SCREEN_WIDTH) {
-		posPlayer.x = -10;
-		nextMap();
-		load();
-		if (isOnFloor)
-			player->setAnimation(1);
-		else
-			player->setAnimation(5);
+	if (actualMap == 11 || actualMap == 12 || actualMap == 13 || actualMap == 14 || actualMap == 15) {
+		if (posPlayer.x > SCREEN_WIDTH) {
+			posPlayer.x = -32;
+			nextMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(1);
+			else
+				player->setAnimation(5);
+		}
+		else if (posPlayer.x < -64) {
+			posPlayer.x = SCREEN_WIDTH - 32;
+			previousMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(0);
+			else
+				player->setAnimation(4);
+		}
 	}
-	if (posPlayer.x < -30) {
-		posPlayer.x = SCREEN_WIDTH - 20;
-		previousMap();
-		load();
-		if (isOnFloor)
-			player->setAnimation(0);
-		else
-			player->setAnimation(4);
+	else if (actualMap == 21) {
+		if (posPlayer.x < -64) {
+			posPlayer.x = SCREEN_WIDTH - 32;
+			nextMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(0);
+			else
+				player->setAnimation(4);
+		}
 	}
-	if (posPlayer.y >= SCREEN_HEIGHT) {
-		posPlayer.y = 5;
-		nextMap();
-		load();
+	else if (actualMap == 22) {
+		if (posPlayer.y >= SCREEN_HEIGHT + 20) {
+			posPlayer.y = 0;
+			if (!isOnFloor)
+				isOnFloor = !isOnFloor;
+			nextMap();
+			load();
+		}
+		else if (posPlayer.x > SCREEN_WIDTH) {
+			posPlayer.x = -32;
+			previousMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(1);
+			else
+				player->setAnimation(5);
+		}
 	}
-	if (posPlayer.y < -25) {
-		posPlayer.y = SCREEN_HEIGHT;
-		previousMap();
-		load();
+	else if (actualMap == 23) {
+		if (posPlayer.x > SCREEN_WIDTH) {
+			posPlayer.x = -32;
+			nextMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(1);
+			else
+				player->setAnimation(5);
+		}
+		else if (posPlayer.y < -128) {
+			posPlayer.y = SCREEN_HEIGHT;
+			if (isOnFloor)
+				isOnFloor = !isOnFloor;
+			previousMap();
+			load();
+		}
+	}
+	else if (actualMap == 24) {
+		if (posPlayer.x > SCREEN_WIDTH) {
+			posPlayer.x = -32;
+			nextMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(1);
+			else
+				player->setAnimation(5);
+		}
+		else if (posPlayer.x < -64) {
+			posPlayer.x = SCREEN_WIDTH - 32;
+			previousMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(0);
+			else
+				player->setAnimation(4);
+		}
+	}
+	else if (actualMap == 25) {
+		if (posPlayer.y < -128) {
+			posPlayer.y = SCREEN_HEIGHT;
+			if (isOnFloor)
+				isOnFloor = !isOnFloor;
+			nextMap();
+			load();
+		}
+		else if (posPlayer.x < -64) {
+			posPlayer.x = SCREEN_WIDTH - 32;
+			previousMap();
+			load();
+			if (isOnFloor)
+				player->setAnimation(0);
+			else
+				player->setAnimation(4);
+		}
+	}
+	else if (actualMap == 26) {
+		if (posPlayer.y >= SCREEN_HEIGHT + 20) {
+			posPlayer.y = 0;
+			if (!isOnFloor)
+				isOnFloor = !isOnFloor;
+			previousMap();
+			load();
+		}
 	}
 }
 

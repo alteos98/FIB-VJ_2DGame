@@ -6,8 +6,8 @@
 #include "Level.h"
 
 
-#define SCREEN_WIDTH 1080 //640 //720
-#define SCREEN_HEIGHT 810 //480 //540
+#define SCREEN_WIDTH 1080
+#define SCREEN_HEIGHT 830 //810
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application
