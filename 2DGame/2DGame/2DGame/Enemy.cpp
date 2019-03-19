@@ -12,7 +12,7 @@ enum EnemyAnims
 
 void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::vec2 relation, string nameImage, glm::ivec2 posInicial, glm::ivec2 posFinal, int velocity)
 {
-	quadSize = glm::ivec2(64, 64);
+	enemySize = glm::ivec2(64, 64);
 	this->posInicial = posInicial;
 	this->posFinal = posFinal;
 	this->velocity = velocity;
@@ -29,7 +29,7 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm
 	goingReturning = true;
 
 	spritesheet.loadFromFile(nameImage, TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(quadSize, relation, &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(enemySize, relation, &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(BASE, 1);
@@ -98,4 +98,14 @@ glm::ivec2 Enemy::getPosition() {
 
 void Enemy::setAnimation(int i) {
 	sprite->changeAnimation(i);
+}
+
+int Enemy::getWidth()
+{
+	return enemySize.x;
+}
+
+int Enemy::getHeight()
+{
+	return enemySize.y;
 }

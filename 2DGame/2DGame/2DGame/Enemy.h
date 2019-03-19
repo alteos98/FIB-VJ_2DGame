@@ -22,9 +22,11 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getPosition();
 	void setAnimation(int i);
+	int getWidth();
+	int getHeight();
 
 private:
-	glm::ivec2 tileMapDispl, posEnemy, posInicial, posFinal;
+	glm::ivec2 tileMapDispl, posEnemy, posInicial, posFinal, enemySize;
 	float incrementX, incrementY; // increment for each update to the position of the enemy
 	int nMovement, nTotalMovements; // número de moviments que farà
 	bool goingReturning; // True -> going to posFinal, False -> returning to posInicial
@@ -33,7 +35,6 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-	glm::ivec2 quadSize;
 
 	void newPosition();
 

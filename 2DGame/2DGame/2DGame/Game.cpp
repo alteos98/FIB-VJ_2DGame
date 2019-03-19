@@ -22,6 +22,11 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
+	if (isPlaying && (level.getActualMap() == 15 || level.getActualMap() == 26) && level.collisionPlayerStar()) {
+		isPlaying = false;
+		updateMenu(ENDSCREEN);
+	}
+
 	if (isPlaying)
 		level.update(deltaTime);
 	else
@@ -96,7 +101,7 @@ void Game::mousePress(int button, int x, int y)
 		case 1: {
 			updateMenu(PLAYING);
 			isPlaying = true;
-			int difficulty = 1;
+			difficulty = 1;
 			level.init(difficulty);
 			break;
 		}
@@ -145,12 +150,13 @@ void Game::mousePress(int button, int x, int y)
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			updateMenu(PLAYING);
-			isPlaying = true;
+			//level = Level();
 			level.init(difficulty);
+			isPlaying = true;
 			break;
 		}
 		case 2: {
-			updateMenu(SELECTDIFFICULTY);
+			updateMenu(MAINMENU);
 			isPlaying = false;
 			break;
 		}
@@ -302,6 +308,24 @@ void Game::updateMenu(MenuTypes menuType) {
 	}
 	case ENDSCREEN:
 	{
+		const int nButtons = 2;
+		string sprites[nButtons]{
+			"images/buttons/PlayAgainButton.png",
+			"images/buttons/ExitButton.png"
+		};
+		glm::vec2 positions[nButtons]{
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 - 50),
+			glm::vec2(SCREEN_WIDTH / 2 - 256, SCREEN_HEIGHT / 2 + 200)
+		};
+		glm::ivec2 sizeButtons[nButtons]{
+			glm::ivec2(512, 128),
+			glm::ivec2(512, 128)
+		};
+		glm::vec2 relation[nButtons]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, false);
 		break;
 	}
 	}

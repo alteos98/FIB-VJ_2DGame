@@ -6,6 +6,8 @@
 #include "Enemy.h"
 #include "Button.h"
 #include "Guardar.h"
+#include "Spike.h"
+#include "Star.h"
 
 class Level
 {
@@ -16,9 +18,11 @@ public:
 
 	void load();
 	void loadMap();
+	void loadSpikes();
 	void loadPlayer();
 	void loadEnemies();
 	void loadGuardar();
+	void loadStar();
 
 	void update(int deltaTime);
 	void render();
@@ -28,7 +32,11 @@ public:
 	void changingMapConditions();
 	bool buttonPress(int x, int y);
 	bool collisionPlayerEnemies();
-	bool Level::collisionPlayerGuardar(int & GuardadoActual);
+	bool collisionPlayerGuardar(int & GuardadoActual);
+	bool collisionPlayerSpikes();
+	bool collisionPlayerStar();
+
+	int getActualMap();
 
 private:
 	string addressActualMap;
@@ -44,10 +52,12 @@ private:
 	glm::ivec2 posPlayer;
 	vector<Enemy*> enemy;
 	vector<Guardar*> guardar;
+	vector<Spike*> spikes;
+	Star* star;
 	int numGuardado;
 	float currentTime;
 	glm::mat4 projection;
-	Button* b;
+	Button* pauseButton;
 	vector<glm::ivec3> posicionesGuardar;
 	void InitPosGuardar();
 

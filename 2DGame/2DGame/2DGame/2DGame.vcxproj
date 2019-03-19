@@ -21,7 +21,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Spike.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
@@ -36,7 +38,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Spike.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>

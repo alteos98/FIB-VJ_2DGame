@@ -1,7 +1,6 @@
 #ifndef _BUTTON_INCLUDE
 #define _BUTTON_INCLUDE
 
-
 #include "Sprite.h"
 #include "TileMap.h"
 
