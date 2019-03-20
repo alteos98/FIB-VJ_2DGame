@@ -8,6 +8,8 @@
 #include "Guardar.h"
 #include "Spike.h"
 #include "Star.h"
+#include "Lightning.h"
+#include "Stalactite.h"
 
 class Level
 {
@@ -23,6 +25,8 @@ public:
 	void loadEnemies();
 	void loadGuardar();
 	void loadStar();
+	void loadLightning();
+	void loadStalactites();
 
 	void update(int deltaTime);
 	void render();
@@ -35,12 +39,14 @@ public:
 	bool collisionPlayerGuardar(int & GuardadoActual);
 	bool collisionPlayerSpikes();
 	bool collisionPlayerStar();
+	bool collisionPlayerLightning();
+	bool collisionPlayerStalactite();
 
 	int getActualMap();
 
 private:
 	string addressActualMap;
-	int actualMap; // 11 ~ 15 easy, 21 ~ 25 hard
+	int actualMap; // 11 ~ 15 easy, 21 ~ 26 hard
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
 	int difficulty;
 
@@ -53,6 +59,8 @@ private:
 	vector<Enemy*> enemy;
 	vector<Guardar*> guardar;
 	vector<Spike*> spikes;
+	vector<Lightning*> lightning;
+	vector<Stalactite*> stalactites;
 	Star* star;
 	int numGuardado;
 	float currentTime;
@@ -69,8 +77,8 @@ private:
 	int enemiesVelocityEasy[5]{
 		NULL, NULL, 4, 4, 4
 	};
-	int enemiesVelocityHard[5]{
-		2, 2, 2, 2, 2
+	int enemiesVelocityHard[6]{
+		8, 8, 8, 8, 8, 8
 	};
 
 };
