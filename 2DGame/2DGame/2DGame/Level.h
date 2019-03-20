@@ -56,7 +56,7 @@ private:
 	bool mapacambiado;
 	TileMap *map;
 	Player *player;
-	glm::ivec2 posPlayer;
+	glm::ivec2 posPlayer, posPlayerIni;
 	vector<Enemy*> enemy;
 	vector<Guardar*> guardar;
 	vector<Spike*> spikes;

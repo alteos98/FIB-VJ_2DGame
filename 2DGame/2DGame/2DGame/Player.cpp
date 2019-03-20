@@ -11,7 +11,8 @@
 enum PlayerAnims
 {
 	STAND_LEFT_DOWN, STAND_RIGHT_DOWN, MOVE_LEFT_DOWN, MOVE_RIGHT_DOWN,
-	STAND_LEFT_UP, STAND_RIGHT_UP, MOVE_LEFT_UP, MOVE_RIGHT_UP
+	STAND_LEFT_UP, STAND_RIGHT_UP, MOVE_LEFT_UP, MOVE_RIGHT_UP,
+	DEAD
 };
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bool isOnFloor)
@@ -22,7 +23,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 
 	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(playerSize, glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(8);
+	sprite->setNumberAnimations(9);
 
 	sprite->setAnimationSpeed(STAND_LEFT_DOWN, 8);
 	sprite->addKeyframe(STAND_LEFT_DOWN, glm::vec2(3.f / 6.f, 2.f / 6.f));
@@ -51,6 +52,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 	sprite->setAnimationSpeed(MOVE_RIGHT_UP, 8);
 	sprite->addKeyframe(MOVE_RIGHT_UP, glm::vec2(0.f, 3.f / 6.f));
 	sprite->addKeyframe(MOVE_RIGHT_UP, glm::vec2(1.f / 6.f, 3.f / 6.f));
+
+	sprite->setAnimationSpeed(DEAD, 8);
+	sprite->addKeyframe(DEAD, glm::vec2(0.f, 3.f / 6.f));
+	sprite->addKeyframe(DEAD, glm::vec2(1.f / 6.f, 3.f / 6.f));
 
 	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;

@@ -97,7 +97,7 @@ void Level::init(int difficulty)
 	if (difficulty == 1) {
 		addressActualMap = "levels/level11.txt";
 		actualMap = 11;
-		posPlayer = glm::vec2(300, 200);
+		posPlayer = posPlayerIni = glm::vec2(300, 200);
 		/*
 		addressActualMap = "levels/level15.txt";
 		actualMap = 15;
@@ -108,7 +108,7 @@ void Level::init(int difficulty)
 	else if (difficulty == 2) {
 		addressActualMap = "levels/level22.txt";
 		actualMap = 22;
-		posPlayer = glm::vec2(50, 50);
+		posPlayer = posPlayerIni = glm::vec2(50, 50);
 	}
 
 	initShaders();
@@ -559,11 +559,9 @@ void Level::update(int deltaTime)
 	
 	if (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite()) {
 		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado-1].x, posicionesGuardar[numGuardado-1].y);
-		// fer que el player reapareixi a l'ultim punt de guardat
 		player->setPosition(glm::vec2(posPlayer.x, posPlayer.y));
 		changeMap();
 		player->setIsOnFloor(true);
-
 	}
 	int aux = -1;
 	if (collisionPlayerGuardar(aux)) {
@@ -583,9 +581,21 @@ void Level::update(int deltaTime)
 
 void Level::changeMap()
 {
-	//cout << char(posicionesGuardar[numGuardado - 1].z) + '0';
-	addressActualMap[13] = char(posicionesGuardar[numGuardado - 1].z) + '0';
-	actualMap = (addressActualMap[12] - '0')*10 + posicionesGuardar[numGuardado - 1].z;
+	if (numGuardado >= 0) {
+		addressActualMap[13] = char(posicionesGuardar[numGuardado - 1].z) + '0';
+		actualMap = (addressActualMap[12] - '0') * 10 + posicionesGuardar[numGuardado - 1].z;
+	}
+	else {
+		if (difficulty == 1) {
+			addressActualMap = "levels/level11.txt";
+			actualMap = 11;
+		}
+		else if (difficulty == 2) {
+			addressActualMap = "levels/level22.txt";
+			actualMap = 22;
+		}
+		posPlayer = posPlayerIni;
+	}
 	load();
 	if (isOnFloor)
 		player->setAnimation(0);
