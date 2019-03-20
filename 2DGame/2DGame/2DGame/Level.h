@@ -43,6 +43,7 @@ public:
 	bool collisionPlayerStalactite();
 
 	int getActualMap();
+	int getDifficulty();
 
 private:
 	string addressActualMap;

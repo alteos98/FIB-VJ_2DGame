@@ -867,6 +867,10 @@ int Level::getActualMap() {
 	return actualMap;
 }
 
+int Level::getDifficulty() {
+	return difficulty;
+}
+
 void Level::initShaders()
 {
 	Shader vShader, fShader;
