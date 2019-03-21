@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "Game.h"
 
-#define FALL_STEP 14
 #define VELOCITY 10
 
 enum PlayerAnims
@@ -20,6 +19,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 	playerSize = glm::ivec2(64, 64);
 	bJumping = bGravity = false;
 	this->isOnFloor = isOnFloor;
+	fallStep = 14;
 
 	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(playerSize, glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
@@ -54,8 +54,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 	sprite->addKeyframe(MOVE_RIGHT_UP, glm::vec2(1.f / 6.f, 3.f / 6.f));
 
 	sprite->setAnimationSpeed(DEAD, 8);
-	sprite->addKeyframe(DEAD, glm::vec2(0.f, 3.f / 6.f));
-	sprite->addKeyframe(DEAD, glm::vec2(1.f / 6.f, 3.f / 6.f));
+	sprite->addKeyframe(DEAD, glm::vec2(5.f / 6.f, 0.f));
 
 	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
@@ -127,15 +126,15 @@ void Player::update(int deltaTime) {
 
 	if (bGravity) {
 		if (!isOnFloor) {
-			posPlayer.y += FALL_STEP;
-			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, FALL_STEP)) {
+			posPlayer.y += fallStep;
+			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep)) {
 				bGravity = false;
 				isOnFloor = true;
 			}
 		}
 		else {
-			posPlayer.y -= FALL_STEP;
-			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, FALL_STEP)) {
+			posPlayer.y -= fallStep;
+			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep)) {
 				bGravity = false;
 				isOnFloor = false;
 			}
@@ -143,12 +142,12 @@ void Player::update(int deltaTime) {
 	}
 	else {
 		if (!isOnFloor) {
-			posPlayer.y -= FALL_STEP;
+			posPlayer.y -= fallStep;
 			if (sprite->animation() == STAND_LEFT_DOWN)
 				sprite->changeAnimation(STAND_LEFT_UP);
 			else if (sprite->animation() == STAND_RIGHT_DOWN)
 				sprite->changeAnimation(STAND_RIGHT_UP);
-			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, FALL_STEP)) {
+			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep)) {
 				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 					bGravity = true;
 					Game::instance().setCanInvertGravity(false);
@@ -156,12 +155,12 @@ void Player::update(int deltaTime) {
 			}
 		}
 		else {
-			posPlayer.y += FALL_STEP;
+			posPlayer.y += fallStep;
 			if (sprite->animation() == STAND_LEFT_UP)
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			else if (sprite->animation() == STAND_RIGHT_UP)
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
-			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, FALL_STEP)) {
+			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep)) {
 				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 					bGravity = true;
 					Game::instance().setCanInvertGravity(false);
@@ -218,4 +217,12 @@ int Player::getWidth()
 int Player::getHeight()
 {
 	return playerSize.y;
+}
+
+int Player::getFallStep() {
+	return fallStep;
+}
+
+bool Player::getBGravity() {
+	return bGravity;
 }

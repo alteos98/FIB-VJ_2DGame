@@ -64,11 +64,12 @@ private:
 	vector<Stalactite*> stalactites;
 	Star* star;
 	int numGuardado;
-	float currentTime;
+	float currentTime, currentTimeCollision;
 	glm::mat4 projection;
 	Button* pauseButton;
 	vector<glm::ivec3> posicionesGuardar;
 	void InitPosGuardar();
+	bool collisioned;
 
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
 

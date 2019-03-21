@@ -8,7 +8,10 @@
 #define SCREEN_Y 0
 
 #define INIT_PLAYER_X_TILES 10
-#define INIT_PLAYER_Y_TILES 20
+#define INIT_PLAYER_Y_TILES 0
+
+#define DURATION_ANIMATION_DEAD 200
+#define INCREMENT_Y_DEAD 10
 
 #define N_ENEMIES11 0
 #define N_ENEMIES12 0
@@ -116,6 +119,7 @@ void Level::init(int difficulty)
 	isOnFloor = true;
 	this->difficulty = difficulty;
 	numGuardado = -1;
+	collisioned = false;
 	pauseButton = new Button;
 	pauseButton->init(
 		glm::ivec2(SCREEN_X, SCREEN_Y),
@@ -538,7 +542,8 @@ void Level::loadStalactites() {
 void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	if (!collisioned)
+		player->update(deltaTime);
 	if (actualMap == 15 || actualMap == 26)
 		star->update(deltaTime);
 	for (unsigned int i = 0; i < enemy.size(); ++i)
@@ -557,12 +562,25 @@ void Level::update(int deltaTime)
 
 	changingMapConditions();
 	
-	if (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite()) {
-		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado-1].x, posicionesGuardar[numGuardado-1].y);
+	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
+		currentTimeCollision = currentTime;
+		collisioned = true;
+		player->setAnimation(8);
+	}
+	else if (collisioned && currentTime - currentTimeCollision >= DURATION_ANIMATION_DEAD) {
+		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado - 1].x, posicionesGuardar[numGuardado - 1].y);
 		player->setPosition(glm::vec2(posPlayer.x, posPlayer.y));
 		changeMap();
 		player->setIsOnFloor(true);
+		collisioned = false;
 	}
+	/*else if (collisioned) {
+		if ((isOnFloor && player->getBGravity()) && (!isOnFloor && !player->getBGravity()))
+			posPlayer.y = posPlayer.y + player->getFallStep() - INCREMENT_Y_DEAD;
+		else if ((isOnFloor && !player->getBGravity()) && (!isOnFloor && player->getBGravity()))
+			posPlayer.y = posPlayer.y - player->getFallStep() - INCREMENT_Y_DEAD;
+		player->setPosition(glm::ivec2(posPlayer.x, posPlayer.y));
+	}*/
 	int aux = -1;
 	if (collisionPlayerGuardar(aux)) {
 		if (aux != -1 && numGuardado != aux) {
