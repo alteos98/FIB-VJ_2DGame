@@ -28,6 +28,15 @@
 #define N_ENEMIES24 1
 #define N_ENEMIES25 1
 
+#define N_PLATAFORMA21 2
+#define N_PLATAFORMA22 2
+#define N_PLATAFORMA23 1
+#define N_PLATAFORMA24 1
+#define N_PLATAFORMA25 1
+#define N_PLATAFORMA26 1
+
+
+
 Level::Level()
 {
 	map = NULL;
@@ -40,6 +49,9 @@ Level::Level()
 	}
 	for (unsigned int i = 0; i < spikes.size(); ++i) {
 		spikes[i] = NULL;
+	}
+	for (unsigned int i = 0; i < plataforma.size(); ++i) {
+		plataforma[i] = NULL;
 	}
 	star = NULL;
 }
@@ -62,6 +74,10 @@ Level::~Level()
 	for (unsigned int i = 0; i < spikes.size(); ++i) {
 		if (spikes[i] != NULL)
 			delete spikes[i];
+	}
+	for (unsigned int i = 0; i < plataforma.size(); ++i) {
+		if (plataforma[i] != NULL)
+			delete plataforma[i];
 	}
 	if (star != NULL)
 		delete star;
@@ -99,6 +115,7 @@ void Level::init(int difficulty)
 	initShaders();
 	player = new Player();
 	isOnFloor = true;
+	ContactoPlat = false;
 	this->difficulty = difficulty;
 	numGuardado = -1;
 	pauseButton = new Button;
@@ -116,12 +133,14 @@ void Level::init(int difficulty)
 
 void Level::load() {
 	enemy.clear();
+	plataforma.clear();
 	guardar.clear();
 	spikes.clear();
 	
 	loadMap();
 	loadPlayer();
 	loadEnemies();
+	loadPlataforma();
 	loadGuardar();
 	loadSpikes();
 	loadStar();
@@ -351,6 +370,39 @@ void Level::loadEnemies() {
 	}*/
 }
 
+void Level::loadPlataforma() {
+	if (difficulty == 2) { // easy
+		switch (actualMap) {
+		case 22: {
+			glm::vec2 relation[N_PLATAFORMA22]{
+				glm::vec2(1.f, 1.f),
+				glm::vec2(1.f, 1.f)
+			};
+			string nameImage[N_PLATAFORMA22]{
+				"images/plataforma/nube1.png",
+				"images/plataforma/nube1.png"
+			};
+			glm::ivec2 posInicial[N_PLATAFORMA22]{
+				glm::ivec2(32*8, 32 *7),
+				glm::ivec2(32*8, 32* 9)
+			};
+			glm::ivec2 posFinal[N_PLATAFORMA22]{
+				glm::ivec2(32 * 16, 32 * 7),
+				glm::ivec2(32 * 8, 32 * 18)
+			};
+			for (int i = 0; i < N_PLATAFORMA22; i++) {
+				Plataforma* e = new Plataforma;
+				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], plataformaVelocityHard[2]);
+				e->setPosition(posInicial[i]);
+				e->setTileMap(map);
+				plataforma.push_back(e);
+			}
+			break;
+		}
+		}
+	}
+}
+
 void Level::loadGuardar() {
 	if (difficulty == 1) { // easy
 		switch (actualMap) {
@@ -422,6 +474,8 @@ void Level::update(int deltaTime)
 		enemy[i]->update(deltaTime);
 	for (unsigned int i = 0; i < guardar.size(); ++i)
 		guardar[i]->update(deltaTime);
+	for (unsigned int i = 0; i < plataforma.size(); ++i)
+		plataforma[i]->update(deltaTime);
 
 	changingMapConditions();
 
@@ -448,6 +502,43 @@ void Level::update(int deltaTime)
 		}
 	}
 	if (mapacambiado) { Actualizarllama(); mapacambiado = false; }
+
+	int nump;
+	if (collisionPlayerPlataforma(nump)) {
+		if (!ContactoPlat) {
+			if (player->getbGravity())player->setIsOnFloor(!player->getIsOnFloor());
+			ContactoPlat = true;
+		}
+		player->setGravity(false);
+		int sum = 0;
+		if (player->getIsOnFloor())
+			sum = -14;
+		else sum = 14;
+		
+		int addvx, addvy;
+		addvx = plataforma[nump]->getIncrease().x;
+		addvy = plataforma[nump]->getIncrease().y;
+
+		int desfas = 0;
+		/*if (player->getIsOnFloor() && player->getbGravity()) {
+			desfas = player->getPosition().y - plataforma[nump]->getPosition().y - plataforma[nump]->getHeight();
+			desfas = abs(desfas);
+		}
+		else if (!player->getIsOnFloor() && player->getbGravity()) {
+			desfas = -player->getPosition().y - 32 + plataforma[nump]->getPosition().y;
+			desfas = abs(desfas);
+		}*/
+
+		player->setPosition(glm::vec2(float(player->getPosition().x + addvx), float(desfas + addvy + sum + player->getPosition().y)));
+		
+		
+		if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
+			player->setGravity(true);
+			Game::instance().setCanInvertGravity(false);
+		}
+	}
+	else ContactoPlat = false;
+
 }
 
 void Level::changeMap()
@@ -496,6 +587,9 @@ void Level::render()
 	}
 	for (unsigned int i = 0; i < spikes.size(); ++i) {
 		spikes[i]->render();
+	}
+	for (unsigned int i = 0; i < plataforma.size(); ++i) {
+		plataforma[i]->render();
 	}
 	pauseButton->render();
 }
@@ -659,6 +753,19 @@ bool Level::collisionPlayerEnemies() {
 	return b;
 }
 
+bool Level::collisionPlayerPlataforma(int& PlataformaAct) {	
+	bool b = false;
+	posPlayer = player->getPosition();
+
+	for (unsigned int i = 0; i < plataforma.size() && !b; ++i) {
+		if (collision(posPlayer, glm::ivec2(player->getWidth(), player->getHeight()), plataforma[i]->getPosition(), glm::ivec2(plataforma[i]->getWidth(), plataforma[i]->getHeight()))) {
+			b = true;
+			PlataformaAct = i;
+		}
+	}
+	return b;
+	
+}
 bool Level::collisionPlayerGuardar(int & GuardadoActual) {
 	bool b = false;
 	posPlayer = player->getPosition();

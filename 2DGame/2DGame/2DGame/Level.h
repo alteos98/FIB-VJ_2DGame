@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Plataforma.h"
 #include "Button.h"
 #include "Guardar.h"
 #include "Spike.h"
@@ -21,6 +22,7 @@ public:
 	void loadSpikes();
 	void loadPlayer();
 	void loadEnemies();
+	void loadPlataforma();
 	void loadGuardar();
 	void loadStar();
 
@@ -32,6 +34,10 @@ public:
 	void changingMapConditions();
 	bool buttonPress(int x, int y);
 	bool collisionPlayerEnemies();
+
+	bool collisionPlayerPlataforma(int& PlataformaAc);
+	bool collisionPlayerPlataformaDown();
+
 	bool collisionPlayerGuardar(int & GuardadoActual);
 	bool collisionPlayerSpikes();
 	bool collisionPlayerStar();
@@ -47,10 +53,12 @@ private:
 	void changeMap();
 	void Actualizarllama();
 	bool mapacambiado;
+	bool ContactoPlat;
 	TileMap *map;
 	Player *player;
 	glm::ivec2 posPlayer;
 	vector<Enemy*> enemy;
+	vector<Plataforma*> plataforma;
 	vector<Guardar*> guardar;
 	vector<Spike*> spikes;
 	Star* star;
@@ -71,6 +79,9 @@ private:
 	};
 	int enemiesVelocityHard[5]{
 		2, 2, 2, 2, 2
+	};
+	int plataformaVelocityHard[5]{
+		2,	2,	2,	2,	2
 	};
 
 };

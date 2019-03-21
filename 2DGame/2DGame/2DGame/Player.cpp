@@ -192,6 +192,10 @@ bool Player::getIsOnFloor() {
 	return isOnFloor;
 }
 
+bool Player::getbGravity() {
+	return bGravity;
+}
+
 Sprite* Player::getSprite() {
 	return sprite;
 }
@@ -205,6 +209,8 @@ void Player::setIsOnFloor(bool floor)
 	isOnFloor = floor;
 }
 
+
+
 int Player::getWidth()
 {
 	return playerSize.x;
@@ -213,4 +219,8 @@ int Player::getWidth()
 int Player::getHeight()
 {
 	return playerSize.y;
+}
+
+void Player::setGravity(bool b) {
+	bGravity = b;
 }

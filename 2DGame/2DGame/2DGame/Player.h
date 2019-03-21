@@ -22,11 +22,13 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getPosition();
 	bool getIsOnFloor();
+	bool getbGravity();
 	Sprite* getSprite();
 	void setAnimation(int i);
 	void setIsOnFloor(bool floor);
 	int getWidth();
 	int getHeight();
+	void setGravity(bool b);
 
 private:
 	bool bJumping;
