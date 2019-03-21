@@ -529,7 +529,7 @@ void Level::loadStar() {
 	}
 	else if (actualMap == 26) {
 		glm::ivec2 starSize = glm::ivec2(64, 64);
-		star->init(glm::ivec2(SCREEN_WIDTH - 128, 250), texProgram, starSize);
+		star->init(glm::ivec2(SCREEN_WIDTH - 128, 200), texProgram, starSize);
 	}
 }
 
