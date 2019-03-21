@@ -33,15 +33,14 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void setMap(int newMap);
 	void nextMap();
 	void previousMap();
 	void changingMapConditions();
 	bool buttonPress(int x, int y);
+
 	bool collisionPlayerEnemies();
-
 	bool collisionPlayerPlataforma(int& PlataformaAc);
-	bool collisionPlayerPlataformaDown();
-
 	bool collisionPlayerGuardar(int & GuardadoActual);
 	bool collisionPlayerSpikes();
 	bool collisionPlayerStar();
@@ -50,6 +49,8 @@ public:
 
 	int getActualMap();
 	int getDifficulty();
+
+	void setPlayerPosition(glm::ivec2 newPlayerPos);
 
 private:
 	string addressActualMap;

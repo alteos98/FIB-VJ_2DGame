@@ -756,6 +756,11 @@ void Level::render()
 	pauseButton->render();
 }
 
+void Level::setMap(int newMap) {
+	this->actualMap = newMap;
+	this->addressActualMap = "levels/level" + to_string(newMap) + ".txt";
+}
+
 // Els hi posem a tots els mapes "levelXY.txt"
 // On X fa referencia a la dificultat i Y al nivell en si
 void Level::nextMap () {
@@ -802,7 +807,7 @@ void Level::changingMapConditions() {
 	else if (actualMap == 21) {
 		if (posPlayer.x < -64) {
 			posPlayer.x = SCREEN_WIDTH - 32;
-			nextMap();
+			setMap(22);
 			load();
 			if (isOnFloor)
 				player->setAnimation(0);
@@ -815,12 +820,12 @@ void Level::changingMapConditions() {
 			posPlayer.y = 0;
 			if (!isOnFloor)
 				isOnFloor = !isOnFloor;
-			nextMap();
+			setMap(23);
 			load();
 		}
 		else if (posPlayer.x > SCREEN_WIDTH) {
 			posPlayer.x = -32;
-			previousMap();
+			setMap(21);
 			load();
 			if (isOnFloor)
 				player->setAnimation(1);
@@ -831,7 +836,7 @@ void Level::changingMapConditions() {
 	else if (actualMap == 23) {
 		if (posPlayer.x > SCREEN_WIDTH) {
 			posPlayer.x = -32;
-			nextMap();
+			setMap(24);
 			load();
 			if (isOnFloor)
 				player->setAnimation(1);
@@ -842,14 +847,14 @@ void Level::changingMapConditions() {
 			posPlayer.y = SCREEN_HEIGHT;
 			if (isOnFloor)
 				isOnFloor = !isOnFloor;
-			previousMap();
+			setMap(22);
 			load();
 		}
 	}
 	else if (actualMap == 24) {
 		if (posPlayer.x > SCREEN_WIDTH) {
 			posPlayer.x = -32;
-			nextMap();
+			setMap(25);
 			load();
 			if (isOnFloor)
 				player->setAnimation(1);
@@ -858,7 +863,7 @@ void Level::changingMapConditions() {
 		}
 		else if (posPlayer.x < -64) {
 			posPlayer.x = SCREEN_WIDTH - 32;
-			previousMap();
+			setMap(23);
 			load();
 			if (isOnFloor)
 				player->setAnimation(0);
@@ -871,12 +876,12 @@ void Level::changingMapConditions() {
 			posPlayer.y = SCREEN_HEIGHT;
 			if (isOnFloor)
 				isOnFloor = !isOnFloor;
-			nextMap();
+			setMap(26);
 			load();
 		}
 		else if (posPlayer.x < -64) {
 			posPlayer.x = SCREEN_WIDTH - 32;
-			previousMap();
+			setMap(24);
 			load();
 			if (isOnFloor)
 				player->setAnimation(0);
@@ -889,7 +894,7 @@ void Level::changingMapConditions() {
 			posPlayer.y = 0;
 			if (!isOnFloor)
 				isOnFloor = !isOnFloor;
-			previousMap();
+			setMap(25);
 			load();
 		}
 	}
@@ -1004,6 +1009,10 @@ int Level::getActualMap() {
 
 int Level::getDifficulty() {
 	return difficulty;
+}
+
+void Level::setPlayerPosition(glm::ivec2 newPlayerPos) {
+	this->posPlayer = newPlayerPos;
 }
 
 void Level::initShaders()

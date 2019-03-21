@@ -53,13 +53,64 @@ void Game::keyPressed(int key)
 	}
 
 	if (isPlaying) {
-		if (key == '+') {
-			level.nextMap();
-			level.load();
+		if (difficulty == 1) {
+			if (key == '1') {
+				level.setMap(11);
+				level.setPlayerPosition(glm::vec2(300, 500));
+				level.load();
+			}
+			else if (key == '2') {
+				level.setMap(12);
+				level.setPlayerPosition(glm::vec2(50, 500));
+				level.load();
+			}
+			else if (key == '3') {
+				level.setMap(13);
+				level.setPlayerPosition(glm::vec2(50, 500));
+				level.load();
+			}
+			else if (key == '4') {
+				level.setMap(14);
+				level.setPlayerPosition(glm::vec2(50, 100));
+				level.load();
+			}
+			else if (key == '5') {
+				level.setMap(15);
+				level.setPlayerPosition(glm::vec2(50, 100));
+				level.load();
+			}
 		}
-		else if (key == '-') {
-			level.previousMap();
-			level.load();
+		else if (difficulty == 2) {
+			if (key == '1') {
+				level.setMap(21);
+				level.setPlayerPosition(glm::vec2(50, 600));
+				level.load();
+			}
+			else if (key == '2') {
+				level.setMap(22);
+				level.setPlayerPosition(glm::vec2(50, 50));
+				level.load();
+			}
+			else if (key == '3') {
+				level.setMap(23);
+				level.setPlayerPosition(glm::vec2(100, 50));
+				level.load();
+			}
+			else if (key == '4') {
+				level.setMap(24);
+				level.setPlayerPosition(glm::vec2(50, 500));
+				level.load();
+			}
+			else if (key == '5') {
+				level.setMap(25);
+				level.setPlayerPosition(glm::vec2(50, 600));
+				level.load();
+			}
+			else if (key == '6') {
+				level.setMap(26);
+				level.setPlayerPosition(glm::vec2(200, 600));
+				level.load();
+			}
 		}
 	}
 
