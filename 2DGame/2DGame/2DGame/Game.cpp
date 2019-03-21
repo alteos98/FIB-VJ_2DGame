@@ -52,6 +52,17 @@ void Game::keyPressed(int key)
 			bPlay = false;
 	}
 
+	if (isPlaying) {
+		if (key == '+') {
+			level.nextMap();
+			level.load();
+		}
+		else if (key == '-') {
+			level.previousMap();
+			level.load();
+		}
+	}
+
 	keys[key] = true;
 }
 

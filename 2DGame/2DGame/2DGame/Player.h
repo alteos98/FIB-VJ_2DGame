@@ -29,11 +29,14 @@ public:
 	int getWidth();
 	int getHeight();
 	void setGravity(bool b);
+	int getFallStep();
+	bool getBGravity();
 
 private:
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity
 	bool isOnFloor;
+	int fallStep;
 
 	glm::ivec2 tileMapDispl, posPlayer, playerSize;
 	int jumpAngle, startY;

@@ -17,6 +17,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Guardar.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Lightning.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Plataforma.h" />
     <ClInclude Include="Player.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Spike.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Stalactite.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMap.h" />
@@ -34,6 +36,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Guardar.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Lightning.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Plataforma.cpp" />
@@ -42,6 +45,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Spike.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Stalactite.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileMap.cpp" />

@@ -9,6 +9,8 @@
 #include "Guardar.h"
 #include "Spike.h"
 #include "Star.h"
+#include "Lightning.h"
+#include "Stalactite.h"
 
 class Level
 {
@@ -25,6 +27,8 @@ public:
 	void loadPlataforma();
 	void loadGuardar();
 	void loadStar();
+	void loadLightning();
+	void loadStalactites();
 
 	void update(int deltaTime);
 	void render();
@@ -41,12 +45,15 @@ public:
 	bool collisionPlayerGuardar(int & GuardadoActual);
 	bool collisionPlayerSpikes();
 	bool collisionPlayerStar();
+	bool collisionPlayerLightning();
+	bool collisionPlayerStalactite();
 
 	int getActualMap();
+	int getDifficulty();
 
 private:
 	string addressActualMap;
-	int actualMap; // 11 ~ 15 easy, 21 ~ 25 hard
+	int actualMap; // 11 ~ 15 easy, 21 ~ 26 hard
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
 	int difficulty;
 
@@ -56,18 +63,21 @@ private:
 	bool ContactoPlat;
 	TileMap *map;
 	Player *player;
-	glm::ivec2 posPlayer;
+	glm::ivec2 posPlayer, posPlayerIni;
 	vector<Enemy*> enemy;
 	vector<Plataforma*> plataforma;
 	vector<Guardar*> guardar;
 	vector<Spike*> spikes;
+	vector<Lightning*> lightning;
+	vector<Stalactite*> stalactites;
 	Star* star;
 	int numGuardado;
-	float currentTime;
+	float currentTime, currentTimeCollision;
 	glm::mat4 projection;
 	Button* pauseButton;
 	vector<glm::ivec3> posicionesGuardar;
 	void InitPosGuardar();
+	bool collisioned;
 
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
 
@@ -77,8 +87,8 @@ private:
 	int enemiesVelocityEasy[5]{
 		NULL, NULL, 4, 4, 4
 	};
-	int enemiesVelocityHard[5]{
-		2, 2, 2, 2, 2
+	int enemiesVelocityHard[6]{
+		8, 8, 8, 8, 8, 8
 	};
 	int plataformaVelocityHard[5]{
 		2,	2,	2,	2,	2
