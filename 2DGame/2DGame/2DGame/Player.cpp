@@ -177,43 +177,7 @@ void Player::render()
 	sprite->render();
 }
 
-void Player::setTileMap(TileMap *tileMap)
-{
-	map = tileMap;
-}
-
-void Player::setPosition(const glm::vec2 &pos)
-{
-	posPlayer = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-}
-
-glm::ivec2 Player::getPosition() {
-	return posPlayer;
-}
-
-bool Player::getIsOnFloor() {
-	return isOnFloor;
-}
-
-bool Player::getbGravity() {
-	return bGravity;
-}
-
-Sprite* Player::getSprite() {
-	return sprite;
-}
-
-void Player::setAnimation(int i) {
-	sprite->changeAnimation(i);
-}
-
-void Player::setIsOnFloor(bool floor)
-{
-	isOnFloor = floor;
-}
-
-
+// GETTERS
 
 int Player::getWidth()
 {
@@ -235,4 +199,46 @@ int Player::getFallStep() {
 
 bool Player::getBGravity() {
 	return bGravity;
+}
+
+glm::ivec2 Player::getPosition() {
+	return posPlayer;
+}
+
+bool Player::getIsOnFloor() {
+	return isOnFloor;
+}
+
+bool Player::getbGravity() {
+	return bGravity;
+}
+
+Sprite* Player::getSprite() {
+	return sprite;
+}
+
+// SETTERS
+
+void Player::setAnimation(int i) {
+	sprite->changeAnimation(i);
+}
+
+void Player::setIsOnFloor(bool floor)
+{
+	isOnFloor = floor;
+}
+
+void Player::setTileMap(TileMap *tileMap)
+{
+	map = tileMap;
+}
+
+void Player::setPosition(const glm::vec2 &pos)
+{
+	posPlayer = pos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
+void Player::setSize(glm::ivec2 newSize) {
+	this->playerSize = newSize;
 }

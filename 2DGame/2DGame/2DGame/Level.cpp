@@ -25,6 +25,13 @@
 #define GUARDAR14 1
 #define GUARDAR15 1
 
+#define GUARDAR21 1
+#define GUARDAR22 1
+#define GUARDAR23 1
+#define GUARDAR24 1
+#define GUARDAR25 1
+#define GUARDAR26 1
+
 #define N_ENEMIES21 0
 #define N_ENEMIES22 2
 #define N_ENEMIES23 3
@@ -103,10 +110,24 @@ Level::~Level()
 
 
 void Level::InitPosGuardar() {
-	vector<glm::ivec3> g(3);
-	g[0] = glm::ivec3(780, 482,1); // El tercer elemento es el mapa en el que es la posicion
+	// El tercer elemento es el mapa en el que es la posicion
+	vector<glm::ivec3> g(11);
+
+	// Easy mode
+	g[0] = glm::ivec3(780, 482, 1);
 	g[1] = glm::ivec3(850, 482, 2);
 	g[2] = glm::ivec3(64, 482, 3);
+	g[3] = glm::ivec3(50, 162, 4);
+	g[4] = glm::ivec3(50, 162, 5);
+
+	// Hard mode
+	g[5] = glm::ivec3(965, 418, 1);
+	g[6] = glm::ivec3(50, 65, 2);
+	g[7] = glm::ivec3(36, 418, 3);
+	g[8] = glm::ivec3(45, 482, 4);
+	g[9] = glm::ivec3(50, 674, 5);
+	g[10] = glm::ivec3(45, 418, 6);
+
 	posicionesGuardar = g;
 }
 
@@ -117,13 +138,8 @@ void Level::init(int difficulty)
 		addressActualMap = "levels/level11.txt";
 		actualMap = 11;
 		posPlayer = posPlayerIni = glm::vec2(300, 200);
-		/*
-		addressActualMap = "levels/level15.txt";
-		actualMap = 15;
-		posPlayer = glm::vec2(50, 150);
-		*/
 	}
-		
+
 	else if (difficulty == 2) {
 		addressActualMap = "levels/level22.txt";
 		actualMap = 22;
@@ -157,7 +173,7 @@ void Level::load() {
 	spikes.clear();
 	lightning.clear();
 	stalactites.clear();
-	
+
 	loadMap();
 	loadPlayer();
 	loadEnemies();
@@ -187,7 +203,7 @@ void Level::loadSpikes() {
 		}
 	}
 	else if (actualMap == 24) {
-		for (unsigned int i = 0; i < 18; ++i) {
+		for (unsigned int i = 0; i < 17; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(64, 64);
 			spike->init(glm::ivec2(125 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 92), texProgram, spikeSize, false);
@@ -200,6 +216,16 @@ void Level::loadSpikes() {
 			spikes.push_back(spike);
 		}
 	}
+	else if (actualMap == 25) {
+		for (unsigned int i = 0; i < 15; ++i) {
+			if (i % 3 != 0) {
+				Spike* spike = new Spike();
+				glm::ivec2 spikeSize = glm::ivec2(64, 64);
+				spike->init(glm::ivec2(160 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 256), texProgram, spikeSize, true);
+				spikes.push_back(spike);
+			}
+		}
+	}
 }
 
 void Level::loadPlayer() {
@@ -209,233 +235,227 @@ void Level::loadPlayer() {
 }
 
 void Level::loadEnemies() {
-	if (difficulty == 1) { // easy
-		switch (actualMap) {
-		case 13: {
-			glm::vec2 relation[N_ENEMIES13]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES13]{
-				"images/enemies/Ball.png",
-				"images/enemies/Ball.png",
-				"images/enemies/Ball.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES13]{
-				glm::ivec2(255, 175),
-				glm::ivec2(510, 605),
-				glm::ivec2(770, 175)
-			};
-			glm::ivec2 posFinal[N_ENEMIES13]{
-				glm::ivec2(255, 660),
-				glm::ivec2(510, 110),
-				glm::ivec2(770, 660)
-			};
-			for (int i = 0; i < N_ENEMIES13; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityEasy[2]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
+	switch (actualMap) {
+	case 13: {
+		glm::vec2 relation[N_ENEMIES13]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES13]{
+			"images/enemies/Ball.png",
+			"images/enemies/Ball.png",
+			"images/enemies/Ball.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES13]{
+			glm::ivec2(255, 175),
+			glm::ivec2(510, 605),
+			glm::ivec2(770, 175)
+		};
+		glm::ivec2 posFinal[N_ENEMIES13]{
+			glm::ivec2(255, 660),
+			glm::ivec2(510, 110),
+			glm::ivec2(770, 660)
+		};
+		for (int i = 0; i < N_ENEMIES13; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityEasy[2]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
-		case 14: {
-			glm::vec2 relation[N_ENEMIES14]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES14]{
-				"images/enemies/Bear.png",
-				"images/enemies/Bear.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES14]{
-				glm::ivec2(365, 360),
-				glm::ivec2(790, 500)
-			};
-			glm::ivec2 posFinal[N_ENEMIES14]{
-				glm::ivec2(790, 360),
-				glm::ivec2(365, 500)
-			};
-			for (int i = 0; i < N_ENEMIES14; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityEasy[3]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
-		}
-		case 15: {
-			glm::vec2 relation[N_ENEMIES15]{
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES15]{
-				"images/enemies/Dinosaur.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES15]{
-				glm::ivec2(560, 150)
-			};
-			glm::ivec2 posFinal[N_ENEMIES15]{
-				glm::ivec2(560, 690)
-			};
-			for (int i = 0; i < N_ENEMIES15; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityEasy[4]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
-		}
-		}
+		break;
 	}
-	else if (difficulty == 2) { // hard
-		switch (actualMap) {
-		case 22: {
-			glm::vec2 relation[N_ENEMIES22]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES22]{
-				"images/enemies/Llama.png",
-				"images/enemies/Llama.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES22]{
-				glm::ivec2(100, SCREEN_HEIGHT - 500),
-				glm::ivec2(SCREEN_WIDTH - 500, SCREEN_HEIGHT - 300)
-			};
-			glm::ivec2 posFinal[N_ENEMIES22]{
-				glm::ivec2(SCREEN_WIDTH - 500, SCREEN_HEIGHT - 500),
-				glm::ivec2(100, SCREEN_HEIGHT - 300)
-			};
-			for (int i = 0; i < N_ENEMIES22; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[1]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
+	case 14: {
+		glm::vec2 relation[N_ENEMIES14]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES14]{
+			"images/enemies/Bear.png",
+			"images/enemies/Bear.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES14]{
+			glm::ivec2(365, 360),
+			glm::ivec2(790, 500)
+		};
+		glm::ivec2 posFinal[N_ENEMIES14]{
+			glm::ivec2(790, 360),
+			glm::ivec2(365, 500)
+		};
+		for (int i = 0; i < N_ENEMIES14; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityEasy[3]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
-		case 23: {
-			glm::vec2 relation[N_ENEMIES23]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES23]{
-				"images/enemies/Rabbit.png",
-				"images/enemies/Rabbit.png",
-				"images/enemies/Rabbit.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES23]{
-				glm::ivec2(400, SCREEN_HEIGHT - 135),
-				glm::ivec2(690, SCREEN_HEIGHT - 335),
-				glm::ivec2(SCREEN_WIDTH - 180, 100)
-			};
-			glm::ivec2 posFinal[N_ENEMIES23]{
-				glm::ivec2(400, SCREEN_HEIGHT - 335),
-				glm::ivec2(690, SCREEN_HEIGHT - 135),
-				glm::ivec2(SCREEN_WIDTH - 180, SCREEN_HEIGHT - 150)
-			};
-			for (int i = 0; i < N_ENEMIES23; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[2]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
+		break;
+	}
+	case 15: {
+		glm::vec2 relation[N_ENEMIES15]{
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES15]{
+			"images/enemies/Dinosaur.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES15]{
+			glm::ivec2(560, 150)
+		};
+		glm::ivec2 posFinal[N_ENEMIES15]{
+			glm::ivec2(560, 690)
+		};
+		for (int i = 0; i < N_ENEMIES15; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityEasy[4]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
-		case 24: {
-			glm::vec2 relation[N_ENEMIES24]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES24]{
-				"images/enemies/Romb.png",
-				"images/enemies/Romb.png",
-				"images/enemies/Romb.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES24]{
-				glm::ivec2(200, 230),
-				glm::ivec2(SCREEN_WIDTH - 200, 360),
-				glm::ivec2(200, 490)
-			};
-			glm::ivec2 posFinal[N_ENEMIES24]{
-				glm::ivec2(SCREEN_WIDTH - 200, 230),
-				glm::ivec2(200, 360),
-				glm::ivec2(SCREEN_WIDTH - 200, 490)
-			};
-			for (int i = 0; i < N_ENEMIES24; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[4]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
+		break;
+	}
+	case 22: {
+		glm::vec2 relation[N_ENEMIES22]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES22]{
+			"images/enemies/Llama.png",
+			"images/enemies/Llama.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES22]{
+			glm::ivec2(100, SCREEN_HEIGHT - 500),
+			glm::ivec2(SCREEN_WIDTH - 500, SCREEN_HEIGHT - 300)
+		};
+		glm::ivec2 posFinal[N_ENEMIES22]{
+			glm::ivec2(SCREEN_WIDTH - 500, SCREEN_HEIGHT - 500),
+			glm::ivec2(100, SCREEN_HEIGHT - 300)
+		};
+		for (int i = 0; i < N_ENEMIES22; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[1]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
-		case 25: {
-			glm::vec2 relation[N_ENEMIES25]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES25]{
-				"images/enemies/Romb.png",
-				"images/enemies/Romb.png",
-				"images/enemies/Romb.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES25]{
-				glm::ivec2(305, 50),
-				glm::ivec2(495, 50),
-				glm::ivec2(690, 50)
-			};
-			glm::ivec2 posFinal[N_ENEMIES25]{
-				glm::ivec2(305, 470),
-				glm::ivec2(495, 470),
-				glm::ivec2(690, 470)
-			};
-			for (int i = 0; i < N_ENEMIES25; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[4]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
+		break;
+	}
+	case 23: {
+		glm::vec2 relation[N_ENEMIES23]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES23]{
+			"images/enemies/Rabbit.png",
+			"images/enemies/Rabbit.png",
+			"images/enemies/Rabbit.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES23]{
+			glm::ivec2(400, SCREEN_HEIGHT - 135),
+			glm::ivec2(690, SCREEN_HEIGHT - 335),
+			glm::ivec2(SCREEN_WIDTH - 180, 100)
+		};
+		glm::ivec2 posFinal[N_ENEMIES23]{
+			glm::ivec2(400, SCREEN_HEIGHT - 335),
+			glm::ivec2(690, SCREEN_HEIGHT - 135),
+			glm::ivec2(SCREEN_WIDTH - 180, SCREEN_HEIGHT - 150)
+		};
+		for (int i = 0; i < N_ENEMIES23; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[2]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
-		case 26: {
-			glm::vec2 relation[N_ENEMIES26]{
-				glm::vec2(1.f, 1.f / 4.f),
-				glm::vec2(1.f, 1.f / 4.f)
-			};
-			string nameImage[N_ENEMIES26]{
-				"images/enemies/Romb.png",
-				"images/enemies/Romb.png"
-			};
-			glm::ivec2 posInicial[N_ENEMIES26]{
-				glm::ivec2(0, 50),
-				glm::ivec2(0, 50)
-			};
-			glm::ivec2 posFinal[N_ENEMIES26]{
-				glm::ivec2(50, 50),
-				glm::ivec2(0, 50)
-			};
-			for (int i = 0; i < N_ENEMIES26; i++) {
-				Enemy* e = new Enemy;
-				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[5]);
-				e->setPosition(posInicial[i]);
-				e->setTileMap(map);
-				enemy.push_back(e);
-			}
-			break;
+		break;
+	}
+	case 24: {
+		glm::vec2 relation[N_ENEMIES24]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES24]{
+			"images/enemies/Romb.png",
+			"images/enemies/Romb.png",
+			"images/enemies/Romb.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES24]{
+			glm::ivec2(200, 230),
+			glm::ivec2(SCREEN_WIDTH - 200, 360),
+			glm::ivec2(200, 490)
+		};
+		glm::ivec2 posFinal[N_ENEMIES24]{
+			glm::ivec2(SCREEN_WIDTH - 200, 230),
+			glm::ivec2(200, 360),
+			glm::ivec2(SCREEN_WIDTH - 200, 490)
+		};
+		for (int i = 0; i < N_ENEMIES24; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[4]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
+		break;
+	}
+	case 25: {
+		glm::vec2 relation[N_ENEMIES25]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES25]{
+			"images/enemies/Duck.png",
+			"images/enemies/Llama.png",
+			"images/enemies/Rabbit.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES25]{
+			glm::ivec2(305, 50),
+			glm::ivec2(495, 470),
+			glm::ivec2(690, 50)
+		};
+		glm::ivec2 posFinal[N_ENEMIES25]{
+			glm::ivec2(305, 470),
+			glm::ivec2(495, 50),
+			glm::ivec2(690, 470)
+		};
+		for (int i = 0; i < N_ENEMIES25; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[4]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
 		}
+		break;
+	}
+	case 26: {
+		glm::vec2 relation[N_ENEMIES26]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES26]{
+			"images/enemies/Heart.png",
+			"images/enemies/Heart.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES26]{
+			glm::ivec2(450, 40),
+			glm::ivec2(700, 40)
+		};
+		glm::ivec2 posFinal[N_ENEMIES26]{
+			glm::ivec2(450, 220),
+			glm::ivec2(700, 220)
+		};
+		for (int i = 0; i < N_ENEMIES26; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[5]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
 	}
 }
 
@@ -452,8 +472,8 @@ void Level::loadPlataforma() {
 				"images/plataforma/nube1.png"
 			};
 			glm::ivec2 posInicial[N_PLATAFORMA22]{
-				glm::ivec2(32*8, 32 *7),
-				glm::ivec2(32*8, 32* 9)
+				glm::ivec2(32 * 8, 32 * 7),
+				glm::ivec2(32 * 8, 32 * 9)
 			};
 			glm::ivec2 posFinal[N_PLATAFORMA22]{
 				glm::ivec2(32 * 16, 32 * 7),
@@ -473,52 +493,162 @@ void Level::loadPlataforma() {
 }
 
 void Level::loadGuardar() {
-	if (difficulty == 1) { // easy
-		switch (actualMap) {
-		case 11: {
-			glm::ivec2 posIni[GUARDAR11]{
-				glm::ivec2(posicionesGuardar[0].x, posicionesGuardar[0].y)
+	switch (actualMap) {
+	case 11: {
+		int id = 1;
+		glm::ivec2 posIni[GUARDAR11]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
 
-			};
-			int id = 1;
-			for (int i = 0; i < GUARDAR11; i++) {
-				Guardar* g = new Guardar;
-				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64,64), id);
-				g->setPosition(posIni[i]);
-				g->setTileMap(map);
-				guardar.push_back(g);
-			}
-			break;
+		};
+		for (int i = 0; i < GUARDAR11; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
 		}
-		case 12: {// Deberia hacer un vector diciendo que guardados va en cada nivel para que solo cargue esos o algo asi 
-			glm::ivec2 posIni[GUARDAR12]{
-				glm::ivec2(posicionesGuardar[1].x, posicionesGuardar[1].y)
-			};
-			int id = 2;
-			for (int i = 0; i < GUARDAR12; i++) {
-				Guardar* g = new Guardar;
-				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
-				g->setPosition(posIni[i]);
-				g->setTileMap(map);
-				guardar.push_back(g);
-			}
-			break;
+		break;
+	}
+	case 12: {
+		int id = 2;
+		glm::ivec2 posIni[GUARDAR12]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR12; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
 		}
-		case 13: {// Deberia hacer un vector diciendo que guardados va en cada nivel para que solo cargue esos o algo asi 
-			glm::ivec2 posIni[GUARDAR13]{
-				glm::ivec2(posicionesGuardar[2].x, posicionesGuardar[2].y)
-			};
-			int id = 3;
-			for (int i = 0; i < GUARDAR13; i++) {
-				Guardar* g = new Guardar;
-				g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
-				g->setPosition(posIni[i]);
-				g->setTileMap(map);
-				guardar.push_back(g);
-			}
-			break;
+		break;
+	}
+	case 13: {
+		int id = 3;
+		glm::ivec2 posIni[GUARDAR13]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR13; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
 		}
+		break;
+	}
+	case 14: {
+		int id = 4;
+		glm::ivec2 posIni[GUARDAR14]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR14; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
 		}
+		break;
+	}
+	case 15: {
+		int id = 5;
+		glm::ivec2 posIni[GUARDAR15]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR15; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
+	case 21: {
+		int id = 6;
+		glm::ivec2 posIni[GUARDAR21]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR21; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
+	case 22: {
+		int id = 7;
+		glm::ivec2 posIni[GUARDAR22]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR22; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
+	case 23: {
+		int id = 8;
+		glm::ivec2 posIni[GUARDAR23]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR23; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
+	case 24: {
+		int id = 9;
+		glm::ivec2 posIni[GUARDAR24]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR24; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
+	case 25: {
+		int id = 10;
+		glm::ivec2 posIni[GUARDAR25]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR25; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
+	case 26: {
+		int id = 11;
+		glm::ivec2 posIni[GUARDAR26]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR26; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+		}
+		break;
+	}
 	}
 }
 
@@ -588,6 +718,26 @@ void Level::loadStalactites() {
 		stalactite->setMargin(200, SCREEN_HEIGHT);
 		stalactite->setFallingVelocity(15);
 		stalactites.push_back(stalactite);
+
+		for (unsigned int i = 0; i < 5; ++i) {
+			stalactite = new Stalactite;
+			stalactitePos = glm::ivec2(160 + 143 * i, SCREEN_HEIGHT - 256);
+			stalactiteSize = glm::ivec2(64, 64);
+			stalactite->init(stalactitePos, texProgram, stalactiteSize);
+			stalactite->setMargin(30, SCREEN_HEIGHT);
+			stalactite->setFallingVelocity(15);
+			stalactites.push_back(stalactite);
+		}
+
+		for (unsigned int i = 0; i < 4; ++i) {
+			stalactite = new Stalactite;
+			stalactitePos = glm::ivec2(208 + 192 * i, 224);
+			stalactiteSize = glm::ivec2(64, 64);
+			stalactite->init(stalactitePos, texProgram, stalactiteSize);
+			stalactite->setMargin(30, 300);
+			stalactite->setFallingVelocity(15);
+			stalactites.push_back(stalactite);
+		}
 	}
 }
 
@@ -615,7 +765,7 @@ void Level::update(int deltaTime)
 	}
 
 	changingMapConditions();
-	
+
 	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
 		currentTimeCollision = currentTime;
 		collisioned = true;
@@ -657,7 +807,7 @@ void Level::update(int deltaTime)
 		if (player->getIsOnFloor())
 			sum = -14;
 		else sum = 14;
-		
+
 		int addvx, addvy;
 		addvx = plataforma[nump]->getIncrease().x;
 		addvy = plataforma[nump]->getIncrease().y;
@@ -673,8 +823,8 @@ void Level::update(int deltaTime)
 		}*/
 
 		player->setPosition(glm::vec2(float(player->getPosition().x + addvx), float(desfas + addvy + sum + player->getPosition().y)));
-		
-		
+
+
 		if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 			player->setGravity(true);
 			Game::instance().setCanInvertGravity(false);
@@ -763,7 +913,7 @@ void Level::setMap(int newMap) {
 
 // Els hi posem a tots els mapes "levelXY.txt"
 // On X fa referencia a la dificultat i Y al nivell en si
-void Level::nextMap () {
+void Level::nextMap() {
 	if (actualMap + 1 != 16 && actualMap + 1 != 27) {
 		int numberOfTheNewMap = int(addressActualMap[13]) + 1;
 		addressActualMap[13] = char(numberOfTheNewMap);
@@ -778,7 +928,6 @@ void Level::previousMap() {
 		actualMap--;
 	}
 }
-
 
 void Level::changingMapConditions() {
 	isOnFloor = player->getIsOnFloor();
@@ -904,7 +1053,7 @@ bool Level::buttonPress(int x, int y) {
 	if ((x > pauseButton->getposB().x + SCREEN_X && x < (pauseButton->getposB().x + pauseButton->getWidth() + SCREEN_X))
 		&& (y > pauseButton->getposB().y + SCREEN_Y && y < (pauseButton->getposB().y + pauseButton->getHeight() + SCREEN_Y))) {
 		return true;
-	}	
+	}
 	return false;
 }
 
@@ -920,7 +1069,7 @@ bool Level::collisionPlayerEnemies() {
 	return b;
 }
 
-bool Level::collisionPlayerPlataforma(int& PlataformaAct) {	
+bool Level::collisionPlayerPlataforma(int& PlataformaAct) {
 	bool b = false;
 	posPlayer = player->getPosition();
 
@@ -931,8 +1080,9 @@ bool Level::collisionPlayerPlataforma(int& PlataformaAct) {
 		}
 	}
 	return b;
-	
+
 }
+
 bool Level::collisionPlayerGuardar(int & GuardadoActual) {
 	bool b = false;
 	posPlayer = player->getPosition();
@@ -997,7 +1147,7 @@ bool Level::collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm
 	x0_2 = pos2.x; x_2 = pos2.x + size2.x;
 	y0_2 = pos2.y; y_2 = pos2.y + size2.y;
 
-	if (!(x0_1 > x_2-5) && !(x0_2+5 > x_1) && !(y0_1 > y_2-15) && !(y0_2+15 > y_1)) {
+	if (!(x0_1 > x_2 - 5) && !(x0_2 + 5 > x_1) && !(y0_1 > y_2 - 15) && !(y0_2 + 15 > y_1)) {
 		return true;
 	}
 	return false;

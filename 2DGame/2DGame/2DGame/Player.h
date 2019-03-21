@@ -18,19 +18,21 @@ public:
 	void update(int deltaTime);
 	void render();
 	
-	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getPosition();
 	bool getIsOnFloor();
 	bool getbGravity();
 	Sprite* getSprite();
-	void setAnimation(int i);
-	void setIsOnFloor(bool floor);
 	int getWidth();
 	int getHeight();
 	void setGravity(bool b);
 	int getFallStep();
 	bool getBGravity();
+
+	void setAnimation(int i);
+	void setIsOnFloor(bool floor);
+	void setTileMap(TileMap *tileMap);
+	void setPosition(const glm::vec2 &pos);
+	void setSize(glm::ivec2 newSize);
 
 private:
 	bool bJumping;
