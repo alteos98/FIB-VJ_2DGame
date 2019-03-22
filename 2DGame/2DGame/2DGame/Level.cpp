@@ -162,8 +162,17 @@ void Level::update(int deltaTime)
 			stalactites[i]->setFalling(false);
 		stalactites[i]->update(deltaTime);
 	}
-	if (actualMap == 23)
+	if (actualMap == 23) {
 		treasure->update(deltaTime);
+
+		if (collisionPlayerTreasure()) {
+			treasure->open();
+			sizePlayer = glm::ivec2(32, 32);
+			player->setSize(sizePlayer);
+			player->initSprite();
+			player->setPosition(posPlayer);
+		}
+	}
 
 	changingMapConditions();
 
@@ -235,13 +244,6 @@ void Level::update(int deltaTime)
 	if (collisionPlayerLightning()) {
 		isOnFloor = player->getIsOnFloor();
 		player->setIsOnFloor(!isOnFloor);
-	}
-	if (collisionPlayerTreasure()) {
-		treasure->open();
-		sizePlayer = glm::ivec2(32, 32);
-		player->setSize(sizePlayer);
-		player->initSprite();
-		player->setPosition(posPlayer);
 	}
 }
 
@@ -778,7 +780,7 @@ void Level::loadStar() {
 	}
 	else if (actualMap == 26) {
 		glm::ivec2 starSize = glm::ivec2(64, 64);
-		star->init(glm::ivec2(SCREEN_WIDTH - 128, 200), texProgram, starSize);
+		star->init(glm::ivec2(SCREEN_WIDTH - 128, 210), texProgram, starSize);
 	}
 }
 
@@ -1125,7 +1127,9 @@ bool Level::collisionPlayerLightning() {
 	bool b = false;
 
 	for (unsigned int i = 0; i < lightning.size() && !b; ++i) {
-		if (collision(player->getPosition(), glm::ivec2(player->getWidth(), player->getHeight()), lightning[i]->getPosition(), glm::ivec2(lightning[i]->getWidth(), lightning[i]->getHeight() - lightning[i]->getHeight() / 64))) {
+		glm::ivec2 lightiningPosition = lightning[i]->getPosition();
+		lightiningPosition.y = lightiningPosition.y + lightning[i]->getHeight() / 2;
+		if (collision(player->getPosition(), glm::ivec2(player->getWidth(), player->getHeight()), lightiningPosition, glm::ivec2(lightning[i]->getWidth(), 1))) {
 			b = true;
 		}
 	}
