@@ -73,7 +73,6 @@ Level::Level()
 	}
 }
 
-
 Level::~Level()
 {
 	if (map != NULL)
@@ -108,32 +107,11 @@ Level::~Level()
 	}
 }
 
-
-void Level::InitPosGuardar() {
-	// El tercer elemento es el mapa en el que es la posicion
-	vector<glm::ivec3> g(11);
-
-	// Easy mode
-	g[0] = glm::ivec3(780, 482, 1);
-	g[1] = glm::ivec3(850, 482, 2);
-	g[2] = glm::ivec3(64, 482, 3);
-	g[3] = glm::ivec3(50, 162, 4);
-	g[4] = glm::ivec3(50, 162, 5);
-
-	// Hard mode
-	g[5] = glm::ivec3(965, 418, 1);
-	g[6] = glm::ivec3(50, 65, 2);
-	g[7] = glm::ivec3(36, 418, 3);
-	g[8] = glm::ivec3(45, 482, 4);
-	g[9] = glm::ivec3(50, 674, 5);
-	g[10] = glm::ivec3(45, 418, 6);
-
-	posicionesGuardar = g;
-}
-
 void Level::init(int difficulty)
 {
 	InitPosGuardar();
+	initShaders();
+
 	if (difficulty == 1) {
 		addressActualMap = "levels/level11.txt";
 		actualMap = 11;
@@ -146,25 +124,164 @@ void Level::init(int difficulty)
 		posPlayer = posPlayerIni = glm::vec2(50, 50);
 	}
 
-	initShaders();
-	player = new Player();
+	player = new Player;
+	pauseButton = new Button;
+	star = new Star;
+	treasure = new Treasure;
+
+	sizePlayer = glm::ivec2(64, 64);
 	isOnFloor = true;
 	ContactoPlat = false;
+	collisioned = false;
 	this->difficulty = difficulty;
 	numGuardado = -1;
-	collisioned = false;
-	pauseButton = new Button;
-	pauseButton->init(
-		glm::ivec2(SCREEN_X, SCREEN_Y),
-		texProgram,
-		glm::ivec2(64, 64),
-		glm::vec2(1.f, 1.f / 4.f),
-		"images/buttons/PauseButton.png"
-	);
-	pauseButton->setPosition(glm::vec2(SCREEN_WIDTH - 90, 20));
-	star = new Star;
+
 	load();
 }
+
+void Level::update(int deltaTime)
+{
+	// Update every interactuable object
+	currentTime += deltaTime;
+	if (!collisioned)
+		player->update(deltaTime);
+	if (actualMap == 15 || actualMap == 26)
+		star->update(deltaTime);
+	for (unsigned int i = 0; i < enemy.size(); ++i)
+		enemy[i]->update(deltaTime);
+	for (unsigned int i = 0; i < guardar.size(); ++i)
+		guardar[i]->update(deltaTime);
+	for (unsigned int i = 0; i < plataforma.size(); ++i)
+		plataforma[i]->update(deltaTime);
+	for (unsigned int i = 0; i < lightning.size(); ++i)
+		lightning[i]->update(deltaTime);
+	for (unsigned int i = 0; i < stalactites.size(); ++i) {
+		if (!stalactites[i]->getFalling() && stalactites[i]->hasToFall(posPlayer))
+			stalactites[i]->setFalling(true);
+		if (stalactites[i]->outOfMap())
+			stalactites[i]->setFalling(false);
+		stalactites[i]->update(deltaTime);
+	}
+	if (actualMap == 23)
+		treasure->update(deltaTime);
+
+	changingMapConditions();
+
+	// Checking collisions
+	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
+		currentTimeCollision = currentTime;
+		collisioned = true;
+		player->setAnimation(8);
+	}
+	else if (collisioned && currentTime - currentTimeCollision >= DURATION_ANIMATION_DEAD) {
+		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado - 1].x, posicionesGuardar[numGuardado - 1].y);
+		player->setPosition(glm::vec2(posPlayer.x, posPlayer.y));
+		changeMap();
+		player->setIsOnFloor(true);
+		collisioned = false;
+	}
+	/*else if (collisioned) {
+		if ((isOnFloor && player->getBGravity()) && (!isOnFloor && !player->getBGravity()))
+			posPlayer.y = posPlayer.y + player->getFallStep() - INCREMENT_Y_DEAD;
+		else if ((isOnFloor && !player->getBGravity()) && (!isOnFloor && player->getBGravity()))
+			posPlayer.y = posPlayer.y - player->getFallStep() - INCREMENT_Y_DEAD;
+		player->setPosition(glm::ivec2(posPlayer.x, posPlayer.y));
+	}*/
+	int aux = -1;
+	if (collisionPlayerGuardar(aux)) {
+		if (aux != -1 && numGuardado != aux) {
+			numGuardado = aux;
+			Actualizarllama();
+		}
+	}
+	if (mapacambiado) { Actualizarllama(); mapacambiado = false; }
+
+	int nump;
+	if (collisionPlayerPlataforma(nump)) {
+		if (!ContactoPlat) {
+			if (player->getbGravity())player->setIsOnFloor(!player->getIsOnFloor());
+			ContactoPlat = true;
+		}
+		player->setGravity(false);
+		int sum = 0;
+		if (player->getIsOnFloor())
+			sum = -14;
+		else sum = 14;
+
+		int addvx, addvy;
+		addvx = plataforma[nump]->getIncrease().x;
+		addvy = plataforma[nump]->getIncrease().y;
+
+		int desfas = 0;
+		/*if (player->getIsOnFloor() && player->getbGravity()) {
+			desfas = player->getPosition().y - plataforma[nump]->getPosition().y - plataforma[nump]->getHeight();
+			desfas = abs(desfas);
+		}
+		else if (!player->getIsOnFloor() && player->getbGravity()) {
+			desfas = -player->getPosition().y - 32 + plataforma[nump]->getPosition().y;
+			desfas = abs(desfas);
+		}*/
+
+		player->setPosition(glm::vec2(float(player->getPosition().x + addvx), float(desfas + addvy + sum + player->getPosition().y)));
+
+
+		if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
+			player->setGravity(true);
+			Game::instance().setCanInvertGravity(false);
+		}
+	}
+	else ContactoPlat = false;
+
+	if (collisionPlayerLightning()) {
+		isOnFloor = player->getIsOnFloor();
+		player->setIsOnFloor(!isOnFloor);
+	}
+	if (collisionPlayerTreasure()) {
+		treasure->open();
+		sizePlayer = glm::ivec2(32, 32);
+		player->setSize(sizePlayer);
+		player->initSprite();
+		player->setPosition(posPlayer);
+	}
+}
+
+void Level::render()
+{
+	glm::mat4 modelview;
+
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	modelview = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	map->render();
+	player->render();
+	for (unsigned int i = 0; i < enemy.size(); ++i)
+		enemy[i]->render();
+	for (unsigned int i = 0; i < guardar.size(); ++i)
+		guardar[i]->render();
+	for (unsigned int i = 0; i < spikes.size(); ++i)
+		spikes[i]->render();
+	for (unsigned int i = 0; i < lightning.size(); ++i)
+		lightning[i]->render();
+	for (unsigned int i = 0; i < stalactites.size(); ++i) {
+		if (!stalactites[i]->outOfMap())
+			stalactites[i]->render();
+	}
+	for (unsigned int i = 0; i < plataforma.size(); ++i) {
+		plataforma[i]->render();
+	}
+	if (actualMap == 15 || actualMap == 26)
+		star->render();
+	if (actualMap == 23)
+		treasure->render();
+	pauseButton->render();
+}
+
+
+// LOAD
 
 void Level::load() {
 	enemy.clear();
@@ -183,6 +300,8 @@ void Level::load() {
 	loadStar();
 	loadLightning();
 	loadStalactites();
+	loadTresure();
+	loadPauseButton();
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -229,7 +348,7 @@ void Level::loadSpikes() {
 }
 
 void Level::loadPlayer() {
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, isOnFloor);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, sizePlayer, isOnFloor);
 	player->setPosition(posPlayer);
 	player->setTileMap(map);
 }
@@ -741,178 +860,33 @@ void Level::loadStalactites() {
 	}
 }
 
-void Level::update(int deltaTime)
-{
-	currentTime += deltaTime;
-	if (!collisioned)
-		player->update(deltaTime);
-	if (actualMap == 15 || actualMap == 26)
-		star->update(deltaTime);
-	for (unsigned int i = 0; i < enemy.size(); ++i)
-		enemy[i]->update(deltaTime);
-	for (unsigned int i = 0; i < guardar.size(); ++i)
-		guardar[i]->update(deltaTime);
-	for (unsigned int i = 0; i < plataforma.size(); ++i)
-		plataforma[i]->update(deltaTime);
-	for (unsigned int i = 0; i < lightning.size(); ++i)
-		lightning[i]->update(deltaTime);
-	for (unsigned int i = 0; i < stalactites.size(); ++i) {
-		if (!stalactites[i]->getFalling() && stalactites[i]->hasToFall(posPlayer))
-			stalactites[i]->setFalling(true);
-		if (stalactites[i]->outOfMap())
-			stalactites[i]->setFalling(false);
-		stalactites[i]->update(deltaTime);
-	}
-
-	changingMapConditions();
-
-	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
-		currentTimeCollision = currentTime;
-		collisioned = true;
-		player->setAnimation(8);
-	}
-	else if (collisioned && currentTime - currentTimeCollision >= DURATION_ANIMATION_DEAD) {
-		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado - 1].x, posicionesGuardar[numGuardado - 1].y);
-		player->setPosition(glm::vec2(posPlayer.x, posPlayer.y));
-		changeMap();
-		player->setIsOnFloor(true);
-		collisioned = false;
-	}
-	/*else if (collisioned) {
-		if ((isOnFloor && player->getBGravity()) && (!isOnFloor && !player->getBGravity()))
-			posPlayer.y = posPlayer.y + player->getFallStep() - INCREMENT_Y_DEAD;
-		else if ((isOnFloor && !player->getBGravity()) && (!isOnFloor && player->getBGravity()))
-			posPlayer.y = posPlayer.y - player->getFallStep() - INCREMENT_Y_DEAD;
-		player->setPosition(glm::ivec2(posPlayer.x, posPlayer.y));
-	}*/
-	int aux = -1;
-	if (collisionPlayerGuardar(aux)) {
-		if (aux != -1 && numGuardado != aux) {
-			//if (numGuardado != -1) guardar[numGuardado-1]->Cambiar_llama();
-			numGuardado = aux;
-			//guardar[numGuardado-1]->Cambiar_llama();
-			Actualizarllama();
-		}
-	}
-	if (mapacambiado) { Actualizarllama(); mapacambiado = false; }
-
-	int nump;
-	if (collisionPlayerPlataforma(nump)) {
-		if (!ContactoPlat) {
-			if (player->getbGravity())player->setIsOnFloor(!player->getIsOnFloor());
-			ContactoPlat = true;
-		}
-		player->setGravity(false);
-		int sum = 0;
-		if (player->getIsOnFloor())
-			sum = -14;
-		else sum = 14;
-
-		int addvx, addvy;
-		addvx = plataforma[nump]->getIncrease().x;
-		addvy = plataforma[nump]->getIncrease().y;
-
-		int desfas = 0;
-		/*if (player->getIsOnFloor() && player->getbGravity()) {
-			desfas = player->getPosition().y - plataforma[nump]->getPosition().y - plataforma[nump]->getHeight();
-			desfas = abs(desfas);
-		}
-		else if (!player->getIsOnFloor() && player->getbGravity()) {
-			desfas = -player->getPosition().y - 32 + plataforma[nump]->getPosition().y;
-			desfas = abs(desfas);
-		}*/
-
-		player->setPosition(glm::vec2(float(player->getPosition().x + addvx), float(desfas + addvy + sum + player->getPosition().y)));
-
-
-		if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
-			player->setGravity(true);
-			Game::instance().setCanInvertGravity(false);
-		}
-	}
-	else ContactoPlat = false;
-
-	if (collisionPlayerLightning()) {
-		isOnFloor = player->getIsOnFloor();
-		player->setIsOnFloor(!isOnFloor);
+void Level::loadTresure() {
+	if (actualMap == 23) {
+		glm::ivec2 treasurePos = glm::ivec2(SCREEN_WIDTH - 650, 260);
+		glm::ivec2 treasureSize = glm::ivec2(64, 64);
+		treasure->init(treasurePos, texProgram, treasureSize);
 	}
 }
 
-void Level::changeMap()
-{
-	if (numGuardado >= 0) {
-		addressActualMap[13] = char(posicionesGuardar[numGuardado - 1].z) + '0';
-		actualMap = (addressActualMap[12] - '0') * 10 + posicionesGuardar[numGuardado - 1].z;
-	}
-	else {
-		if (difficulty == 1) {
-			addressActualMap = "levels/level11.txt";
-			actualMap = 11;
-		}
-		else if (difficulty == 2) {
-			addressActualMap = "levels/level22.txt";
-			actualMap = 22;
-		}
-		posPlayer = posPlayerIni;
-	}
-	load();
-	if (isOnFloor)
-		player->setAnimation(0);
-	else
-		player->setAnimation(4);
+void Level::loadPauseButton() {
+	pauseButton->init(
+		glm::ivec2(SCREEN_X, SCREEN_Y),
+		texProgram,
+		glm::ivec2(64, 64),
+		glm::vec2(1.f, 1.f / 4.f),
+		"images/buttons/PauseButton.png"
+	);
+	pauseButton->setPosition(glm::vec2(SCREEN_WIDTH - 90, 20));
 }
 
-void Level::Actualizarllama() {
-	if (numGuardado != -1) {
-		for (unsigned int i = 0; i < guardar.size(); ++i) {
-			if (numGuardado == guardar[i]->getID()) {
-				guardar[i]->Cambiar_llama(true);
-			}
-			else guardar[i]->Cambiar_llama(false);
-		}
-	}
-}
 
-void Level::render()
-{
-	glm::mat4 modelview;
-
-	texProgram.use();
-	texProgram.setUniformMatrix4f("projection", projection);
-	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	modelview = glm::mat4(1.0f);
-	texProgram.setUniformMatrix4f("modelview", modelview);
-	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-
-	map->render();
-	if (actualMap == 15 || actualMap == 26)
-		star->render();
-	player->render();
-	for (unsigned int i = 0; i < enemy.size(); ++i)
-		enemy[i]->render();
-	for (unsigned int i = 0; i < guardar.size(); ++i)
-		guardar[i]->render();
-	for (unsigned int i = 0; i < spikes.size(); ++i)
-		spikes[i]->render();
-	for (unsigned int i = 0; i < lightning.size(); ++i)
-		lightning[i]->render();
-	for (unsigned int i = 0; i < stalactites.size(); ++i) {
-		if (!stalactites[i]->outOfMap())
-			stalactites[i]->render();
-	}
-	for (unsigned int i = 0; i < plataforma.size(); ++i) {
-		plataforma[i]->render();
-	}
-	pauseButton->render();
-}
+// MAP
 
 void Level::setMap(int newMap) {
 	this->actualMap = newMap;
 	this->addressActualMap = "levels/level" + to_string(newMap) + ".txt";
 }
 
-// Els hi posem a tots els mapes "levelXY.txt"
-// On X fa referencia a la dificultat i Y al nivell en si
 void Level::nextMap() {
 	if (actualMap + 1 != 16 && actualMap + 1 != 27) {
 		int numberOfTheNewMap = int(addressActualMap[13]) + 1;
@@ -1049,13 +1023,43 @@ void Level::changingMapConditions() {
 	}
 }
 
-bool Level::buttonPress(int x, int y) {
-	if ((x > pauseButton->getposB().x + SCREEN_X && x < (pauseButton->getposB().x + pauseButton->getWidth() + SCREEN_X))
-		&& (y > pauseButton->getposB().y + SCREEN_Y && y < (pauseButton->getposB().y + pauseButton->getHeight() + SCREEN_Y))) {
-		return true;
+void Level::changeMap()
+{
+	if (numGuardado >= 0) {
+		addressActualMap[13] = char(posicionesGuardar[numGuardado - 1].z) + '0';
+		actualMap = (addressActualMap[12] - '0') * 10 + posicionesGuardar[numGuardado - 1].z;
 	}
-	return false;
+	else {
+		if (difficulty == 1) {
+			addressActualMap = "levels/level11.txt";
+			actualMap = 11;
+		}
+		else if (difficulty == 2) {
+			addressActualMap = "levels/level22.txt";
+			actualMap = 22;
+		}
+		posPlayer = posPlayerIni;
+	}
+	load();
+	if (isOnFloor)
+		player->setAnimation(0);
+	else
+		player->setAnimation(4);
 }
+
+void Level::Actualizarllama() {
+	if (numGuardado != -1) {
+		for (unsigned int i = 0; i < guardar.size(); ++i) {
+			if (numGuardado == guardar[i]->getID()) {
+				guardar[i]->Cambiar_llama(true);
+			}
+			else guardar[i]->Cambiar_llama(false);
+		}
+	}
+}
+
+
+// COLLISION
 
 bool Level::collisionPlayerEnemies() {
 	bool b = false;
@@ -1139,6 +1143,15 @@ bool Level::collisionPlayerStalactite() {
 	return b;
 }
 
+bool Level::collisionPlayerTreasure() {
+	bool b = false;
+
+	if (collision(player->getPosition(), glm::ivec2(player->getWidth(), player->getHeight()), treasure->getPosition(), glm::ivec2(treasure->getWidth(), treasure->getHeight()))) {
+		b = true;
+	}
+	return b;
+}
+
 bool Level::collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2) {
 	// size actualment �s (64, 64) tant per player com per enemies
 	int x0_1, x_1, y0_1, y_1, x0_2, x_2, y0_2, y_2;
@@ -1153,6 +1166,9 @@ bool Level::collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm
 	return false;
 }
 
+
+// GETTERS
+
 int Level::getActualMap() {
 	return actualMap;
 }
@@ -1161,8 +1177,44 @@ int Level::getDifficulty() {
 	return difficulty;
 }
 
+
+// SETTERS
+
 void Level::setPlayerPosition(glm::ivec2 newPlayerPos) {
 	this->posPlayer = newPlayerPos;
+}
+
+
+// OTHER
+
+void Level::InitPosGuardar() {
+	// El tercer elemento es el mapa en el que es la posicion
+	vector<glm::ivec3> g(11);
+
+	// Easy mode
+	g[0] = glm::ivec3(780, 482, 1);
+	g[1] = glm::ivec3(850, 482, 2);
+	g[2] = glm::ivec3(64, 482, 3);
+	g[3] = glm::ivec3(50, 162, 4);
+	g[4] = glm::ivec3(50, 162, 5);
+
+	// Hard mode
+	g[5] = glm::ivec3(965, 418, 1);
+	g[6] = glm::ivec3(50, 65, 2);
+	g[7] = glm::ivec3(36, 418, 3);
+	g[8] = glm::ivec3(45, 482, 4);
+	g[9] = glm::ivec3(50, 674, 5);
+	g[10] = glm::ivec3(45, 418, 6);
+
+	posicionesGuardar = g;
+}
+
+bool Level::buttonPress(int x, int y) {
+	if ((x > pauseButton->getposB().x + SCREEN_X && x < (pauseButton->getposB().x + pauseButton->getWidth() + SCREEN_X))
+		&& (y > pauseButton->getposB().y + SCREEN_Y && y < (pauseButton->getposB().y + pauseButton->getHeight() + SCREEN_Y))) {
+		return true;
+	}
+	return false;
 }
 
 void Level::initShaders()

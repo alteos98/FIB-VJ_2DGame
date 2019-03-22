@@ -11,6 +11,7 @@
 #include "Star.h"
 #include "Lightning.h"
 #include "Stalactite.h"
+#include "Treasure.h"
 
 class Level
 {
@@ -18,6 +19,8 @@ public:
 	Level();
 	~Level();
 	void init(int difficulty);
+	void update(int deltaTime);
+	void render();
 
 	void load();
 	void loadMap();
@@ -29,15 +32,13 @@ public:
 	void loadStar();
 	void loadLightning();
 	void loadStalactites();
-
-	void update(int deltaTime);
-	void render();
+	void loadTresure();
+	void loadPauseButton();
 
 	void setMap(int newMap);
 	void nextMap();
 	void previousMap();
 	void changingMapConditions();
-	bool buttonPress(int x, int y);
 
 	bool collisionPlayerEnemies();
 	bool collisionPlayerPlataforma(int& PlataformaAc);
@@ -46,11 +47,14 @@ public:
 	bool collisionPlayerStar();
 	bool collisionPlayerLightning();
 	bool collisionPlayerStalactite();
+	bool collisionPlayerTreasure();
 
 	int getActualMap();
 	int getDifficulty();
 
 	void setPlayerPosition(glm::ivec2 newPlayerPos);
+
+	bool buttonPress(int x, int y);
 
 private:
 	string addressActualMap;
@@ -58,13 +62,12 @@ private:
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
 	int difficulty;
 
-	void changeMap();
-	void Actualizarllama();
-	bool mapacambiado;
-	bool ContactoPlat;
+
+	// INTERACTUABLE
+
 	TileMap *map;
 	Player *player;
-	glm::ivec2 posPlayer, posPlayerIni;
+	Button* pauseButton;
 	vector<Enemy*> enemy;
 	vector<Plataforma*> plataforma;
 	vector<Guardar*> guardar;
@@ -72,18 +75,32 @@ private:
 	vector<Lightning*> lightning;
 	vector<Stalactite*> stalactites;
 	Star* star;
-	int numGuardado;
+	Treasure* treasure;
+
+
+	// OTHERS
+
+	glm::ivec2 posPlayer, posPlayerIni, sizePlayer;
 	float currentTime, currentTimeCollision;
-	glm::mat4 projection;
-	Button* pauseButton;
 	vector<glm::ivec3> posicionesGuardar;
-	void InitPosGuardar();
+	glm::mat4 projection;
+	int numGuardado;
+	bool mapacambiado;
+	bool ContactoPlat;
 	bool collisioned;
+	ShaderProgram texProgram;
+
+
+	// FUNCTIONS
 
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
-
+	void changeMap();
+	void Actualizarllama();
+	void InitPosGuardar();
 	void initShaders();
-	ShaderProgram texProgram;
+
+
+	// DEFINITIONS
 
 	int enemiesVelocityEasy[5]{
 		NULL, NULL, 4, 4, 4
