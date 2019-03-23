@@ -141,6 +141,7 @@ void Level::init(int difficulty)
 
 void Level::update(int deltaTime)
 {
+	cout << posPlayer.x << " " << posPlayer.y << endl;
 	// Update every interactuable object
 	currentTime += deltaTime;
 	if (!collisioned)
@@ -206,7 +207,10 @@ void Level::update(int deltaTime)
 	if (mapacambiado) { Actualizarllama(); mapacambiado = false; }
 
 	int nump;
-	if (collisionPlayerPlataforma(nump)) {
+	/*if (collisionPlayerPlataformaLateral(nump)) {
+
+	}
+	else */if (collisionPlayerPlataforma(nump)) {
 		if (!ContactoPlat) {
 			if (player->getbGravity())player->setIsOnFloor(!player->getIsOnFloor());
 			ContactoPlat = true;
@@ -214,22 +218,28 @@ void Level::update(int deltaTime)
 		player->setGravity(false);
 		int sum = 0;
 		if (player->getIsOnFloor())
-			sum = -14;
-		else sum = 14;
+			sum = -player->getFallStep();
+		else sum = player->getFallStep();
 
 		int addvx, addvy;
 		addvx = plataforma[nump]->getIncrease().x;
 		addvy = plataforma[nump]->getIncrease().y;
 
 		int desfas = 0;
-		/*if (player->getIsOnFloor() && player->getbGravity()) {
-			desfas = player->getPosition().y - plataforma[nump]->getPosition().y - plataforma[nump]->getHeight();
-			desfas = abs(desfas);
+		if (player->getIsOnFloor()) {
+			desfas = plataforma[nump]->getPosition().y - (player->getPosition().y + player->getHeight() - addvy);
+			if (desfas > -10)
+				desfas = abs(desfas);
+			else
+				desfas = 0;
 		}
-		else if (!player->getIsOnFloor() && player->getbGravity()) {
-			desfas = -player->getPosition().y - 32 + plataforma[nump]->getPosition().y;
-			desfas = abs(desfas);
-		}*/
+		else if (!player->getIsOnFloor()) {
+			desfas = player->getPosition().y - (plataforma[nump]->getPosition().y + plataforma[nump]->getHeight() + addvx);
+			if (desfas > -10)
+				desfas = -abs(desfas);
+			else
+				desfas = 0;
+		}
 
 		player->setPosition(glm::vec2(float(player->getPosition().x + addvx), float(desfas + addvy + sum + player->getPosition().y)));
 
@@ -435,7 +445,7 @@ void Level::loadEnemies() {
 		}
 		break;
 	}
-	case 22: {
+	/*case 22: {
 		glm::vec2 relation[N_ENEMIES22]{
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
@@ -460,7 +470,7 @@ void Level::loadEnemies() {
 			enemy.push_back(e);
 		}
 		break;
-	}
+	}*/
 	case 23: {
 		glm::vec2 relation[N_ENEMIES23]{
 			glm::vec2(1.f, 1.f / 4.f),
@@ -468,9 +478,9 @@ void Level::loadEnemies() {
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		string nameImage[N_ENEMIES23]{
-			"images/enemies/Rabbit.png",
-			"images/enemies/Rabbit.png",
-			"images/enemies/Rabbit.png"
+			"images/enemies/Star.png",
+			"images/enemies/Star.png",
+			"images/enemies/Star.png"
 		};
 		glm::ivec2 posInicial[N_ENEMIES23]{
 			glm::ivec2(400, SCREEN_HEIGHT - 135),
@@ -1080,12 +1090,24 @@ bool Level::collisionPlayerPlataforma(int& PlataformaAct) {
 	posPlayer = player->getPosition();
 
 	for (unsigned int i = 0; i < plataforma.size() && !b; ++i) {
-		if (collision(posPlayer, glm::ivec2(player->getWidth(), player->getHeight()), plataforma[i]->getPosition(), glm::ivec2(plataforma[i]->getWidth(), plataforma[i]->getHeight()))) {
+		if (collision(posPlayer, glm::ivec2(player->getWidth(), player->getHeight() - 5), plataforma[i]->getPosition(), glm::ivec2(plataforma[i]->getWidth(), plataforma[i]->getHeight() - 5))) {
 			b = true;
 			PlataformaAct = i;
 		}
 	}
 	return b;
+
+}
+
+bool Level::collisionPlayerPlataformaLateral(int& PlataformaAct) {
+	posPlayer = player->getPosition();
+
+	for (unsigned int i = 0; i < plataforma.size(); ++i) {
+		if (collisionLateral(posPlayer, glm::ivec2(player->getWidth(), player->getHeight()), plataforma[i]->getPosition(), glm::ivec2(plataforma[i]->getWidth(), plataforma[i]->getHeight()))) {
+			return true;
+		}
+	}
+	return false;
 
 }
 
@@ -1164,9 +1186,21 @@ bool Level::collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm
 	x0_2 = pos2.x; x_2 = pos2.x + size2.x;
 	y0_2 = pos2.y; y_2 = pos2.y + size2.y;
 
-	if (!(x0_1 > x_2 - 5) && !(x0_2 + 5 > x_1) && !(y0_1 > y_2 - 15) && !(y0_2 + 15 > y_1)) {
+	if (!(x0_1 > x_2) && !(x0_2 > x_1) && !(y0_1 > y_2) && !(y0_2 > y_1)) {
 		return true;
 	}
+	return false;
+}
+
+bool Level::collisionLateral(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2) {
+	int x0_1, x_1, y0_1, y_1, x0_2, x_2, y0_2, y_2;
+	x0_1 = pos1.x; x_1 = pos1.x + size1.x;
+	y0_1 = pos1.y; y_1 = pos1.y + size1.y;
+	x0_2 = pos2.x; x_2 = pos2.x + size2.x;
+	y0_2 = pos2.y; y_2 = pos2.y + size2.y;
+
+	if ((x_1 >= x0_2 && x0_1 <= x0_2) || (x_2 >= x0_1 && x_2 <= x0_1))
+		return true;
 	return false;
 }
 

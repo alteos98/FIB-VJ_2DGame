@@ -20,9 +20,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, gl
 	this->isOnFloor = isOnFloor;
 	this->shaderProgram = shaderProgram;
 	bJumping = bGravity = false;
-	fallStep = 14;
+	fallStep = 16;
 
-	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/player/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	initSprite();
 	sprite->changeAnimation(1);
 
