@@ -40,7 +40,7 @@
 #define N_ENEMIES26 2
 
 #define N_PLATAFORMA21 2
-#define N_PLATAFORMA22 2
+#define N_PLATAFORMA22 3
 #define N_PLATAFORMA23 1
 #define N_PLATAFORMA24 1
 #define N_PLATAFORMA25 1
@@ -474,11 +474,11 @@ void Level::loadEnemies() {
 		};
 		glm::ivec2 posInicial[N_ENEMIES22]{
 			glm::ivec2(100, SCREEN_HEIGHT - 300),
-			glm::ivec2(SCREEN_WIDTH - 600, SCREEN_HEIGHT - 150),
+			glm::ivec2(SCREEN_WIDTH - 550, SCREEN_HEIGHT - 150),
 			glm::ivec2(SCREEN_WIDTH - 450, SCREEN_HEIGHT - 500)
 		};
 		glm::ivec2 posFinal[N_ENEMIES22]{
-			glm::ivec2(SCREEN_WIDTH - 600, SCREEN_HEIGHT - 300),
+			glm::ivec2(SCREEN_WIDTH - 550, SCREEN_HEIGHT - 300),
 			glm::ivec2(100, SCREEN_HEIGHT - 150),
 			glm::ivec2(SCREEN_WIDTH - 450, SCREEN_HEIGHT - 150)
 		};
@@ -616,19 +616,23 @@ void Level::loadPlataforma() {
 		case 22: {
 			glm::vec2 relation[N_PLATAFORMA22]{
 				glm::vec2(1.f, 1.f),
+				glm::vec2(1.f, 1.f),
 				glm::vec2(1.f, 1.f)
 			};
 			string nameImage[N_PLATAFORMA22]{
+				"images/plataforma/nube1.png",
 				"images/plataforma/nube1.png",
 				"images/plataforma/nube1.png"
 			};
 			glm::ivec2 posInicial[N_PLATAFORMA22]{
 				glm::ivec2(32 * 8, 32 * 7),
-				glm::ivec2(32 * 8, 32 * 9)
+				glm::ivec2(32 * 14, 32 * 7),
+				glm::ivec2(32 * 20, 32 * 7)
 			};
 			glm::ivec2 posFinal[N_PLATAFORMA22]{
-				glm::ivec2(32 * 16, 32 * 7),
-				glm::ivec2(32 * 8, 32 * 18)
+				glm::ivec2(32 * 20, 32 * 7),
+				glm::ivec2(32 * 26, 32 * 7),
+				glm::ivec2(32 * 32, 32 * 7)
 			};
 			for (int i = 0; i < N_PLATAFORMA22; i++) {
 				Plataforma* e = new Plataforma;
@@ -825,7 +829,7 @@ void Level::loadLightning() {
 	else if (actualMap == 22) {
 		Lightning* l = new Lightning;
 		glm::ivec2 lightningPos = glm::ivec2(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 300);
-		glm::ivec2 lightningSize = glm::ivec2(128, 64);
+		glm::ivec2 lightningSize = glm::ivec2(192, 64);
 		l->init(lightningPos, texProgram, lightningSize, false);
 		lightning.push_back(l);
 	}
