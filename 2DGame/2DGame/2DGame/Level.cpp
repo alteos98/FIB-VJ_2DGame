@@ -33,7 +33,7 @@
 #define GUARDAR26 1
 
 #define N_ENEMIES21 0
-#define N_ENEMIES22 2
+#define N_ENEMIES22 3
 #define N_ENEMIES23 3
 #define N_ENEMIES24 3
 #define N_ENEMIES25 3
@@ -333,6 +333,22 @@ void Level::loadSpikes() {
 			spikes.push_back(spike);
 		}
 	}
+	else if (actualMap == 22) {
+		for (unsigned int i = 0; i < 4; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(SCREEN_WIDTH - 350 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
+			spikes.push_back(spike);
+		}
+	}
+	else if (actualMap == 23) {
+		for (unsigned int i = 0; i < 2; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(64 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
+			spikes.push_back(spike);
+		}
+	}
 	else if (actualMap == 24) {
 		for (unsigned int i = 0; i < 17; ++i) {
 			Spike* spike = new Spike();
@@ -445,22 +461,26 @@ void Level::loadEnemies() {
 		}
 		break;
 	}
-	/*case 22: {
+	case 22: {
 		glm::vec2 relation[N_ENEMIES22]{
+			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		string nameImage[N_ENEMIES22]{
 			"images/enemies/Llama.png",
+			"images/enemies/Llama.png",
 			"images/enemies/Llama.png"
 		};
 		glm::ivec2 posInicial[N_ENEMIES22]{
-			glm::ivec2(100, SCREEN_HEIGHT - 500),
-			glm::ivec2(SCREEN_WIDTH - 500, SCREEN_HEIGHT - 300)
+			glm::ivec2(100, SCREEN_HEIGHT - 300),
+			glm::ivec2(SCREEN_WIDTH - 600, SCREEN_HEIGHT - 150),
+			glm::ivec2(SCREEN_WIDTH - 450, SCREEN_HEIGHT - 500)
 		};
 		glm::ivec2 posFinal[N_ENEMIES22]{
-			glm::ivec2(SCREEN_WIDTH - 500, SCREEN_HEIGHT - 500),
-			glm::ivec2(100, SCREEN_HEIGHT - 300)
+			glm::ivec2(SCREEN_WIDTH - 600, SCREEN_HEIGHT - 300),
+			glm::ivec2(100, SCREEN_HEIGHT - 150),
+			glm::ivec2(SCREEN_WIDTH - 450, SCREEN_HEIGHT - 150)
 		};
 		for (int i = 0; i < N_ENEMIES22; i++) {
 			Enemy* e = new Enemy;
@@ -470,7 +490,7 @@ void Level::loadEnemies() {
 			enemy.push_back(e);
 		}
 		break;
-	}*/
+	}
 	case 23: {
 		glm::vec2 relation[N_ENEMIES23]{
 			glm::vec2(1.f, 1.f / 4.f),
