@@ -6,6 +6,7 @@
 #include "Game.h"
 
 #define VELOCITY 10
+#define PI 3.141592
 
 enum PlayerAnims
 {
@@ -16,10 +17,14 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bool isOnFloor)
 {
+	//t = clock();
+	time = 0;
 	playerSize = glm::ivec2(64, 64);
 	bJumping = bGravity = false;
 	this->isOnFloor = isOnFloor;
 	fallStep = 14;
+	desplas = 0;
+	time = 5 * PI / 2;
 
 	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(playerSize, glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
@@ -64,7 +69,11 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 
 void Player::update(int deltaTime) {
 	sprite->update(deltaTime);
+//	t = clock() - t;
+
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
+		needdesplas = false;
+		sentidodesplas = -1;
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_LEFT_DOWN)
 				sprite->changeAnimation(MOVE_LEFT_DOWN);
@@ -87,6 +96,8 @@ void Player::update(int deltaTime) {
 		}
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
+		needdesplas = false;
+		sentidodesplas = +1;
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_RIGHT_DOWN)
 				sprite->changeAnimation(MOVE_RIGHT_DOWN);
@@ -168,7 +179,36 @@ void Player::update(int deltaTime) {
 			}
 		}
 	}
+	/*
+	if (!Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !needdesplas && sentidodesplas == -1) {
+		needdesplas = true;
+		hasdesplas = true;
+	}
+	else if (!Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !needdesplas && sentidodesplas == 1 ) {
+		needdesplas = true;
+		hasdesplas = true;
+	}
+
+	if (desplas < 0 || time == 5 * PI) {
+		hasdesplas = false;
+		time = (5 * PI) / 2;
+		desplas = 0;
+		//posPlayer.x += int(sentidodesplas*desplas);
+		//needdesplas = false;
+	}
+	if (hasdesplas) {
+		if (sentidodesplas == -1) {
+			sprite->changeAnimation(STAND_LEFT_DOWN);
+		}
+		else sprite->changeAnimation(STAND_RIGHT_DOWN);
+		desplas = 14 * (sin(time/5));
+		time += 1;
+		//posPlayer.x += int(sentidodesplas*desplas);
+	}*/
 	
+	
+
+
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
@@ -242,3 +282,4 @@ void Player::setPosition(const glm::vec2 &pos)
 void Player::setSize(glm::ivec2 newSize) {
 	this->playerSize = newSize;
 }
+ 

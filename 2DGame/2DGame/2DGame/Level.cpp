@@ -109,6 +109,12 @@ Level::~Level()
 }
 
 
+void Level::LoadMusicAndSoundEffects() {
+	Music m_music;
+	m_music = AudioEngine::instance().loadMusic(AudioEngine::instance().dirmusica + "Titeknots.ogg");
+	AudioEngine::instance().musicas["tite"] = m_music;
+}
+
 void Level::InitPosGuardar() {
 	// El tercer elemento es el mapa en el que es la posicion
 	vector<glm::ivec3> g(11);
@@ -131,9 +137,18 @@ void Level::InitPosGuardar() {
 	posicionesGuardar = g;
 }
 
+void Level::InitMusica() {
+	AudioEngine::instance().musicas["tite"].play(-1);
+}
+
+void Level::InitSoundEffects(){}
+
 void Level::init(int difficulty)
 {
 	InitPosGuardar();
+	AudioEngine::instance().init();
+	InitMusica();
+	InitSoundEffects();
 	if (difficulty == 1) {
 		addressActualMap = "levels/level11.txt";
 		actualMap = 11;
@@ -818,7 +833,7 @@ void Level::update(int deltaTime)
 			desfas = abs(desfas);
 		}
 		else if (!player->getIsOnFloor() && player->getbGravity()) {
-			desfas = -player->getPosition().y - 32 + plataforma[nump]->getPosition().y;
+			desfas = -player->getPosition().y - 64 + plataforma[nump]->getPosition().y;
 			desfas = abs(desfas);
 		}*/
 

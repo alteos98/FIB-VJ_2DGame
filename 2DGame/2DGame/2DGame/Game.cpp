@@ -12,8 +12,14 @@ void Game::init()
 	actualMenu = MAINMENU;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
+	AudioEngine::instance().init();
+	AudioEngine::instance().dirmusica = "C:/Users/alber/Documents/GitHub/FIB-VJ_2DGame/2DGame/2DGame/2DGame/Musics/";
+	AudioEngine::instance().dirsonido = "C:/Users/alber/Documents/GitHub/FIB-VJ_2DGame/2DGame/2DGame/2DGame/Sounds/";
+
 	menu = Menu();
+	menu.loadMusicAndSoundEffects();
 	level = Level();
+	level.LoadMusicAndSoundEffects();
 
 	canInvertGravity = true;
 
@@ -144,14 +150,17 @@ void Game::mousePress(int button, int x, int y)
 	case MAINMENU: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(SELECTDIFFICULTY);
 			break;
 		}
 		case 2: {
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(INSTRUCTIONS);
 			break;
 		}
 		case 3: {
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(CREDITS);
 			break;
 		}
@@ -161,6 +170,7 @@ void Game::mousePress(int button, int x, int y)
 	case SELECTDIFFICULTY: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(PLAYING);
 			isPlaying = true;
 			difficulty = 1;
@@ -168,6 +178,7 @@ void Game::mousePress(int button, int x, int y)
 			break;
 		}
 		case 2: {
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(PLAYING);
 			isPlaying = true;
 			difficulty = 2;
@@ -175,6 +186,7 @@ void Game::mousePress(int button, int x, int y)
 			break;
 		}
 		case 3: {
+			AudioEngine::instance().sonidos["cancel"].play(0);
 			updateMenu(MAINMENU);
 			break;
 		}
@@ -183,12 +195,14 @@ void Game::mousePress(int button, int x, int y)
 	}
 	case INSTRUCTIONS: {
 		if (menu.buttonPress(x, y) == 1) {
+			AudioEngine::instance().sonidos["cancel"].play(0);
 			updateMenu(MAINMENU);
 		}
 		break;
 	}
 	case CREDITS: {
 		if (menu.buttonPress(x, y) == 1) {
+			AudioEngine::instance().sonidos["cancel"].play(0);
 			updateMenu(MAINMENU);
 		}
 		break;
@@ -196,11 +210,14 @@ void Game::mousePress(int button, int x, int y)
 	case PAUSE: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
+			AudioEngine::instance().musicas["tite"].resume();
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(PLAYING);
 			isPlaying = true;
 			break;
 		}
 		case 2: {
+			AudioEngine::instance().sonidos["cancel"].play(0);
 			updateMenu(MAINMENU);
 			isPlaying = false;
 			break;
@@ -211,6 +228,7 @@ void Game::mousePress(int button, int x, int y)
 	case ENDSCREEN: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
+			AudioEngine::instance().sonidos["okay"].play(0);
 			updateMenu(PLAYING);
 			//level = Level();
 			level.init(difficulty);
@@ -218,6 +236,7 @@ void Game::mousePress(int button, int x, int y)
 			break;
 		}
 		case 2: {
+			AudioEngine::instance().sonidos["cancel"].play(0);
 			updateMenu(MAINMENU);
 			isPlaying = false;
 			break;
@@ -227,6 +246,8 @@ void Game::mousePress(int button, int x, int y)
 	}
 	case PLAYING: {
 		if (level.buttonPress(x, y)) {
+			AudioEngine::instance().musicas["tite"].pause();
+			AudioEngine::instance().sonidos["cancel"].play(0);
 			isPlaying = false;
 			updateMenu(PAUSE);
 		}

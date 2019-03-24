@@ -4,6 +4,7 @@
 
 #include "Menu.h"
 #include "Level.h"
+#include "AudioEngine.h"
 
 
 #define SCREEN_WIDTH 1080
@@ -57,6 +58,8 @@ private:
 	int mouseX, mouseY;
 	int difficulty;
 	bool canInvertGravity;
+	int desplas;
+	bool needdesplas;
 
 public:
 	void updateMenu(MenuTypes menuType);

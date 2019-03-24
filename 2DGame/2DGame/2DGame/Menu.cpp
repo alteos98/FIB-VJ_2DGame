@@ -108,6 +108,14 @@ void Menu::addImage(string nameImage, glm::vec2 quadSize, glm::vec2 sizeInSprite
 	images.push_back(image);
 }
 
+void Menu::loadMusicAndSoundEffects()
+{
+	SoundEffect s1 = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "ui_okay.ogg");
+	AudioEngine::instance().sonidos["okay"] = s1;
+	s1 = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "ui_cancel.ogg");
+	AudioEngine::instance().sonidos["cancel"] = s1;
+}
+
 void Menu::initShaders()
 {
 	Shader vShader, fShader;

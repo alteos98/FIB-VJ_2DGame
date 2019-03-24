@@ -11,6 +11,7 @@
 #include "Star.h"
 #include "Lightning.h"
 #include "Stalactite.h"
+#include "AudioEngine.h"
 
 class Level
 {
@@ -29,6 +30,7 @@ public:
 	void loadStar();
 	void loadLightning();
 	void loadStalactites();
+	void LoadMusicAndSoundEffects();
 
 	void update(int deltaTime);
 	void render();
@@ -78,6 +80,8 @@ private:
 	Button* pauseButton;
 	vector<glm::ivec3> posicionesGuardar;
 	void InitPosGuardar();
+	void InitMusica();
+	void InitSoundEffects();
 	bool collisioned;
 
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);

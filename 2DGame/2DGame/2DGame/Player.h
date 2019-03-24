@@ -1,7 +1,7 @@
 #ifndef _PLAYER_INCLUDE
 #define _PLAYER_INCLUDE
 
-
+#include <time.h>
 #include "Sprite.h"
 #include "TileMap.h"
 
@@ -28,17 +28,27 @@ public:
 	int getFallStep();
 	bool getBGravity();
 
+
 	void setAnimation(int i);
 	void setIsOnFloor(bool floor);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setSize(glm::ivec2 newSize);
 
+
 private:
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity
 	bool isOnFloor;
 	int fallStep;
+
+	bool needdesplas;
+	bool hasdesplas;
+	float desplas;
+	float sentidodesplas;
+	int time;
+
+
 
 	glm::ivec2 tileMapDispl, posPlayer, playerSize;
 	int jumpAngle, startY;
