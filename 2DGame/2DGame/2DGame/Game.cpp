@@ -151,19 +151,16 @@ void Game::mousePress(int button, int x, int y)
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(SELECTDIFFICULTY);
 			break;
 		}
 		case 2: {
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(INSTRUCTIONS);
 			break;
 		}
 		case 3: {
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(CREDITS);
 			break;
 		}
@@ -174,7 +171,6 @@ void Game::mousePress(int button, int x, int y)
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(PLAYING);
 			isPlaying = true;
 			difficulty = 1;
@@ -183,7 +179,6 @@ void Game::mousePress(int button, int x, int y)
 		}
 		case 2: {
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(PLAYING);
 			isPlaying = true;
 			difficulty = 2;
@@ -192,7 +187,6 @@ void Game::mousePress(int button, int x, int y)
 		}
 		case 3: {
 			AudioEngine::instance().sonidos["cancel"].play(0);
-			menu.free();
 			updateMenu(MAINMENU);
 			break;
 		}
@@ -202,7 +196,6 @@ void Game::mousePress(int button, int x, int y)
 	case INSTRUCTIONS: {
 		if (menu.buttonPress(x, y) == 1) {
 			AudioEngine::instance().sonidos["cancel"].play(0);
-			menu.free();
 			updateMenu(MAINMENU);
 		}
 		break;
@@ -210,7 +203,6 @@ void Game::mousePress(int button, int x, int y)
 	case CREDITS: {
 		if (menu.buttonPress(x, y) == 1) {
 			AudioEngine::instance().sonidos["cancel"].play(0);
-			menu.free();
 			updateMenu(MAINMENU);
 		}
 		break;
@@ -220,14 +212,12 @@ void Game::mousePress(int button, int x, int y)
 		case 1: {
 			AudioEngine::instance().musicas["tite"].resume();
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(PLAYING);
 			isPlaying = true;
 			break;
 		}
 		case 2: {
 			AudioEngine::instance().sonidos["cancel"].play(0);
-			menu.free();
 			updateMenu(MAINMENU);
 			isPlaying = false;
 			break;
@@ -239,15 +229,14 @@ void Game::mousePress(int button, int x, int y)
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
 			AudioEngine::instance().sonidos["okay"].play(0);
-			menu.free();
 			updateMenu(PLAYING);
+			//level = Level();
 			level.init(difficulty);
 			isPlaying = true;
 			break;
 		}
 		case 2: {
 			AudioEngine::instance().sonidos["cancel"].play(0);
-			menu.free();
 			updateMenu(MAINMENU);
 			isPlaying = false;
 			break;
@@ -310,7 +299,6 @@ void Game::updateMenu(MenuTypes menuType) {
 		};
 		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
 		menu.addImage("images/logo.png", glm::vec2(700, 300), glm::vec2(1.f, 1.f), glm::vec2(SCREEN_WIDTH / 2 - 350, SCREEN_HEIGHT / 2 - 400));
-		menu.addBackground("images/backgrounds/MainMenu.png", 3);
 		break;
 	}
 	case SELECTDIFFICULTY:
@@ -359,7 +347,6 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
-		menu.addBackground("images/backgrounds/Instructions.png", 1);
 		break;
 	}
 	case CREDITS:
@@ -378,7 +365,6 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
-		menu.addBackground("images/backgrounds/Credits.png", 1);
 		break;
 	}
 	case PAUSE:

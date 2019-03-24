@@ -63,8 +63,7 @@ void Menu::loadMenu(
 
 void Menu::update(int deltaTime)
 {
-	if (hasBackground)
-		background->update(deltaTime);
+	
 }
 
 void Menu::render()
@@ -88,30 +87,23 @@ void Menu::render()
 		buttons[i]->render();
 }
 
-void Menu::addBackground(string background, int nFrames) {
+void Menu::addBackground(string background) {
 	hasBackground = true;
-	texture1.loadFromFile(background, TEXTURE_PIXEL_FORMAT_RGBA);
-	texture1.setMinFilter(GL_NEAREST);
-	texture1.setMagFilter(GL_NEAREST);
+	texture.loadFromFile(background, TEXTURE_PIXEL_FORMAT_RGBA);
+	texture.setMinFilter(GL_NEAREST);
+	texture.setMagFilter(GL_NEAREST);
 	glm::vec2 quadSize = glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	glm::vec2 sizeInSpritesheet = glm::vec2(1.f, 1.f / float(nFrames));
-	this->background = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture1, &texProgram);
-	
-	this->background->setNumberAnimations(nFrames);
-	this->background->setAnimationSpeed(0, 8);
-	for (int i = 0; i < nFrames; ++i)
-		this->background->addKeyframe(0, glm::vec2(0.f, float(i) / float(nFrames)));
-	this->background->changeAnimation(0);
-	this->background->setPosition(glm::vec2(0, 0));
+	glm::vec2 sizeInSpritesheet = glm::vec2(1.f, 1.f);
+	this->background = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture, &texProgram);
 }
 
 void Menu::addImage(string nameImage, glm::vec2 quadSize, glm::vec2 sizeInSpritesheet, glm::vec2 position) {
-	texture2.loadFromFile(nameImage, TEXTURE_PIXEL_FORMAT_RGBA);
-	texture2.setMinFilter(GL_NEAREST);
-	texture2.setMagFilter(GL_NEAREST);
+	texture.loadFromFile(nameImage, TEXTURE_PIXEL_FORMAT_RGBA);
+	texture.setMinFilter(GL_NEAREST);
+	texture.setMagFilter(GL_NEAREST);
 	glm::vec2 _quadSize = quadSize;
 	glm::vec2 _sizeInSpritesheet = sizeInSpritesheet;
-	Sprite* image = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture2, &texProgram);
+	Sprite* image = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture, &texProgram);
 	image->setPosition(position);
 	images.push_back(image);
 }
@@ -122,14 +114,6 @@ void Menu::loadMusicAndSoundEffects()
 	AudioEngine::instance().sonidos["okay"] = s1;
 	s1 = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "ui_cancel.ogg");
 	AudioEngine::instance().sonidos["cancel"] = s1;
-}
-
-void Menu::free() {
-	background->free();
-	for (unsigned int i = 0; i < images.size(); ++i)
-		images[i]->free();
-	for (unsigned int i = 0; i < buttons.size(); ++i)
-		buttons[i]->free();
 }
 
 void Menu::initShaders()

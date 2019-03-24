@@ -20,17 +20,16 @@ public:
 	void update(int deltaTime);
 	void render();
 	int buttonPress(int x, int y);
-	void addBackground(string background, int nFrames);
+	void addBackground(string background);
 	void addImage(string nameImage, glm::vec2 quadSize, glm::vec2 sizeInSpritesheet, glm::vec2 position);
 	void loadMusicAndSoundEffects();
-	void free();
 
 private:
 	vector<Button*> buttons;
 
 	bool hasBackground;
 	Sprite* background;
-	Texture texture1, texture2;
+	Texture texture;
 
 	vector<Sprite*> images;
 

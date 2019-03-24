@@ -12,7 +12,6 @@
 #include "Lightning.h"
 #include "Stalactite.h"
 #include "AudioEngine.h"
-#include "Treasure.h"
 
 class Level
 {
@@ -20,8 +19,6 @@ public:
 	Level();
 	~Level();
 	void init(int difficulty);
-	void update(int deltaTime);
-	void render();
 
 	void load();
 	void loadMap();
@@ -34,30 +31,28 @@ public:
 	void loadLightning();
 	void loadStalactites();
 	void LoadMusicAndSoundEffects();
-	void loadTresure();
-	void loadPauseButton();
+
+	void update(int deltaTime);
+	void render();
 
 	void setMap(int newMap);
 	void nextMap();
 	void previousMap();
 	void changingMapConditions();
+	bool buttonPress(int x, int y);
 
 	bool collisionPlayerEnemies();
 	bool collisionPlayerPlataforma(int& PlataformaAc);
-	bool collisionPlayerPlataformaLateral(int& PlataformaAc);
 	bool collisionPlayerGuardar(int & GuardadoActual);
 	bool collisionPlayerSpikes();
 	bool collisionPlayerStar();
 	bool collisionPlayerLightning();
 	bool collisionPlayerStalactite();
-	bool collisionPlayerTreasure();
 
 	int getActualMap();
 	int getDifficulty();
 
 	void setPlayerPosition(glm::ivec2 newPlayerPos);
-
-	bool buttonPress(int x, int y);
 
 private:
 	string addressActualMap;
@@ -65,12 +60,13 @@ private:
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
 	int difficulty;
 
-
-	// INTERACTUABLE
-
+	void changeMap();
+	void Actualizarllama();
+	bool mapacambiado;
+	bool ContactoPlat;
 	TileMap *map;
 	Player *player;
-	Button* pauseButton;
+	glm::ivec2 posPlayer, posPlayerIni;
 	vector<Enemy*> enemy;
 	vector<Plataforma*> plataforma;
 	vector<Guardar*> guardar;
@@ -78,35 +74,20 @@ private:
 	vector<Lightning*> lightning;
 	vector<Stalactite*> stalactites;
 	Star* star;
-	Treasure* treasure;
-
-
-	// OTHERS
-
-	glm::ivec2 posPlayer, posPlayerIni, sizePlayer;
-	float currentTime, currentTimeCollision;
-	vector<glm::ivec3> posicionesGuardar;
-	glm::mat4 projection;
 	int numGuardado;
-	bool mapacambiado;
-	bool ContactoPlat;
-	bool collisioned;
-	ShaderProgram texProgram;
-
-
-	// FUNCTIONS
-
+	float currentTime, currentTimeCollision;
+	glm::mat4 projection;
+	Button* pauseButton;
+	vector<glm::ivec3> posicionesGuardar;
+	void InitPosGuardar();
 	void InitMusica();
 	void InitSoundEffects();
+	bool collisioned;
+
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
-	bool collisionLateral(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
-	void changeMap();
-	void Actualizarllama();
-	void InitPosGuardar();
+
 	void initShaders();
-
-
-	// DEFINITIONS
+	ShaderProgram texProgram;
 
 	int enemiesVelocityEasy[5]{
 		NULL, NULL, 4, 4, 4

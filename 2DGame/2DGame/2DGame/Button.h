@@ -11,7 +11,6 @@ public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 buttonSize, glm::vec2 relation, string nameImage);
 	void update(int deltaTime);
 	void render();
-	void free();
 
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);

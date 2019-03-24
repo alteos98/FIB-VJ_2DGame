@@ -182,7 +182,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	int x, y0, y1;
 
 	// Fa que el Player pugui sortir del mapa per avançar de pantalla
-	if (pos.x >= 1080 - size.x)
+	if (pos.x >= 1080 - 64)
 		return false;
 	
 	x = (pos.x + size.x - 1) / tileSize;
@@ -201,7 +201,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int fallStep) const
 {
 	// para que pueda cambiar de mapa
-	if (pos.y >= 832 - size.y)
+	if (pos.y >= 768)
 		return false;
 	
 	int x0, x1, y;
@@ -244,7 +244,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
 		{
 			if (tileSize * y - *posY <= fallStep)
 			{
-				*posY = tileSize * (y - 1) + 2*tileSize; //size.y;
+				*posY = tileSize * (y - 1) + size.y;
 				return true;
 			}
 		}

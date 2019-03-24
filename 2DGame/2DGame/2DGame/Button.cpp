@@ -39,10 +39,6 @@ void Button::render() {
 	sprite->render();
 }
 
-void Button::free() {
-	sprite->free();
-}
-
 void Button::setTileMap(TileMap *tileMap) {
 	map = tileMap;
 }
