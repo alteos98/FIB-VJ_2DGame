@@ -244,20 +244,20 @@ void Level::update(int deltaTime)
 		int desfas = 0;
 		if (player->getIsOnFloor()) {
 			desfas = plataforma[nump]->getPosition().y - (player->getPosition().y + player->getHeight() - addvy);
-			if (desfas > -10)
-				desfas = abs(desfas);
+			if (desfas > 0)
+				desfas = desfas;
 			else
 				desfas = 0;
 		}
 		else if (!player->getIsOnFloor()) {
 			desfas = player->getPosition().y - (plataforma[nump]->getPosition().y + plataforma[nump]->getHeight() + addvx);
-			if (desfas > -10)
-				desfas = -abs(desfas);
+			if (desfas > 0)
+				desfas = -desfas;
 			else
 				desfas = 0;
 		}
 
-		player->setPosition(glm::vec2(float(player->getPosition().x + addvx), float(desfas + addvy + sum + player->getPosition().y)));
+		player->setPosition(glm::vec2(float(player->getPosition().x) + float(addvx), float(desfas) + float(addvy) + float(sum) + float(player->getPosition().y)));
 
 
 		if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
