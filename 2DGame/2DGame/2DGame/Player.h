@@ -14,7 +14,8 @@ class Player
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bool isOnFloor);
+	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 size, bool isOnFloor);
+	void initSprite();
 	void update(int deltaTime);
 	void render();
 	
@@ -55,7 +56,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-
+	ShaderProgram shaderProgram;
 };
 
 

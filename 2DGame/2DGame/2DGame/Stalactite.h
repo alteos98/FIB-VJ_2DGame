@@ -19,7 +19,6 @@ public:
 	bool outOfMap();
 
 	void setTileMap(TileMap *tileMap);
-	glm::ivec2 getPosition();
 	void setPosition(const glm::vec2 &pos);
 	void setMargin(int marginX, int marginY);
 	void setLeftX(int leftX);
@@ -28,6 +27,7 @@ public:
 	void setFallingVelocity(int fallingVelocity);
 	void setFalling(bool b);
 
+	glm::ivec2 getPosition();
 	int getWidth();
 	int getHeight();
 	int getLeftX();

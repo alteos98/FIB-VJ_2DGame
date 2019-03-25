@@ -15,19 +15,27 @@ enum PlayerAnims
 	DEAD
 };
 
-void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bool isOnFloor)
+void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 size, bool isOnFloor)
 {
-	//t = clock();
-	time = 0;
-	playerSize = glm::ivec2(64, 64);
-	bJumping = bGravity = false;
-	this->isOnFloor = isOnFloor;
-	fallStep = 14;
 	desplas = 0;
 	time = 5 * PI / 2;
+	this->playerSize = size;
+	this->isOnFloor = isOnFloor;
+	this->shaderProgram = shaderProgram;
+	bJumping = bGravity = false;
+	fallStep = 16;
 
-	spritesheet.loadFromFile("images/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(playerSize, glm::vec2(1.f/6.f, 1.f/6.f), &spritesheet, &shaderProgram);
+	spritesheet.loadFromFile("images/player/Player.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	initSprite();
+	sprite->changeAnimation(1);
+
+	tileMapDispl = tileMapPos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
+}
+
+void Player::initSprite() {
+	sprite = Sprite::createSprite(playerSize, glm::vec2(1.f / 6.f, 1.f / 6.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(9);
 
 	sprite->setAnimationSpeed(STAND_LEFT_DOWN, 8);
@@ -60,11 +68,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, bo
 
 	sprite->setAnimationSpeed(DEAD, 8);
 	sprite->addKeyframe(DEAD, glm::vec2(5.f / 6.f, 0.f));
-
-	sprite->changeAnimation(1);
-	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-
 }
 
 void Player::update(int deltaTime) {
@@ -206,9 +209,6 @@ void Player::update(int deltaTime) {
 		//posPlayer.x += int(sentidodesplas*desplas);
 	}*/
 	
-	
-
-
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
