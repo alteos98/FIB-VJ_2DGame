@@ -337,6 +337,7 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, true);
+		menu.addBackground("images/backgrounds/MainMenu.png", 3);
 		break;
 	}
 	case PLAYING:
@@ -401,6 +402,7 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, false);
+		menu.addBackground("images/backgrounds/MainMenu.png", 3);
 		break;
 	}
 	case ENDSCREEN:
@@ -423,6 +425,7 @@ void Game::updateMenu(MenuTypes menuType) {
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		menu.loadMenu(sprites, positions, sizeButtons, relation, nButtons, false);
+		menu.addBackground("images/backgrounds/MainMenu.png", 3);
 		break;
 	}
 	}
