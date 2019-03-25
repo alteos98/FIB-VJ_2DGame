@@ -13,8 +13,8 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	AudioEngine::instance().init();
-	AudioEngine::instance().dirmusica = "C:/Users/alber/Documents/GitHub/FIB-VJ_2DGame/2DGame/2DGame/2DGame/Musics/";
-	AudioEngine::instance().dirsonido = "C:/Users/alber/Documents/GitHub/FIB-VJ_2DGame/2DGame/2DGame/2DGame/Sounds/";
+	AudioEngine::instance().dirmusica = "./Musics/";
+	AudioEngine::instance().dirsonido = "./Sounds/";
 
 	menu = Menu();
 	menu.loadMusicAndSoundEffects();

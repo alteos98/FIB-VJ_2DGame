@@ -114,28 +114,6 @@ void Level::LoadMusicAndSoundEffects() {
 	AudioEngine::instance().musicas["tite"] = m_music;
 }
 
-void Level::InitPosGuardar() {
-	// El tercer elemento es el mapa en el que es la posicion
-	vector<glm::ivec3> g(11);
-
-	// Easy mode
-	g[0] = glm::ivec3(780, 482, 1);
-	g[1] = glm::ivec3(850, 482, 2);
-	g[2] = glm::ivec3(64, 482, 3);
-	g[3] = glm::ivec3(50, 162, 4);
-	g[4] = glm::ivec3(50, 162, 5);
-
-	// Hard mode
-	g[5] = glm::ivec3(965, 418, 1);
-	g[6] = glm::ivec3(50, 65, 2);
-	g[7] = glm::ivec3(36, 418, 3);
-	g[8] = glm::ivec3(45, 482, 4);
-	g[9] = glm::ivec3(50, 674, 5);
-	g[10] = glm::ivec3(45, 418, 6);
-
-	posicionesGuardar = g;
-}
-
 void Level::InitMusica() {
 	AudioEngine::instance().musicas["tite"].play(-1);
 }
