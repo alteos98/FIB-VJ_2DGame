@@ -22,7 +22,7 @@ void Game::init()
 	level.LoadMusicAndSoundEffects();
 
 	canInvertGravity = true;
-
+	AudioEngine::instance().musicas["menu1"].play(-1);
 	updateMenu(MAINMENU);
 }
 
@@ -173,6 +173,7 @@ void Game::mousePress(int button, int x, int y)
 	case SELECTDIFFICULTY: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
+			AudioEngine::instance().musicas["menu1"].pause();
 			AudioEngine::instance().sonidos["okay"].play(0);
 			menu.free();
 			updateMenu(PLAYING);
@@ -182,6 +183,7 @@ void Game::mousePress(int button, int x, int y)
 			break;
 		}
 		case 2: {
+			AudioEngine::instance().musicas["menu1"].pause();
 			AudioEngine::instance().sonidos["okay"].play(0);
 			menu.free();
 			updateMenu(PLAYING);
@@ -218,8 +220,10 @@ void Game::mousePress(int button, int x, int y)
 	case PAUSE: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
-			AudioEngine::instance().musicas["tite"].resume();
+			AudioEngine::instance().musicas["menu1"].pause();
 			AudioEngine::instance().sonidos["okay"].play(0);
+			AudioEngine::instance().musicas["tite"].play();
+			
 			menu.free();
 			updateMenu(PLAYING);
 			isPlaying = true;
@@ -238,6 +242,8 @@ void Game::mousePress(int button, int x, int y)
 	case ENDSCREEN: {
 		switch (menu.buttonPress(x, y)) {
 		case 1: {
+			AudioEngine::instance().musicas["menu1"].pause();
+			AudioEngine::instance().musicas["tite"].play();
 			AudioEngine::instance().sonidos["okay"].play(0);
 			menu.free();
 			updateMenu(PLAYING);
@@ -259,6 +265,7 @@ void Game::mousePress(int button, int x, int y)
 		if (level.buttonPress(x, y)) {
 			AudioEngine::instance().musicas["tite"].pause();
 			AudioEngine::instance().sonidos["cancel"].play(0);
+			AudioEngine::instance().musicas["menu1"].play();
 			isPlaying = false;
 			updateMenu(PAUSE);
 		}
@@ -408,6 +415,7 @@ void Game::updateMenu(MenuTypes menuType) {
 	case ENDSCREEN:
 	{
 		const int nButtons = 2;
+		AudioEngine::instance().musicas["menu1"].play();
 		string sprites[nButtons]{
 			"images/buttons/PlayAgainButton.png",
 			"images/buttons/ExitButton.png"

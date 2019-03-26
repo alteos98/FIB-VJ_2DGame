@@ -28,19 +28,21 @@ public:
 	void setGravity(bool b);
 	int getFallStep();
 	bool getBGravity();
-
+	bool isLittle();
 
 	void setAnimation(int i);
 	void setIsOnFloor(bool floor);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setSize(glm::ivec2 newSize);
+	void setLittle(bool little);
 
 
 private:
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity
 	bool isOnFloor;
+	bool little = false;
 	int fallStep;
 
 	bool needdesplas;

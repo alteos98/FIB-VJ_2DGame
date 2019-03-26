@@ -9,6 +9,7 @@
 	public:
 		friend class AudioEngine;
 		void play(int loops = 0);
+
 	private:
 		Mix_Chunk* m_chunk = nullptr;
 	};
@@ -16,7 +17,7 @@
 	class Music {
 	public:
 		friend class AudioEngine;
-		void play(int loops = 1);
+		void play(int loops = -1);
 
 		static void pause();
 		static void stop();

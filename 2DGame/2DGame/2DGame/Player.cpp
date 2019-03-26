@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "Player.h"
 #include "Game.h"
+#include "AudioEngine.h"
 
 #define VELOCITY 10
 #define PI 3.141592
@@ -77,6 +78,8 @@ void Player::update(int deltaTime) {
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
 		needdesplas = false;
 		sentidodesplas = -1;
+	//  if (little) AudioEngine::instance().sonidos["pasos_g"].resume();
+	//	else AudioEngine::instance().sonidos["pasos_g"].resume();
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_LEFT_DOWN)
 				sprite->changeAnimation(MOVE_LEFT_DOWN);
@@ -163,6 +166,8 @@ void Player::update(int deltaTime) {
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep)) {
 				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
+					if(little) AudioEngine::instance().sonidos["salto_p"].play(0);
+					else AudioEngine::instance().sonidos["salto_g"].play(0);
 					bGravity = true;
 					Game::instance().setCanInvertGravity(false);
 				}
@@ -176,6 +181,8 @@ void Player::update(int deltaTime) {
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep)) {
 				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
+					if (little) AudioEngine::instance().sonidos["salto_p"].play(0);
+					else AudioEngine::instance().sonidos["salto_g"].play(0);
 					bGravity = true;
 					Game::instance().setCanInvertGravity(false);
 				}
@@ -241,6 +248,11 @@ bool Player::getBGravity() {
 	return bGravity;
 }
 
+bool Player::isLittle()
+{
+	return little;
+}
+
 glm::ivec2 Player::getPosition() {
 	return posPlayer;
 }
@@ -281,5 +293,10 @@ void Player::setPosition(const glm::vec2 &pos)
 
 void Player::setSize(glm::ivec2 newSize) {
 	this->playerSize = newSize;
+}
+
+void Player::setLittle(bool little)
+{
+	this->little = little;
 }
  

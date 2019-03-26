@@ -7,7 +7,6 @@
 			std::cin >> a;
 			exit(69);
 		}
-
 	}
 
 	void Music::play(int loops) {

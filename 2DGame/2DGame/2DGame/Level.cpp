@@ -112,6 +112,16 @@ void Level::LoadMusicAndSoundEffects() {
 	Music m_music;
 	m_music = AudioEngine::instance().loadMusic(AudioEngine::instance().dirmusica + "Titeknots.ogg");
 	AudioEngine::instance().musicas["tite"] = m_music;
+	AudioEngine::instance().musicas["menu1"] = AudioEngine::instance().loadMusic(AudioEngine::instance().dirmusica + "CityRain.ogg");
+	//AudioEngine::instance().musicas["menu2"] = AudioEngine::instance().loadMusic(AudioEngine::instance().dirmusica + "Hanz.m4a");
+	
+	AudioEngine::instance().sonidos["salto_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "salto_g.ogg");
+	AudioEngine::instance().sonidos["salto_p"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "salto_p.ogg");
+
+	AudioEngine::instance().sonidos["muerte_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "muerte_g.ogg");
+	AudioEngine::instance().sonidos["muerte_p"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "muerte_p.ogg");
+	
+	AudioEngine::instance().sonidos["pasos_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "pasos_g.ogg");
 }
 
 void Level::InitMusica() {
@@ -184,6 +194,7 @@ void Level::update(int deltaTime)
 
 		if (collisionPlayerTreasure()) {
 			treasure->open();
+			player->setLittle(true);
 			sizePlayer = glm::ivec2(32, 32);
 			player->setSize(sizePlayer);
 			player->initSprite();
@@ -195,6 +206,8 @@ void Level::update(int deltaTime)
 
 	// Checking collisions
 	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
+		if (player->isLittle())AudioEngine::instance().sonidos["muerte_p"].play(0);
+		else AudioEngine::instance().sonidos["muerte_g"].play(0);
 		currentTimeCollision = currentTime;
 		collisioned = true;
 		player->setAnimation(8);
