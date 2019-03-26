@@ -15,7 +15,9 @@ Menu::Menu()
 	for (unsigned int i = 0; i < images.size(); ++i) {
 		images[i] = NULL;
 	}
-	background = NULL;
+	for (unsigned int i = 0; i < background.size(); ++i) {
+		background[i] = NULL;
+	}
 }
 
 
@@ -29,8 +31,10 @@ Menu::~Menu()
 		if (images[i] != NULL)
 			delete images[i];
 	}
-	if (background != NULL)
-		delete background;
+	for (unsigned int i = 0; i < background.size(); ++i) {
+		if (background[i] != NULL)
+			delete background[i];
+	}
 }
 
 void Menu::init() {}
@@ -48,9 +52,9 @@ void Menu::loadMenu(
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	buttons.clear();
 	images.clear();
+	background.clear();
 
 	initShaders();
-	hasBackground = false;
 
 	for (int i = 0; i < nButtons; i++) {
 		Button* b = new Button;
@@ -63,8 +67,8 @@ void Menu::loadMenu(
 
 void Menu::update(int deltaTime)
 {
-	if (hasBackground)
-		background->update(deltaTime);
+	for (unsigned int i = 0; i < background.size(); i++)
+		background[i]->update(deltaTime);
 }
 
 void Menu::render()
@@ -78,8 +82,8 @@ void Menu::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	if (hasBackground)
-		background->render();
+	for (unsigned int i = 0; i < background.size(); i++)
+		background[i]->render();
 
 	for (unsigned int i = 0; i < images.size(); i++)
 		images[i]->render();
@@ -95,14 +99,15 @@ void Menu::addBackground(string background, int nFrames) {
 	texture1.setMagFilter(GL_NEAREST);
 	glm::vec2 quadSize = glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glm::vec2 sizeInSpritesheet = glm::vec2(1.f, 1.f / float(nFrames));
-	this->background = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture1, &texProgram);
+	Sprite* b = Sprite::createSprite(quadSize, sizeInSpritesheet, &texture1, &texProgram);
 	
-	this->background->setNumberAnimations(nFrames);
-	this->background->setAnimationSpeed(0, 8);
+	b->setNumberAnimations(nFrames);
+	b->setAnimationSpeed(0, 8);
 	for (int i = 0; i < nFrames; ++i)
-		this->background->addKeyframe(0, glm::vec2(0.f, float(i) / float(nFrames)));
-	this->background->changeAnimation(0);
-	this->background->setPosition(glm::vec2(0, 0));
+		b->addKeyframe(0, glm::vec2(0.f, float(i) / float(nFrames)));
+	b->changeAnimation(0);
+	b->setPosition(glm::vec2(0, 0));
+	this->background.push_back(b);
 }
 
 void Menu::addImage(string nameImage, glm::vec2 quadSize, glm::vec2 sizeInSpritesheet, glm::vec2 position) {
@@ -125,7 +130,8 @@ void Menu::loadMusicAndSoundEffects()
 }
 
 void Menu::free() {
-	background->free();
+	for (unsigned int i = 0; i < background.size(); ++i)
+		background[i]->free();
 	for (unsigned int i = 0; i < images.size(); ++i)
 		images[i]->free();
 	for (unsigned int i = 0; i < buttons.size(); ++i)
