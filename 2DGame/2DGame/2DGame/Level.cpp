@@ -1003,6 +1003,15 @@ void Level::changingMapConditions() {
 			else
 				player->setAnimation(4);
 		}
+		else if (posPlayer.x > SCREEN_WIDTH) {
+			posPlayer.x = -32;
+			setMap(26);
+			load();
+			if (isOnFloor)
+				player->setAnimation(1);
+			else
+				player->setAnimation(5);
+		}
 	}
 	else if (actualMap == 22) {
 		if (posPlayer.y >= SCREEN_HEIGHT + 20) {
@@ -1079,13 +1088,42 @@ void Level::changingMapConditions() {
 		}
 	}
 	else if (actualMap == 26) {
-		if (posPlayer.y >= SCREEN_HEIGHT + 20) {
+		if (posPlayer.x < -64) {
+			posPlayer.x = SCREEN_WIDTH - 32;
+			setMap(21);
+			load();
+			if (isOnFloor)
+				player->setAnimation(0);
+			else
+				player->setAnimation(4);
+		}
+		else if (posPlayer.x > SCREEN_WIDTH) {
+			posPlayer.x = -32;
+			setMap(27);
+			load();
+			if (isOnFloor)
+				player->setAnimation(1);
+			else
+				player->setAnimation(5);
+		}
+		else if (posPlayer.y >= SCREEN_HEIGHT + 20) {
 			posPlayer.y = 0;
 			if (!isOnFloor)
 				isOnFloor = !isOnFloor;
 			setMap(25);
 			load();
 		}
+	}
+	else if (actualMap == 27) {
+	if (posPlayer.x < -64) {
+		posPlayer.x = SCREEN_WIDTH - 32;
+		setMap(26);
+		load();
+		if (isOnFloor)
+			player->setAnimation(0);
+		else
+			player->setAnimation(4);
+	}
 	}
 }
 

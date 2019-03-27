@@ -29,7 +29,7 @@ private:
 	vector<Button*> buttons;
 
 	bool hasBackground;
-	Sprite* background;
+	vector<Sprite*> background;
 	Texture texture1, texture2;
 
 	vector<Sprite*> images;
