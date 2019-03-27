@@ -61,7 +61,7 @@ public:
 
 private:
 	string addressActualMap;
-	int actualMap; // 11 ~ 15 easy, 21 ~ 26 hard
+	int actualMap; // 11 ~ 15 easy, 21 ~ 27 hard
 	bool isOnFloor; // True -> Player is on the floor, False -> Player is on the roof
 	int difficulty;
 
@@ -111,11 +111,11 @@ private:
 	int enemiesVelocityEasy[5]{
 		NULL, NULL, 4, 4, 4
 	};
-	int enemiesVelocityHard[6]{
-		8, 8, 8, 8, 10, 8
+	int enemiesVelocityHard[7]{
+		8, 8, 8, 8, 10, 8, 8
 	};
-	int plataformaVelocityHard[5]{
-		2,	2,	2,	2,	2
+	int plataformaVelocityHard[7]{
+		2,	2,	2,	2,	2,	2,	2
 	};
 
 };

@@ -28,7 +28,7 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-	if (isPlaying && (level.getActualMap() == 15 || level.getActualMap() == 26) && level.collisionPlayerStar()) {
+	if (isPlaying && (level.getActualMap() == 15 || level.getActualMap() == 27) && level.collisionPlayerStar()) {
 		isPlaying = false;
 		updateMenu(ENDSCREEN);
 	}

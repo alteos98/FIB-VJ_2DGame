@@ -30,14 +30,16 @@
 #define GUARDAR23 1
 #define GUARDAR24 1
 #define GUARDAR25 1
-#define GUARDAR26 1
+#define GUARDAR26 2
+#define GUARDAR27 1
 
 #define N_ENEMIES21 0
 #define N_ENEMIES22 3
 #define N_ENEMIES23 3
 #define N_ENEMIES24 3
 #define N_ENEMIES25 3
-#define N_ENEMIES26 2
+#define N_ENEMIES26 5
+#define N_ENEMIES27 2
 
 #define N_PLATAFORMA21 2
 #define N_PLATAFORMA22 3
@@ -173,7 +175,7 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	if (!collisioned)
 		player->update(deltaTime);
-	if (actualMap == 15 || actualMap == 26)
+	if (actualMap == 15 || actualMap == 27)
 		star->update(deltaTime);
 	for (unsigned int i = 0; i < enemy.size(); ++i)
 		enemy[i]->update(deltaTime);
@@ -315,7 +317,7 @@ void Level::render()
 	for (unsigned int i = 0; i < plataforma.size(); ++i) {
 		plataforma[i]->render();
 	}
-	if (actualMap == 15 || actualMap == 26)
+	if (actualMap == 15 || actualMap == 27)
 		star->render();
 	if (actualMap == 23)
 		treasure->render();
@@ -401,6 +403,34 @@ void Level::loadSpikes() {
 				spike->init(glm::ivec2(160 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 256), texProgram, spikeSize, true);
 				spikes.push_back(spike);
 			}
+		}
+	}
+	else if (actualMap == 26) {
+		for (unsigned int i = 0; i < 6; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(400 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 256), texProgram, spikeSize, true);
+			spikes.push_back(spike);
+		}
+		for (unsigned int i = 0; i < 6; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(700 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 256), texProgram, spikeSize, true);
+			spikes.push_back(spike);
+		}
+	}
+	else if (actualMap == 27) {
+		for (unsigned int i = 0; i < 15; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(300 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
+			spikes.push_back(spike);
+		}
+		for (unsigned int i = 0; i < 15; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(300 + i * (spikeSize.x - 16), 256), texProgram, spikeSize, true);
+			spikes.push_back(spike);
 		}
 	}
 }
@@ -614,21 +644,59 @@ void Level::loadEnemies() {
 	case 26: {
 		glm::vec2 relation[N_ENEMIES26]{
 			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		string nameImage[N_ENEMIES26]{
 			"images/enemies/Heart.png",
+			"images/enemies/Heart.png",
+			"images/enemies/Heart.png",
+			"images/enemies/Heart.png",
 			"images/enemies/Heart.png"
 		};
 		glm::ivec2 posInicial[N_ENEMIES26]{
-			glm::ivec2(450, 40),
-			glm::ivec2(700, 40)
+			glm::ivec2(200, 40),
+			glm::ivec2(400, 40),
+			glm::ivec2(600, 40),
+			glm::ivec2(800, 40),
+			glm::ivec2(250, SCREEN_HEIGHT - 300),
 		};
 		glm::ivec2 posFinal[N_ENEMIES26]{
-			glm::ivec2(450, 220),
-			glm::ivec2(700, 220)
+			glm::ivec2(200, 220),
+			glm::ivec2(400, 220),
+			glm::ivec2(600, 220),
+			glm::ivec2(800, 220),
+			glm::ivec2(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 300),
 		};
 		for (int i = 0; i < N_ENEMIES26; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[5]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
+	case 27: {
+		glm::vec2 relation[N_ENEMIES27]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES27]{
+			"images/enemies/Heart.png",
+			"images/enemies/Heart.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES27]{
+			glm::ivec2(450, 100),
+			glm::ivec2(450, 500)
+		};
+		glm::ivec2 posFinal[N_ENEMIES27]{
+			glm::ivec2(SCREEN_WIDTH - 200, 100),
+			glm::ivec2(SCREEN_WIDTH - 200, 500)
+		};
+		for (int i = 0; i < N_ENEMIES27; i++) {
 			Enemy* e = new Enemy;
 			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[5]);
 			e->setPosition(posInicial[i]);
@@ -823,9 +891,25 @@ void Level::loadGuardar() {
 	case 26: {
 		int id = 11;
 		glm::ivec2 posIni[GUARDAR26]{
-			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y),
+			glm::ivec2(posicionesGuardar[id].x, posicionesGuardar[id].y)
 		};
 		for (int i = 0; i < GUARDAR26; i++) {
+			Guardar* g = new Guardar;
+			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
+			g->setPosition(posIni[i]);
+			g->setTileMap(map);
+			guardar.push_back(g);
+			++id;
+		}
+		break;
+	}
+	case 27: {
+		int id = 13;
+		glm::ivec2 posIni[GUARDAR27]{
+			glm::ivec2(posicionesGuardar[id - 1].x, posicionesGuardar[id - 1].y)
+		};
+		for (int i = 0; i < GUARDAR27; i++) {
 			Guardar* g = new Guardar;
 			g->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(64, 64), id);
 			g->setPosition(posIni[i]);
@@ -842,9 +926,9 @@ void Level::loadStar() {
 		glm::ivec2 starSize = glm::ivec2(64, 64);
 		star->init(glm::ivec2(SCREEN_WIDTH - 128, SCREEN_HEIGHT - 135), texProgram, starSize);
 	}
-	else if (actualMap == 26) {
+	else if (actualMap == 27) {
 		glm::ivec2 starSize = glm::ivec2(64, 64);
-		star->init(glm::ivec2(SCREEN_WIDTH - 128, 210), texProgram, starSize);
+		star->init(glm::ivec2(SCREEN_WIDTH - 100, 150), texProgram, starSize);
 	}
 }
 
@@ -954,7 +1038,7 @@ void Level::setMap(int newMap) {
 }
 
 void Level::nextMap() {
-	if (actualMap + 1 != 16 && actualMap + 1 != 27) {
+	if (actualMap + 1 != 16 && actualMap + 1 != 28) {
 		int numberOfTheNewMap = int(addressActualMap[13]) + 1;
 		addressActualMap[13] = char(numberOfTheNewMap);
 		actualMap++;
@@ -1319,7 +1403,7 @@ void Level::setPlayerPosition(glm::ivec2 newPlayerPos) {
 
 void Level::InitPosGuardar() {
 	// El tercer elemento es el mapa en el que es la posicion
-	vector<glm::ivec3> g(11);
+	vector<glm::ivec3> g(13);
 
 	// Easy mode
 	g[0] = glm::ivec3(780, 482, 1);
@@ -1334,7 +1418,9 @@ void Level::InitPosGuardar() {
 	g[7] = glm::ivec3(36, 418, 3);
 	g[8] = glm::ivec3(45, 482, 4);
 	g[9] = glm::ivec3(50, 674, 5);
-	g[10] = glm::ivec3(45, 418, 6);
+	g[10] = glm::ivec3(45, 96, 6);
+	g[11] = glm::ivec3(200, SCREEN_HEIGHT - 190, 6);
+	g[12] = glm::ivec3(45, SCREEN_HEIGHT - 190, 7);
 
 	posicionesGuardar = g;
 }
