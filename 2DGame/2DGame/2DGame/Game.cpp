@@ -117,6 +117,11 @@ void Game::keyPressed(int key)
 				level.setPlayerPosition(glm::vec2(200, 600));
 				level.load();
 			}
+			else if (key == '7') {
+				level.setMap(27);
+				level.setPlayerPosition(glm::vec2(200, 600));
+				level.load();
+			}
 		}
 	}
 
