@@ -432,7 +432,7 @@ void Level::loadSpikes() {
 			spike->init(glm::ivec2(770 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
 			spikes.push_back(spike);
 		}
-		for (unsigned int i = 0; i < 6; ++i) {
+		for (unsigned int i = 0; i < 5; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(64, 64);
 			spike->init(glm::ivec2(600 + i * (spikeSize.x - 16), 32), texProgram, spikeSize, true);
