@@ -38,7 +38,7 @@
 #define N_ENEMIES23 3
 #define N_ENEMIES24 3
 #define N_ENEMIES25 3
-#define N_ENEMIES26 5
+#define N_ENEMIES26 6
 #define N_ENEMIES27 2
 
 #define N_PLATAFORMA21 2
@@ -665,6 +665,7 @@ void Level::loadEnemies() {
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f),
 			glm::vec2(1.f, 1.f / 4.f)
 		};
 		string nameImage[N_ENEMIES26]{
@@ -672,20 +673,23 @@ void Level::loadEnemies() {
 			"images/enemies/Heart.png",
 			"images/enemies/Heart.png",
 			"images/enemies/Heart.png",
+			"images/enemies/Heart.png",
 			"images/enemies/Heart.png"
 		};
 		glm::ivec2 posInicial[N_ENEMIES26]{
-			glm::ivec2(200, 40),
-			glm::ivec2(400, 40),
-			glm::ivec2(600, 40),
+			glm::ivec2(255, 40),
+			glm::ivec2(448, 40),
+			glm::ivec2(643, 40),
 			glm::ivec2(800, 40),
+			glm::ivec2(925, 40),
 			glm::ivec2(220, SCREEN_HEIGHT - 350),
 		};
 		glm::ivec2 posFinal[N_ENEMIES26]{
-			glm::ivec2(200, 220),
-			glm::ivec2(400, 220),
-			glm::ivec2(600, 220),
+			glm::ivec2(255, 220),
+			glm::ivec2(448, 220),
+			glm::ivec2(643, 220),
 			glm::ivec2(800, 220),
+			glm::ivec2(925, 220),
 			glm::ivec2(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 350),
 		};
 		for (int i = 0; i < N_ENEMIES26; i++) {
@@ -707,11 +711,11 @@ void Level::loadEnemies() {
 			"images/enemies/Heart.png"
 		};
 		glm::ivec2 posInicial[N_ENEMIES27]{
-			glm::ivec2(420, 150),
+			glm::ivec2(200, 140),
 			glm::ivec2(SCREEN_WIDTH - 230, 550)
 		};
 		glm::ivec2 posFinal[N_ENEMIES27]{
-			glm::ivec2(SCREEN_WIDTH - 230, 150),
+			glm::ivec2(SCREEN_WIDTH - 230, 140),
 			glm::ivec2(420, 550)
 		};
 		for (int i = 0; i < N_ENEMIES27; i++) {

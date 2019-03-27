@@ -112,7 +112,7 @@ private:
 		NULL, NULL, 4, 4, 4
 	};
 	int enemiesVelocityHard[7]{
-		8, 8, 8, 8, 10, 8, 8
+		8, 8, 8, 8, 10, 10, 10
 	};
 	int plataformaVelocityHard[7]{
 		2,	2,	2,	2,	2,	2,	2
