@@ -121,6 +121,7 @@ void Level::LoadMusicAndSoundEffects() {
 	AudioEngine::instance().sonidos["muerte_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "muerte_g.ogg");
 	AudioEngine::instance().sonidos["muerte_p"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "muerte_p.ogg");
 	
+
 	AudioEngine::instance().sonidos["pasos_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "pasos_g.ogg");
 }
 
@@ -167,7 +168,7 @@ void Level::init(int difficulty)
 
 void Level::update(int deltaTime)
 {
-	cout << posPlayer.x << " " << posPlayer.y << endl;
+	//cout << posPlayer.x << " " << posPlayer.y << endl;
 	// Update every interactuable object
 	currentTime += deltaTime;
 	if (!collisioned)

@@ -74,7 +74,7 @@ void Player::initSprite() {
 void Player::update(int deltaTime) {
 	sprite->update(deltaTime);
 //	t = clock() - t;
-
+	pasos += 1;
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
 		needdesplas = false;
 		sentidodesplas = -1;
@@ -89,6 +89,7 @@ void Player::update(int deltaTime) {
 				posPlayer.x += VELOCITY;
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			}
+			else if (pasos % 10 == 0)AudioEngine::instance().sonidos["pasos_g"].play(0);
 		}
 		else {
 			if (sprite->animation() != MOVE_LEFT_UP)
@@ -99,6 +100,7 @@ void Player::update(int deltaTime) {
 				posPlayer.x += VELOCITY;
 				sprite->changeAnimation(STAND_LEFT_UP);
 			}
+			else if (pasos % 10 == 0) AudioEngine::instance().sonidos["pasos_g"].play(0); 
 		}
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
@@ -113,6 +115,7 @@ void Player::update(int deltaTime) {
 				posPlayer.x -= VELOCITY;
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			}
+			else if (pasos % 10 == 0) AudioEngine::instance().sonidos["pasos_g"].play(0);
 		}
 		else {
 			if (sprite->animation() != MOVE_RIGHT_UP)
@@ -123,6 +126,7 @@ void Player::update(int deltaTime) {
 				posPlayer.x -= VELOCITY;
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			}
+			else if (pasos % 10 == 0) AudioEngine::instance().sonidos["pasos_g"].play(0);
 		}
 	}
 	else
