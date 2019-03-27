@@ -44,6 +44,7 @@ private:
 	bool isOnFloor;
 	bool little = false;
 	int fallStep;
+	int pasos = 0;
 
 	bool needdesplas;
 	bool hasdesplas;
