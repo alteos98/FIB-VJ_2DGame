@@ -406,30 +406,48 @@ void Level::loadSpikes() {
 		}
 	}
 	else if (actualMap == 26) {
-		for (unsigned int i = 0; i < 6; ++i) {
+		for (unsigned int i = 0; i < 4; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(64, 64);
-			spike->init(glm::ivec2(400 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 256), texProgram, spikeSize, true);
+			spike->init(glm::ivec2(360 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
 			spikes.push_back(spike);
 		}
-		for (unsigned int i = 0; i < 6; ++i) {
+		for (unsigned int i = 0; i < 4; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(64, 64);
-			spike->init(glm::ivec2(700 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 256), texProgram, spikeSize, true);
+			spike->init(glm::ivec2(650 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
 			spikes.push_back(spike);
 		}
 	}
 	else if (actualMap == 27) {
-		for (unsigned int i = 0; i < 15; ++i) {
+		for (unsigned int i = 0; i < 5; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(64, 64);
-			spike->init(glm::ivec2(300 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
+			spike->init(glm::ivec2(380 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
 			spikes.push_back(spike);
 		}
-		for (unsigned int i = 0; i < 15; ++i) {
+		for (unsigned int i = 0; i < 5; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(64, 64);
-			spike->init(glm::ivec2(300 + i * (spikeSize.x - 16), 256), texProgram, spikeSize, true);
+			spike->init(glm::ivec2(770 + i * (spikeSize.x - 16), SCREEN_HEIGHT - 128), texProgram, spikeSize, false);
+			spikes.push_back(spike);
+		}
+		for (unsigned int i = 0; i < 6; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(64, 64);
+			spike->init(glm::ivec2(600 + i * (spikeSize.x - 16), 32), texProgram, spikeSize, true);
+			spikes.push_back(spike);
+		}
+		for (unsigned int i = 0; i < 5; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(32, 32);
+			spike->init(glm::ivec2(658 + i * (spikeSize.x - 16), 450), texProgram, spikeSize, true);
+			spikes.push_back(spike);
+		}
+		for (unsigned int i = 0; i < 5; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(32, 32);
+			spike->init(glm::ivec2(658 + i * (spikeSize.x - 16), 288), texProgram, spikeSize, false);
 			spikes.push_back(spike);
 		}
 	}
@@ -661,14 +679,14 @@ void Level::loadEnemies() {
 			glm::ivec2(400, 40),
 			glm::ivec2(600, 40),
 			glm::ivec2(800, 40),
-			glm::ivec2(250, SCREEN_HEIGHT - 300),
+			glm::ivec2(220, SCREEN_HEIGHT - 350),
 		};
 		glm::ivec2 posFinal[N_ENEMIES26]{
 			glm::ivec2(200, 220),
 			glm::ivec2(400, 220),
 			glm::ivec2(600, 220),
 			glm::ivec2(800, 220),
-			glm::ivec2(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 300),
+			glm::ivec2(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 350),
 		};
 		for (int i = 0; i < N_ENEMIES26; i++) {
 			Enemy* e = new Enemy;
@@ -689,12 +707,12 @@ void Level::loadEnemies() {
 			"images/enemies/Heart.png"
 		};
 		glm::ivec2 posInicial[N_ENEMIES27]{
-			glm::ivec2(450, 100),
-			glm::ivec2(450, 500)
+			glm::ivec2(420, 150),
+			glm::ivec2(SCREEN_WIDTH - 230, 550)
 		};
 		glm::ivec2 posFinal[N_ENEMIES27]{
-			glm::ivec2(SCREEN_WIDTH - 200, 100),
-			glm::ivec2(SCREEN_WIDTH - 200, 500)
+			glm::ivec2(SCREEN_WIDTH - 230, 150),
+			glm::ivec2(420, 550)
 		};
 		for (int i = 0; i < N_ENEMIES27; i++) {
 			Enemy* e = new Enemy;
