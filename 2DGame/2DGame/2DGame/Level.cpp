@@ -121,7 +121,7 @@ void Level::LoadMusicAndSoundEffects() {
 	AudioEngine::instance().sonidos["muerte_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "muerte_g.ogg");
 	AudioEngine::instance().sonidos["muerte_p"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "muerte_p.ogg");
 	
-
+	AudioEngine::instance().sonidos["pasos_p"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "pasos_p.ogg");
 	AudioEngine::instance().sonidos["pasos_g"] = AudioEngine::instance().loadSoundEffect(AudioEngine::instance().dirsonido + "pasos_g.ogg");
 }
 
