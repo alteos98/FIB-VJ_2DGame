@@ -88,7 +88,11 @@ void Player::update(int deltaTime) {
 				posPlayer.x += VELOCITY;
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			}
-			else if (pasos % 10 == 0 && !bGravity)AudioEngine::instance().sonidos["pasos_g"].play(0);
+			else if (pasos % 10 == 0 && !bGravity) {
+
+				if (!little) AudioEngine::instance().sonidos["pasos_g"].play(0);
+				else AudioEngine::instance().sonidos["pasos_p"].play(0);
+			}
 		}
 		else {
 			if (sprite->animation() != MOVE_LEFT_UP)
@@ -99,7 +103,11 @@ void Player::update(int deltaTime) {
 				posPlayer.x += VELOCITY;
 				sprite->changeAnimation(STAND_LEFT_UP);
 			}
-			else if (pasos % 10 == 0 && !bGravity) AudioEngine::instance().sonidos["pasos_g"].play(0);
+			else if (pasos % 10 == 0 && !bGravity) {
+
+				if (!little) AudioEngine::instance().sonidos["pasos_g"].play(0);
+				else AudioEngine::instance().sonidos["pasos_p"].play(0);
+			}
 		}
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
@@ -114,7 +122,11 @@ void Player::update(int deltaTime) {
 				posPlayer.x -= VELOCITY;
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
 			}
-			else if (pasos % 10 == 0 && !bGravity) AudioEngine::instance().sonidos["pasos_g"].play(0);
+			else if (pasos % 10 == 0 && !bGravity) {
+
+				if (!little) AudioEngine::instance().sonidos["pasos_g"].play(0);
+				else AudioEngine::instance().sonidos["pasos_p"].play(0);
+			}
 		}
 		else {
 			if (sprite->animation() != MOVE_RIGHT_UP)
@@ -125,7 +137,10 @@ void Player::update(int deltaTime) {
 				posPlayer.x -= VELOCITY;
 				sprite->changeAnimation(STAND_RIGHT_UP);
 			}
-			else if (pasos % 10 == 0 && !bGravity) AudioEngine::instance().sonidos["pasos_g"].play(0);
+			else if (pasos % 10 == 0 && !bGravity) {
+				if (!little) AudioEngine::instance().sonidos["pasos_g"].play(0);
+				else AudioEngine::instance().sonidos["pasos_p"].play(0);
+			}
 		}
 	}
 	else
