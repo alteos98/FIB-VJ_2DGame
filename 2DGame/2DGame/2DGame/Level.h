@@ -109,10 +109,10 @@ private:
 	// DEFINITIONS
 
 	int enemiesVelocityEasy[5]{
-		NULL, NULL, 4, 4, 4
+		NULL, NULL, 6, 6, 6
 	};
 	int enemiesVelocityHard[7]{
-		8, 8, 8, 8, 10, 10, 10
+		8, 6, 8, 8, 10, 10, 10
 	};
 	int plataformaVelocityHard[7]{
 		2,	2,	2,	2,	2,	2,	2

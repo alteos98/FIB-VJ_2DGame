@@ -29,6 +29,7 @@ public:
 	int getFallStep();
 	bool getBGravity();
 	bool isLittle();
+	TileMap* getTileMap();
 
 	void setAnimation(int i);
 	void setIsOnFloor(bool floor);
