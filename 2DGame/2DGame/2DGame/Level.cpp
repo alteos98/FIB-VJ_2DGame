@@ -47,6 +47,7 @@
 #define N_PLATAFORMA24 1
 #define N_PLATAFORMA25 1
 #define N_PLATAFORMA26 1
+#define N_PLATAFORMA27 1
 
 
 
@@ -162,6 +163,7 @@ void Level::init(int difficulty)
 	isOnFloor = true;
 	ContactoPlat = false;
 	collisioned = false;
+	canCollisionLightning = true;
 	this->difficulty = difficulty;
 	numGuardado = -1;
 
@@ -276,10 +278,13 @@ void Level::update(int deltaTime)
 	}
 	else ContactoPlat = false;
 
-	if (collisionPlayerLightning()) {
+	if (collisionPlayerLightning() && canCollisionLightning) {
 		isOnFloor = player->getIsOnFloor();
 		player->setIsOnFloor(!isOnFloor);
+		canCollisionLightning = false;
 	}
+	else if (!collisionPlayerLightning())
+		canCollisionLightning = true;
 }
 
 void Level::render()
@@ -452,13 +457,13 @@ void Level::loadSpikes() {
 		for (unsigned int i = 0; i < 5; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(32, 32);
-			spike->init(glm::ivec2(658 + i * (spikeSize.x - 16), 450), texProgram, spikeSize, true);
+			spike->init(glm::ivec2(658 + i * (spikeSize.x - 16), 448), texProgram, spikeSize, true);
 			spikes.push_back(spike);
 		}
 		for (unsigned int i = 0; i < 5; ++i) {
 			Spike* spike = new Spike();
 			glm::ivec2 spikeSize = glm::ivec2(32, 32);
-			spike->init(glm::ivec2(658 + i * (spikeSize.x - 16), 288), texProgram, spikeSize, false);
+			spike->init(glm::ivec2(658 + i * (spikeSize.x - 16), 256), texProgram, spikeSize, false);
 			spikes.push_back(spike);
 		}
 	}
@@ -804,6 +809,28 @@ void Level::loadPlataforma() {
 			}
 			break;
 		}
+		case 27: {
+			glm::vec2 relation[N_PLATAFORMA27]{
+				glm::vec2(1.f, 1.f)
+			};
+			string nameImage[N_PLATAFORMA27]{
+				"images/plataforma/nube1.png"
+			};
+			glm::ivec2 posInicial[N_PLATAFORMA27]{
+				glm::ivec2(32 * 15, 32 * 11)
+			};
+			glm::ivec2 posFinal[N_PLATAFORMA27]{
+				glm::ivec2(32 * 26, 32 * 11)
+			};
+			for (int i = 0; i < N_PLATAFORMA27; i++) {
+				Plataforma* e = new Plataforma;
+				e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], plataformaVelocityHard[2]);
+				e->setPosition(posInicial[i]);
+				e->setTileMap(map);
+				plataforma.push_back(e);
+			}
+			break;
+		}
 		}
 	}
 }
@@ -1029,6 +1056,13 @@ void Level::loadLightning() {
 			l->init(lightningPos, texProgram, lightningSize, false);
 			lightning.push_back(l);
 		}
+	}
+	else if (actualMap == 27) {
+		Lightning* l = new Lightning;
+		glm::ivec2 lightningPos = glm::ivec2(176, 38);
+		glm::ivec2 lightningSize = glm::ivec2(256, 64);
+		l->init(lightningPos, texProgram, lightningSize, false);
+		lightning.push_back(l);
 	}
 }
 
@@ -1338,18 +1372,6 @@ bool Level::collisionPlayerPlataforma(int& PlataformaAct) {
 
 }
 
-bool Level::collisionPlayerPlataformaLateral(int& PlataformaAct) {
-	posPlayer = player->getPosition();
-
-	for (unsigned int i = 0; i < plataforma.size(); ++i) {
-		if (collisionLateral(posPlayer, glm::ivec2(player->getWidth(), player->getHeight()), plataforma[i]->getPosition(), glm::ivec2(plataforma[i]->getWidth(), plataforma[i]->getHeight()))) {
-			return true;
-		}
-	}
-	return false;
-
-}
-
 bool Level::collisionPlayerGuardar(int & GuardadoActual) {
 	bool b = false;
 	posPlayer = player->getPosition();
@@ -1384,16 +1406,13 @@ bool Level::collisionPlayerStar() {
 }
 
 bool Level::collisionPlayerLightning() {
-	bool b = false;
-
-	for (unsigned int i = 0; i < lightning.size() && !b; ++i) {
+	for (unsigned int i = 0; i < lightning.size(); ++i) {
 		glm::ivec2 lightiningPosition = lightning[i]->getPosition();
 		lightiningPosition.y = lightiningPosition.y + lightning[i]->getHeight() / 2;
-		if (collision(player->getPosition(), glm::ivec2(player->getWidth(), player->getHeight()), lightiningPosition, glm::ivec2(lightning[i]->getWidth(), 1))) {
-			b = true;
-		}
+		if (collision(player->getPosition(), glm::ivec2(player->getWidth(), player->getHeight()), lightiningPosition, glm::ivec2(lightning[i]->getWidth(), 1)))
+			return true;
 	}
-	return b;
+	return false;
 }
 
 bool Level::collisionPlayerStalactite() {
@@ -1427,18 +1446,6 @@ bool Level::collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm
 	if (!(x0_1 > x_2) && !(x0_2 > x_1) && !(y0_1 > y_2) && !(y0_2 > y_1)) {
 		return true;
 	}
-	return false;
-}
-
-bool Level::collisionLateral(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2) {
-	int x0_1, x_1, y0_1, y_1, x0_2, x_2, y0_2, y_2;
-	x0_1 = pos1.x; x_1 = pos1.x + size1.x;
-	y0_1 = pos1.y; y_1 = pos1.y + size1.y;
-	x0_2 = pos2.x; x_2 = pos2.x + size2.x;
-	y0_2 = pos2.y; y_2 = pos2.y + size2.y;
-
-	if ((x_1 >= x0_2 && x0_1 <= x0_2) || (x_2 >= x0_1 && x_2 <= x0_1))
-		return true;
 	return false;
 }
 
