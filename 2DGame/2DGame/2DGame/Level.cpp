@@ -1025,7 +1025,7 @@ void Level::loadStar() {
 void Level::loadLightning() {
 	if (actualMap == 21) {
 		Lightning* l = new Lightning;
-		glm::ivec2 lightningPos = glm::ivec2(SCREEN_WIDTH - 400, SCREEN_HEIGHT - 300);
+		glm::ivec2 lightningPos = glm::ivec2(SCREEN_WIDTH / 2 - 128, 50);
 		glm::ivec2 lightningSize = glm::ivec2(256, 64);
 		l->init(lightningPos, texProgram, lightningSize, false);
 		lightning.push_back(l);
