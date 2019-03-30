@@ -76,7 +76,7 @@ void Player::update(int deltaTime) {
 //	t = clock() - t;
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
 		needdesplas = false;
-		sentidodesplas = -1;
+		if(cambiosentido)sentidodesplas = -1;
 	//  if (little) AudioEngine::instance().sonidos["pasos_g"].resume();
 	//	else AudioEngine::instance().sonidos["pasos_g"].resume();
 		if (isOnFloor) {
@@ -112,7 +112,7 @@ void Player::update(int deltaTime) {
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
 		needdesplas = false;
-		sentidodesplas = +1;
+		if (cambiosentido)sentidodesplas = +1;
 		if (isOnFloor) {
 			if (sprite->animation() != MOVE_RIGHT_DOWN)
 				sprite->changeAnimation(MOVE_RIGHT_DOWN);
@@ -208,7 +208,7 @@ void Player::update(int deltaTime) {
 		}
 		
 	}
-	/*
+
 	if (!Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !needdesplas && sentidodesplas == -1) {
 		needdesplas = true;
 		hasdesplas = true;
@@ -217,7 +217,7 @@ void Player::update(int deltaTime) {
 		needdesplas = true;
 		hasdesplas = true;
 	}
-
+	/*
 	if (desplas < 0 || time == 5 * PI) {
 		hasdesplas = false;
 		time = (5 * PI) / 2;
@@ -234,9 +234,32 @@ void Player::update(int deltaTime) {
 		time += 1;
 		//posPlayer.x += int(sentidodesplas*desplas);
 	}*/
-	pasos += 1;
+	pasos += 1; pasos %= 109;
+
+	if (hasdesplas) posPlayer.x += -sentidodesplas * aceleracion();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
+
+int Player::aceleracion() {
+	if (hasdesplas) {
+		ac = - pow(((time-48)/12),2) +2;
+		time++;
+		cambiosentido = false;
+	}
+	else {
+		ac = 0;
+		time = 0;
+	}
+
+	if (ac >= 0) {
+		cambiosentido = true;
+		ac = 0;
+		time = 0;
+		hasdesplas = false;
+	}
+	return (int)ac;
+}
+
 
 void Player::render()
 {
@@ -317,5 +340,10 @@ void Player::setSize(glm::ivec2 newSize) {
 void Player::setLittle(bool little)
 {
 	this->little = little;
+}
+
+void Player::setHasdesplas(bool b)
+{
+	hasdesplas = b;
 }
  

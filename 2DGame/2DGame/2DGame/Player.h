@@ -36,9 +36,10 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	void setSize(glm::ivec2 newSize);
 	void setLittle(bool little);
-
+	void setHasdesplas(bool b);
 
 private:
+	bool cambiosentido = true;
 	bool bJumping;
 	bool bGravity; // true if the player is inverting / reverting the gravity
 	bool isOnFloor;
@@ -47,12 +48,14 @@ private:
 	int pasos = 0;
 
 	bool needdesplas;
-	bool hasdesplas;
+	bool needdesplasder;
+	bool needdesplasizq;
+	bool hasdesplas = false;
 	float desplas;
 	float sentidodesplas;
-	int time;
-
-
+	float time;
+	int aceleracion();
+	float ac;
 
 	glm::ivec2 tileMapDispl, posPlayer, playerSize;
 	int jumpAngle, startY;

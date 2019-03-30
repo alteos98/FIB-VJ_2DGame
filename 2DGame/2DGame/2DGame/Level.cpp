@@ -209,6 +209,7 @@ void Level::update(int deltaTime)
 
 	// Checking collisions
 	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
+		player->setHasdesplas(false);
 		if (player->isLittle())AudioEngine::instance().sonidos["muerte_p"].play(0);
 		else AudioEngine::instance().sonidos["muerte_g"].play(0);
 		currentTimeCollision = currentTime;
