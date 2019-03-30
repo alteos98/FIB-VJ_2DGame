@@ -33,7 +33,7 @@
 #define GUARDAR26 2
 #define GUARDAR27 1
 
-#define N_ENEMIES21 0
+#define N_ENEMIES21 2
 #define N_ENEMIES22 1
 #define N_ENEMIES23 3
 #define N_ENEMIES24 3
@@ -364,6 +364,14 @@ void Level::loadSpikes() {
 			spikes.push_back(spike);
 		}
 	}
+	else if (actualMap == 21) {
+		for (unsigned int i = 0; i < 30; ++i) {
+			Spike* spike = new Spike();
+			glm::ivec2 spikeSize = glm::ivec2(24, 24);
+			spike->init(glm::ivec2(165 + i * (spikeSize.x), 32), texProgram, spikeSize, true);
+			spikes.push_back(spike);
+		}
+	}
 	else if (actualMap == 22) {
 		for (unsigned int i = 0; i < 29; ++i) {
 			Spike* spike = new Spike();
@@ -556,6 +564,32 @@ void Level::loadEnemies() {
 		}
 		break;
 	}
+	case 21: {
+		glm::vec2 relation[N_ENEMIES21]{
+			glm::vec2(1.f, 1.f / 4.f),
+			glm::vec2(1.f, 1.f / 4.f)
+		};
+		string nameImage[N_ENEMIES21]{
+			"images/enemies/Dinosaur.png",
+			"images/enemies/Dinosaur.png"
+		};
+		glm::ivec2 posInicial[N_ENEMIES21]{
+			glm::ivec2(200, 64),
+			glm::ivec2(350, SCREEN_HEIGHT - 275)
+		};
+		glm::ivec2 posFinal[N_ENEMIES21]{
+			glm::ivec2(200, SCREEN_HEIGHT - 160),
+			glm::ivec2(SCREEN_WIDTH - 190, SCREEN_HEIGHT - 275)
+		};
+		for (int i = 0; i < N_ENEMIES21; i++) {
+			Enemy* e = new Enemy;
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[0]);
+			e->setPosition(posInicial[i]);
+			e->setTileMap(map);
+			enemy.push_back(e);
+		}
+		break;
+	}
 	case 22: {
 		glm::vec2 relation[N_ENEMIES22]{
 			glm::vec2(1.f, 1.f / 4.f)
@@ -631,7 +665,7 @@ void Level::loadEnemies() {
 		};
 		for (int i = 0; i < N_ENEMIES24; i++) {
 			Enemy* e = new Enemy;
-			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[4]);
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[3]);
 			e->setPosition(posInicial[i]);
 			e->setTileMap(map);
 			enemy.push_back(e);
@@ -729,7 +763,7 @@ void Level::loadEnemies() {
 		};
 		for (int i = 0; i < N_ENEMIES27; i++) {
 			Enemy* e = new Enemy;
-			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[5]);
+			e->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, relation[i], nameImage[i], posInicial[i], posFinal[i], enemiesVelocityHard[6]);
 			e->setPosition(posInicial[i]);
 			e->setTileMap(map);
 			enemy.push_back(e);
@@ -1026,7 +1060,7 @@ void Level::loadStar() {
 void Level::loadLightning() {
 	if (actualMap == 21) {
 		Lightning* l = new Lightning;
-		glm::ivec2 lightningPos = glm::ivec2(SCREEN_WIDTH / 2 - 128, 50);
+		glm::ivec2 lightningPos = glm::ivec2(SCREEN_WIDTH / 2 - 64, 50);
 		glm::ivec2 lightningSize = glm::ivec2(256, 64);
 		l->init(lightningPos, texProgram, lightningSize, false);
 		lightning.push_back(l);

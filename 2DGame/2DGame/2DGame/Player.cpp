@@ -20,7 +20,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, gl
 {
 	hasdesplas = false;
 	desplas = 0;
-	time = 5 * PI / 2;
+	time = 5 * float(PI) / 2;
 	this->playerSize = size;
 	this->isOnFloor = isOnFloor;
 	this->shaderProgram = shaderProgram;
@@ -219,25 +219,8 @@ void Player::update(int deltaTime) {
 		needdesplas = true;
 		hasdesplas = true;
 	}
-	/*
-	if (desplas < 0 || time == 5 * PI) {
-		hasdesplas = false;
-		time = (5 * PI) / 2;
-		desplas = 0;
-		//posPlayer.x += int(sentidodesplas*desplas);
-		//needdesplas = false;
-	}
-	if (hasdesplas) {
-		if (sentidodesplas == -1) {
-			sprite->changeAnimation(STAND_LEFT_DOWN);
-		}
-		else sprite->changeAnimation(STAND_RIGHT_DOWN);
-		desplas = 14 * (sin(time/5));
-		time += 1;
-		//posPlayer.x += int(sentidodesplas*desplas);
-	}*/
 	pasos += 1; pasos %= 109;
-	if (hasdesplas) posPlayer.x += -sentidodesplas * aceleracion();
+	if (hasdesplas) posPlayer.x += int(-sentidodesplas) * aceleracion();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
