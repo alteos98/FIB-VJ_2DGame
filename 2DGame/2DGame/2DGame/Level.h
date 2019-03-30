@@ -44,7 +44,6 @@ public:
 
 	bool collisionPlayerEnemies();
 	bool collisionPlayerPlataforma(int& PlataformaAc);
-	bool collisionPlayerPlataformaLateral(int& PlataformaAc);
 	bool collisionPlayerGuardar(int & GuardadoActual);
 	bool collisionPlayerSpikes();
 	bool collisionPlayerStar();
@@ -91,6 +90,7 @@ private:
 	bool mapacambiado;
 	bool ContactoPlat;
 	bool collisioned;
+	bool canCollisionLightning;
 	ShaderProgram texProgram;
 
 
@@ -99,7 +99,6 @@ private:
 	void InitMusica();
 	void InitSoundEffects();
 	bool collision(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
-	bool collisionLateral(glm::ivec2 &pos1, glm::ivec2 &size1, glm::ivec2 &pos2, glm::ivec2 &size2);
 	void changeMap();
 	void Actualizarllama();
 	void InitPosGuardar();
@@ -109,10 +108,10 @@ private:
 	// DEFINITIONS
 
 	int enemiesVelocityEasy[5]{
-		NULL, NULL, 4, 4, 4
+		NULL, NULL, 6, 6, 6
 	};
 	int enemiesVelocityHard[7]{
-		8, 8, 8, 8, 10, 10, 10
+		8, 6, 8, 8, 10, 10, 10
 	};
 	int plataformaVelocityHard[7]{
 		2,	2,	2,	2,	2,	2,	2

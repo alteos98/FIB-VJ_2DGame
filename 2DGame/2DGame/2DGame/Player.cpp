@@ -311,6 +311,10 @@ Sprite* Player::getSprite() {
 	return sprite;
 }
 
+TileMap* Player::getTileMap() {
+	return map;
+}
+
 // SETTERS
 
 void Player::setAnimation(int i) {
