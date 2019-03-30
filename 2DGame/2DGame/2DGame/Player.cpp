@@ -18,6 +18,7 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, glm::ivec2 size, bool isOnFloor)
 {
+	hasdesplas = false;
 	desplas = 0;
 	time = 5 * PI / 2;
 	this->playerSize = size;
@@ -73,6 +74,7 @@ void Player::initSprite() {
 
 void Player::update(int deltaTime) {
 	sprite->update(deltaTime);
+	int numtile = 0;
 //	t = clock() - t;
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
 		needdesplas = false;
@@ -162,14 +164,14 @@ void Player::update(int deltaTime) {
 	if (bGravity) {
 		if (!isOnFloor) {
 			posPlayer.y += fallStep;
-			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep)) {
+			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep, numtile)) {
 				bGravity = false;
 				isOnFloor = true;
 			}
 		}
 		else {
 			posPlayer.y -= fallStep;
-			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep)) {
+			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep, numtile)) {
 				bGravity = false;
 				isOnFloor = false;
 			}
@@ -182,7 +184,7 @@ void Player::update(int deltaTime) {
 				sprite->changeAnimation(STAND_LEFT_UP);
 			else if (sprite->animation() == STAND_RIGHT_DOWN)
 				sprite->changeAnimation(STAND_RIGHT_UP);
-			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep)) {
+			if (map->collisionMoveUp(posPlayer, playerSize, &posPlayer.y, fallStep, numtile)) {
 				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 					if(little) AudioEngine::instance().sonidos["salto_p"].play(0);
 					else AudioEngine::instance().sonidos["salto_g"].play(0);
@@ -197,7 +199,7 @@ void Player::update(int deltaTime) {
 				sprite->changeAnimation(STAND_LEFT_DOWN);
 			else if (sprite->animation() == STAND_RIGHT_UP)
 				sprite->changeAnimation(STAND_RIGHT_DOWN);
-			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep)) {
+			if (map->collisionMoveDown(posPlayer, playerSize, &posPlayer.y, fallStep, numtile)) {
 				if (Game::instance().getKey(' ') && Game::instance().getCanInvertGravity()) {
 					if (little) AudioEngine::instance().sonidos["salto_p"].play(0);
 					else AudioEngine::instance().sonidos["salto_g"].play(0);
@@ -235,7 +237,7 @@ void Player::update(int deltaTime) {
 		//posPlayer.x += int(sentidodesplas*desplas);
 	}*/
 	pasos += 1; pasos %= 109;
-
+	if (numtile != 157)hasdesplas = false;
 	if (hasdesplas) posPlayer.x += -sentidodesplas * aceleracion();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }

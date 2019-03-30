@@ -210,12 +210,12 @@ void Level::update(int deltaTime)
 
 	// Checking collisions
 	if (!collisioned && (collisionPlayerEnemies() || collisionPlayerSpikes() || collisionPlayerStalactite())) {
-		player->setHasdesplas(false);
 		if (player->isLittle())AudioEngine::instance().sonidos["muerte_p"].play(0);
 		else AudioEngine::instance().sonidos["muerte_g"].play(0);
 		currentTimeCollision = currentTime;
 		collisioned = true;
 		player->setAnimation(8);
+		player->setHasdesplas(false);
 	}
 	else if (collisioned && currentTime - currentTimeCollision >= DURATION_ANIMATION_DEAD) {
 		if (numGuardado != -1) posPlayer = glm::ivec2(posicionesGuardar[numGuardado - 1].x, posicionesGuardar[numGuardado - 1].y);

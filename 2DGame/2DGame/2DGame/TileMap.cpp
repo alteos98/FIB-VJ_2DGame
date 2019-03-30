@@ -198,7 +198,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int fallStep) const
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int fallStep, int& num) const
 {
 	// para que pueda cambiar de mapa
 	if (pos.y >= 832 - size.y)
@@ -216,6 +216,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			if(*posY - tileSize * y + size.y <= fallStep)
 			{
 				*posY = tileSize * y - size.y;
+				num = map[y*mapSize.x + x];
 				return true;
 			}
 		}
@@ -224,7 +225,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int fallStep) const
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int fallStep, int& num) const
 {
 	// para que pueda cambiar de mapa
 	if (pos.y <= 0)
@@ -245,6 +246,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
 			if (tileSize * y - *posY <= fallStep)
 			{
 				*posY = tileSize * (y - 1) + 2*tileSize; //size.y;
+				num = map[y*mapSize.x + x];
 				return true;
 			}
 		}
