@@ -57,6 +57,7 @@ private:
 	float time;
 	int aceleracion();
 	float ac;
+	int numtile;
 
 	glm::ivec2 tileMapDispl, posPlayer, playerSize;
 	int jumpAngle, startY;

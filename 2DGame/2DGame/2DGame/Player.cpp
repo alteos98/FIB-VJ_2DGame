@@ -74,7 +74,7 @@ void Player::initSprite() {
 
 void Player::update(int deltaTime) {
 	sprite->update(deltaTime);
-	int numtile = 0;
+	numtile = 0;
 //	t = clock() - t;
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
 		needdesplas = false;
@@ -237,13 +237,12 @@ void Player::update(int deltaTime) {
 		//posPlayer.x += int(sentidodesplas*desplas);
 	}*/
 	pasos += 1; pasos %= 109;
-	if (numtile != 157)hasdesplas = false;
 	if (hasdesplas) posPlayer.x += -sentidodesplas * aceleracion();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
 int Player::aceleracion() {
-	if (hasdesplas) {
+	if (numtile == 157 && hasdesplas) {
 		ac = - pow(((time-48)/12),2) +2;
 		time++;
 		cambiosentido = false;
